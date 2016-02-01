@@ -24,13 +24,15 @@ bigSubtract a b = bigSubtractDiff
     where   (paddedA, paddedB) = padLists a b -- Pad the two arrays so they are the same length
             -- Zip the two lists
             zippedList = zipWith (-) paddedA paddedB
+            -- After normalizing the list, shave off any trailing zeros so list is minimum length.
             subtractDiff = (reverse . dropWhile (==0) . reverse . normalizeList) zippedList
             -- If the list is empty, append one 0. 
             bigSubtractDiff = subtractDiff ++ (null subtractDiff) ? ([], [0])
             
+-- Compares whether one list is greater than the other
 gt :: [Int] -> [Int] -> Bool
 gt a b
-    | (null a) && (null b) = False
+    | null a && null b = False
     | null listCompare = False
     | head listCompare > 0 = True
     | otherwise = False

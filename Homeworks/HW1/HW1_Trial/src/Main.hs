@@ -1,5 +1,6 @@
 module Main where
 
+-- Checks for the equality of two big number lists.
 bigEq :: [Int] -> [Int] -> Bool
 bigEq a b
     | lenA /= lenB = False
@@ -7,8 +8,9 @@ bigEq a b
     | otherwise = True
     where   lenA = length a
             lenB = length b
-            comparedList = zipWith ((==)) a b 
+            comparedList = zipWith (==) a b 
 
+-- Adds to big number lists and returns a big number list.
 bigAdd :: [Int] -> [Int] -> [Int]
 bigAdd a b = bigAddSum
     where   (paddedA, paddedB) = padLists a b -- Pad the two arrays so they are the same length
@@ -16,13 +18,25 @@ bigAdd a b = bigAddSum
             zippedList = zipWith (+) paddedA paddedB
             bigAddSum = normalizeList zippedList
 
+-- Subtracts to big number lists.
 bigSubtract :: [Int] -> [Int] -> [Int]
 bigSubtract a b = bigSubtractDiff
     where   (paddedA, paddedB) = padLists a b -- Pad the two arrays so they are the same length
             -- Zip the two lists
             zippedList = zipWith (-) paddedA paddedB
-            bigSubtractDiff = normalizeList zippedList
+            subtractDiff = (reverse . dropWhile (==0) . reverse . normalizeList) zippedList
+            -- If the list is empty, append one 0. 
+            bigSubtractDiff = subtractDiff ++ (null subtractDiff) ? ([], [0])
             
+gt :: [Int] -> [Int] -> Bool
+gt a b
+    | (null a) && (null b) = False
+    | null listCompare = False
+    | head listCompare > 0 = True
+    | otherwise = False
+    where   (paddedA, paddedB) = padLists a b
+            subtractedList = zipWith (-) a b
+            listCompare = (reverse . dropWhile (==0) . reverse) subtractedList
 
 padLists :: [Int] -> [Int] -> ([Int], [Int])
 padLists a b = (paddedA, paddedB)
@@ -41,8 +55,6 @@ normalizeList a = normalizedA
             lastCarry = last carryList
             -- Combine original list plus sums.
             normalizedA = zipWith3 (\x y z -> x + y + z) a subtractionList carryList ++ (lastCarry > 0) ? ([lastCarry], [])
-
-
 
 -- Used as a global to represent the maximum block size
 maxBlockValue :: Int

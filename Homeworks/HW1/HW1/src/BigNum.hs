@@ -48,15 +48,27 @@ stripLeadingZeroes xs = xs
 
 -- Negative numbers are not supported, so you may throw an error in these cases
 bigSubtract' :: BigNum -> BigNum -> Block -> BigNum
-bigSubtract' a b c = bigSubtractDiff
+bigSubtract' a b c
+    | otherwise = bigSubtractDiff
     where   (paddedA, paddedB) = padLists a b -- Pad the two arrays so they are the same length
             -- Zip the two lists
-            zippedList = zipWith (-) paddedA paddedB
-            bigSubtractDiff = normalizeList zippedList
+            bigSubtractDiff = normalizeList  $ zipWith (-) paddedA paddedB
             -- After normalizing the list, shave off any trailing zeros so list is minimum length.
             --subtractDiff = (reverse . dropWhile (==0) . reverse . normalizeList) zippedList
             -- If the list is empty, append one 0. 
             --bigSubtractDiff = subtractDiff ++ (null subtractDiff) ? ([], [0])
+
+
+-- Compares whether one list is greater than the other
+gt :: [Int] -> [Int] -> Bool
+gt a b
+    | null a && null b = False
+    | null listCompare = False
+    | head listCompare > 0 = True
+    | otherwise = False
+    where   (paddedA, paddedB) = padLists a b
+            subtractedList = zipWith (-) a b
+            listCompare = (reverse . dropWhile (==0) . reverse) subtractedList
 
 
 -- Checks whether two BigNum lists are equal to one another.
@@ -69,17 +81,20 @@ bigEq a b
             lenB = length b
             comparedList = zipWith (==) a b 
 
+-- Decrements a big number by 1
 bigDec :: BigNum -> BigNum
 bigDec x = bigSubtract x [1]
 
+-- Multiplies two big numbers and returns the product
 bigMultiply :: BigNum -> BigNum -> BigNum
 bigMultiply a b 
     | null a || null b = error "Null lists cannot be passed to bigMultiply."
     -- Will deconstruct second argument recursively so select the shorter one for that
-    | length a > length b = bigMultiply' a b 0
-    | otherwise = bigMultiply' b a 0
+    | length a > length b = reverse $ stripLeadingZeroes $ reverse $ bigMultiply' a b 0
+    | otherwise = reverse $ stripLeadingZeroes $ reverse $ bigMultiply' b a 0
 
-
+-- Recursive multiplication to multiply big number
+-- by each of the of the blocks.
 bigMultiply' :: BigNum -> BigNum -> Int -> BigNum
 -- a - BigNum List
 -- b - Second BigNum List
@@ -89,17 +104,17 @@ bigMultiply' a b d
     | length b == 1 = multiplyResult
     | otherwise = bigAdd (bigMultiply' a [head b] d) (bigMultiply' a (tail b) (d+1))
     -- Pad the list with the recursion depth similar to shift in multiplication
-    where   multiplyResult = stripLeadingZeroes $ replicate d 0 ++ listScalarMultiply a (head b) 0
+    where   multiplyResult = replicate d 0 ++ listScalarMultiply a (head b) 0
 
+-- Multiplies a list by one a block.
 listScalarMultiply :: BigNum -> Block -> Int -> BigNum
 listScalarMultiply list scalar carry
     -- Handle case where no need to create an extra an extra block 
-    | (length list) == 1 && (headCarryProduct < maxblock) = [headCarryProduct]
+    | length list == 1 && (headCarryProduct < maxblock) = [headCarryProduct]
     -- Handle case where extra
     | length list == 1 = [headCarryRem, headCarryQuot]
     | otherwise = headCarryRem : (listScalarMultiply (tail list) scalar headCarryQuot)
-    where   lenList = length list
-            headCarryProduct = (head list + carry) * scalar
+    where   headCarryProduct = (head list * scalar) + carry
             headCarryQuot = quot headCarryProduct maxblock
             headCarryRem = rem headCarryProduct maxblock
 
@@ -108,9 +123,7 @@ bigPowerOf :: BigNum -> BigNum -> BigNum
 bigPowerOf a b
     -- Base Case #1 - Raise to the power 0 so always return 1
     | length b == 1 && (head b == 0) = [1]
-    -- Base Case #2 - Raise to the power 1 so always return a
-    | length b == 1 && (head b == 1) = a
-    | otherwise = stripLeadingZeroes $ bigMultiply a (bigPowerOf a (bigDec b))
+    | otherwise = reverse $ stripLeadingZeroes $ reverse $ bigMultiply a (bigPowerOf a (bigDec b))
 
 prettyPrint :: BigNum -> String
 prettyPrint [] = ""

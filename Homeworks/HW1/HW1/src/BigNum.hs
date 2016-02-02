@@ -168,11 +168,12 @@ a ? (b, c) = if a then b else c
 
 -- Perform any necessary carries and ensure each block is between 0 and maxblock - 1
 normalizeList :: [Block] -> [Block]
-normalizeList a = normalizedA
-            -- Used to make sure each element is between 0 and maxblock - 1
-    where   subtractionList = [ subtract | block <- a, let subtract = (-maxblock) * div block maxblock]
-            -- Carry over as needed 
-            carryList = 0 : [carry | block <- a, let carry = div block maxblock]
-            lastCarry = last carryList
-            -- Combine original list plus sums.
-            normalizedA = zipWith3 (\x y z -> x + y + z) a subtractionList carryList ++ (lastCarry > 0) ? ([lastCarry], []) 
+normalizeList a = normalizeList' a 0
+normalizeList' :: [Block] -> Int -> [Block]
+normalizeList' a carry 
+    | null a && carry == 0 = []
+    | null a && carry > 0 = [ carry]
+    | otherwise = headCarryRem : normalizeList' (tail a) headCarryQuot
+    where   headCarrySum = head a + carry 
+            headCarryRem = headCarrySum `rem` maxblock
+            headCarryQuot = headCarrySum `quot` maxblock

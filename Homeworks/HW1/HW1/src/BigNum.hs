@@ -57,7 +57,7 @@ bigSubtract' a b c
 
 
 -- Compares whether one list is greater than the other
-gt :: [Block] -> [Block] -> Bool
+gt :: BigNum -> BigNum -> Bool
 gt a b
     | null a && null b = False
     | null listCompare = False

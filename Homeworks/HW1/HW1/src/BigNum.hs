@@ -49,14 +49,11 @@ stripLeadingZeroes xs = xs
 -- Negative numbers are not supported, so you may throw an error in these cases
 bigSubtract' :: BigNum -> BigNum -> Block -> BigNum
 bigSubtract' a b c
-    | otherwise = bigSubtractDiff
-    where   (paddedA, paddedB) = padLists a b -- Pad the two arrays so they are the same length
-            -- Zip the two lists
-            bigSubtractDiff = normalizeList  $ zipWith (-) paddedA paddedB
-            -- After normalizing the list, shave off any trailing zeros so list is minimum length.
-            --subtractDiff = (reverse . dropWhile (==0) . reverse . normalizeList) zippedList
-            -- If the list is empty, append one 0. 
-            --bigSubtractDiff = subtractDiff ++ (null subtractDiff) ? ([], [0])
+    | null a = []
+    | null b && head a + c >= 0 = (head a + c) : tail a
+    | null b = (head a + c + maxblock) : bigSubtract' (tail a) b (-1)
+    | (head a + c) >= (head b) = (head a + c - head b) : bigSubtract' (tail a) (tail b) 0 
+    | otherwise = (head a + c + maxblock - head b) : bigSubtract' (tail a) (tail b) (-1) 
 
 
 -- Compares whether one list is greater than the other

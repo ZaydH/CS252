@@ -36,7 +36,7 @@ bigAdd' a b c = bigAddSum
 
 bigSubtract :: BigNum -> BigNum -> BigNum
 bigSubtract x y =
-  if length x < length y
+  if (length x < length y || y `gt` x)
     then error "Negative numbers not supported"
     else reverse $ stripLeadingZeroes $ reverse result
       where result = bigSubtract' x y 0
@@ -57,15 +57,15 @@ bigSubtract' a b c
 
 
 -- Compares whether one list is greater than the other
-gt :: [Int] -> [Int] -> Bool
+gt :: [Block] -> [Block] -> Bool
 gt a b
     | null a && null b = False
     | null listCompare = False
     | head listCompare > 0 = True
     | otherwise = False
     where   (paddedA, paddedB) = padLists a b
-            subtractedList = zipWith (-) a b
-            listCompare = (reverse . dropWhile (==0) . reverse) subtractedList
+            subtractedList = zipWith (-) paddedA paddedB
+            listCompare = dropWhile (==0) $ reverse subtractedList
 
 
 -- Checks whether two BigNum lists are equal to one another.

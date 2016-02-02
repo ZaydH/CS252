@@ -149,7 +149,7 @@ stringToBigNum' (a:b:c:rest) = block : stringToBigNum' rest
 
 -- Given two lists of Blocks (in essentially Little Endian format),
 -- pad the shorter list with 0 value blocks and return two new lists. 
-padLists :: [Block] -> [Block] -> ([Block], [Block])
+padLists :: BigNum -> BigNum -> (BigNum, BigNum)
 padLists a b = (paddedA, paddedB)
     where   lenA = length a
             lenB = length b
@@ -164,9 +164,9 @@ a ? (b, c) = if a then b else c
 
 
 -- Perform any necessary carries and ensure each block is between 0 and maxblock - 1
-normalizeList :: [Block] -> [Block]
+normalizeList :: BigNum -> BigNum
 normalizeList a = normalizeList' a 0
-normalizeList' :: [Block] -> Int -> [Block]
+normalizeList' :: BigNum -> Int -> BigNum
 normalizeList' a carry 
     | null a && carry == 0 = []
     | null a && carry > 0 = [ carry]

@@ -3,7 +3,7 @@
   Class: CS 252
   Assigment: HW1
   Date: February 15, 2016
-  Description: <Describe the program and what it does>
+  Description: Used to simulate large positive integer arithmetic in Haskell.
 -}
 
 module BigNum (
@@ -16,7 +16,6 @@ module BigNum (
   bigPowerOf,
   prettyPrint,
   stringToBigNum,
-  padLists,
 ) where
 
 type Block = Int -- An Int from 0-999
@@ -53,22 +52,65 @@ bigSubtract' a b c = bigSubtractDiff
     where   (paddedA, paddedB) = padLists a b -- Pad the two arrays so they are the same length
             -- Zip the two lists
             zippedList = zipWith (-) paddedA paddedB
+            bigSubtractDiff = normalizeList zippedList
             -- After normalizing the list, shave off any trailing zeros so list is minimum length.
-            subtractDiff = (reverse . dropWhile (==0) . reverse . normalizeList) zippedList
+            --subtractDiff = (reverse . dropWhile (==0) . reverse . normalizeList) zippedList
             -- If the list is empty, append one 0. 
-            bigSubtractDiff = subtractDiff ++ (null subtractDiff) ? ([], [0])
+            --bigSubtractDiff = subtractDiff ++ (null subtractDiff) ? ([], [0])
 
+
+-- Checks whether two BigNum lists are equal to one another.
 bigEq :: BigNum -> BigNum -> Bool
-bigEq _ _ = error "Your code here"
+bigEq a b
+    | lenA /= lenB = False
+    | False `elem` comparedList = False
+    | otherwise = True
+    where   lenA = length a
+            lenB = length b
+            comparedList = zipWith (==) a b 
 
 bigDec :: BigNum -> BigNum
 bigDec x = bigSubtract x [1]
 
 bigMultiply :: BigNum -> BigNum -> BigNum
-bigMultiply _ _ = error "Your code here"
+bigMultiply a b 
+    | null a || null b = error "Null lists cannot be passed to bigMultiply."
+    -- Will deconstruct second argument recursively so select the shorter one for that
+    | length a > length b = bigMultiply' a b 0
+    | otherwise = bigMultiply' b a 0
+
+
+bigMultiply' :: BigNum -> BigNum -> Int -> BigNum
+-- a - BigNum List
+-- b - Second BigNum List
+-- d - recursion depth
+bigMultiply' a b d
+    -- Recursion Base case.
+    | length b == 1 = multiplyResult
+    | otherwise = bigAdd (bigMultiply' a [head b] d) (bigMultiply' a (tail b) (d+1))
+    -- Pad the list with the recursion depth similar to shift in multiplication
+    where   multiplyResult = stripLeadingZeroes $ replicate d 0 ++ listScalarMultiply a (head b) 0
+
+listScalarMultiply :: BigNum -> Block -> Int -> BigNum
+listScalarMultiply list scalar carry
+    -- Handle case where no need to create an extra an extra block 
+    | (length list) == 1 && (headCarryProduct < maxblock) = [headCarryProduct]
+    -- Handle case where extra
+    | length list == 1 = [headCarryRem, headCarryQuot]
+    | otherwise = headCarryRem : (listScalarMultiply (tail list) scalar headCarryQuot)
+    where   lenList = length list
+            headCarryProduct = (head list + carry) * scalar
+            headCarryQuot = quot headCarryProduct maxblock
+            headCarryRem = rem headCarryProduct maxblock
 
 bigPowerOf :: BigNum -> BigNum -> BigNum
-bigPowerOf _ _ = error "Your code here"
+-- basic format a ^ b
+bigPowerOf a b
+    -- Base Case #1 - Raise to the power 0 so always return 1
+    | length b == 1 && (head b == 0) = [1]
+    -- Base Case #2 - Raise to the power 1 so always return a
+    | length b == 1 && (head b == 1) = a
+    | otherwise = stripLeadingZeroes $ bigMultiply a (bigPowerOf a (bigDec b))
 
 prettyPrint :: BigNum -> String
 prettyPrint [] = ""
@@ -112,7 +154,7 @@ a ? (b, c) = if a then b else c
 
 
 -- Perform any necessary carries and ensure each block is between 0 and maxblock - 1
-normalizeList :: [Int] -> [Int]
+normalizeList :: [Block] -> [Block]
 normalizeList a = normalizedA
             -- Used to make sure each element is between 0 and maxblock - 1
     where   subtractionList = [ subtract | block <- a, let subtract = (-maxblock) * div block maxblock]

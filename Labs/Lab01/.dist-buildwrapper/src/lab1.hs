@@ -2,10 +2,11 @@
 -- and return the largest.
 -- THE DEFINITION MUST BE RECURSIVE.
 maxNum :: [Integer] -> Integer
-maxNum a
-    | null a = error "Empty list.  No max is possible."
-    | length a == 1 = head a
-    | otherwise = max (head a) (maxNum (tail a))
+maxNum [] = error "Empty list.  No max is possible."
+maxNum (x:[]) = x
+maxNum (x:xs) = if x > xsMax then x else xsMax
+    where
+        xsMax = maxNum xs
 
 -- Do the game fizzbuzz (http://en.wikipedia.org/wiki/Fizz_buzz).
 -- Return a string counting from 1 to the specified number.
@@ -16,13 +17,15 @@ fizzbuzz :: Int -> String
 fizzbuzz n
     | n < 1 = error "Invalid game value.  Must be greater than or equal to 1."
     | n == 1 = "1"
-    | (rem n 3 == 0) && (rem n 5 == 0) = recursion ++ "fizzbuzz"
-    | rem n 3 == 0 = recursion ++ "fizz"
-    | rem n 5 == 0 = recursion ++ "buzz"
-    | otherwise = recursion ++ show n
+    | otherwise = recursion ++ fizzStr ++ buzzStr ++ numbStr
     where 
+        fizzStr = if (rem n 3 == 0) then "fizz" else ""
+        buzzStr = if (rem n 5 == 0) then "buzz" else ""
+        numbStr = if (buzzStr == "" && fizzStr =="") then show n else ""
         recursion = fizzbuzz (n-1) ++ " "
 
 main :: IO()
 main = do
-    putStrLn (fizzbuzz 15)
+    putStrLn $ fizzbuzz (12)
+    let x = [34, 42, 4, 62, -1, 20, 54, 34, -9999]
+    putStrLn $ show $ maxNum x

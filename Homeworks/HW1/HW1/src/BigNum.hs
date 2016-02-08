@@ -32,11 +32,11 @@ bigAdd' a b c = bigAddSum
     where   (paddedA, paddedB) = padLists a b -- Pad the two arrays so they are the same length
             -- Zip the two lists
             zippedList = zipWith (+) paddedA paddedB
-            bigAddSum = normalizeList zippedList
+            bigAddSum = reverse $ stripLeadingZeroes $ reverse $ normalizeList zippedList
 
 bigSubtract :: BigNum -> BigNum -> BigNum
 bigSubtract x y =
-  if (length x < length y || y `gt` x)
+  if length x < length y || y `gt` x
     then error "Negative numbers not supported"
     else reverse $ stripLeadingZeroes $ reverse result
       where result = bigSubtract' x y 0

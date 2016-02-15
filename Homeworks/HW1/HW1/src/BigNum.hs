@@ -38,7 +38,7 @@ bigAdd' a b c = bigAddSum
 
 bigSubtract :: BigNum -> BigNum -> BigNum
 bigSubtract x y =
-  if length x < length y || y `gt` x || (illegalBigNum x || illegalBigNum y)
+  if y `gt` x || (illegalBigNum x || illegalBigNum y)
     then error "Invalid Input Data"
     else reverse $ stripLeadingZeroes $ reverse result
       where result = bigSubtract' x y 0
@@ -169,7 +169,7 @@ a ? (b, c) = if a then b else c
 
 
 illegalBigNum :: BigNum -> Bool
-illegalBigNum x  = foldr (\x acc -> acc || (x < 0) || (x >= maxblock)) False x 
+illegalBigNum x  =  (x == []) || foldr (\x acc -> acc || (x < 0) || (x >= maxblock)) False x 
 
 -- Perform any necessary carries and ensure each block is between 0 and maxblock - 1
 normalizeList :: BigNum -> BigNum

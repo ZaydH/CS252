@@ -74,12 +74,10 @@ gt a b
 bigEq :: BigNum -> BigNum -> Bool
 bigEq a b
     | illegalBigNum a || illegalBigNum b = error "Invalid Input Data"
-    | lenA /= lenB = False
     | False `elem` comparedList = False
     | otherwise = True
-    where   lenA = length a
-            lenB = length b
-            comparedList = zipWith (==) a b 
+    where   (paddedA, paddedB) = padLists a b -- Pad the two arrays so they are the same length
+            comparedList = zipWith (==) paddedA paddedB 
 
 -- Decrements a big number by 1
 bigDec :: BigNum -> BigNum

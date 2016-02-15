@@ -39,7 +39,7 @@ bigAdd' a b c = bigAddSum
 bigSubtract :: BigNum -> BigNum -> BigNum
 bigSubtract x y =
   if length x < length y || y `gt` x || (illegalBigNum x || illegalBigNum y)
-    then error "Negative numbers not supported"
+    then error "Invalid Input Data"
     else reverse $ stripLeadingZeroes $ reverse result
       where result = bigSubtract' x y 0
 

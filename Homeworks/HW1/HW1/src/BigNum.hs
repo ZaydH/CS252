@@ -25,7 +25,9 @@ type BigNum = [Block]
 maxblock = 1000
 
 bigAdd :: BigNum -> BigNum -> BigNum
-bigAdd x y = bigAdd' x y 0
+bigAdd x y 
+    | illegalBigNum x || illegalBigNum y = error "Invalid Input Data"
+    | otherwise = bigAdd' x y 0
 
 bigAdd' :: BigNum -> BigNum -> Block -> BigNum
 bigAdd' a b c = bigAddSum
@@ -36,7 +38,7 @@ bigAdd' a b c = bigAddSum
 
 bigSubtract :: BigNum -> BigNum -> BigNum
 bigSubtract x y =
-  if length x < length y || y `gt` x
+  if length x < length y || y `gt` x || (illegalBigNum x || illegalBigNum y)
     then error "Negative numbers not supported"
     else reverse $ stripLeadingZeroes $ reverse result
       where result = bigSubtract' x y 0
@@ -71,6 +73,7 @@ gt a b
 -- Checks whether two BigNum lists are equal to one another.
 bigEq :: BigNum -> BigNum -> Bool
 bigEq a b
+    | illegalBigNum a || illegalBigNum b = error "Invalid Input Data"
     | lenA /= lenB = False
     | False `elem` comparedList = False
     | otherwise = True
@@ -85,6 +88,7 @@ bigDec x = bigSubtract x [1]
 -- Multiplies two big numbers and returns the product
 bigMultiply :: BigNum -> BigNum -> BigNum
 bigMultiply a b 
+    | illegalBigNum a || illegalBigNum b = error "Invalid Input Data"
     | null a || null b = error "Null lists cannot be passed to bigMultiply."
     -- Will deconstruct second argument recursively so select the shorter one for that
     | length a > length b = reverse $ stripLeadingZeroes $ reverse $ bigMultiply' a b 0
@@ -118,6 +122,7 @@ listScalarMultiply list scalar carry
 bigPowerOf :: BigNum -> BigNum -> BigNum
 -- basic format a ^ b
 bigPowerOf a b
+    | illegalBigNum a || illegalBigNum b = error "Invalid Input Data"
     -- Base Case #1 - Raise to the power 0 so always return 1
     | length b == 1 && (head b == 0) = [1]
     | otherwise = reverse $ stripLeadingZeroes $ reverse $ bigMultiply a (bigPowerOf a (bigDec b))
@@ -162,6 +167,9 @@ padLists a b = (paddedA, paddedB)
 (?) :: Bool -> (t, t) -> t
 a ? (b, c) = if a then b else c
 
+
+illegalBigNum :: BigNum -> Bool
+illegalBigNum x  = foldr (\x acc -> acc || (x < 0) || (x >= maxblock)) False x 
 
 -- Perform any necessary carries and ensure each block is between 0 and maxblock - 1
 normalizeList :: BigNum -> BigNum

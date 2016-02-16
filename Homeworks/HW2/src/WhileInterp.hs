@@ -104,7 +104,7 @@ evaluate (And e1 e2) s = case eVal1 of
                             _ -> error "\"And\" only accepts Boolean values."
     where   (eVal1, s') = evaluate e1 s
             (eVal2, s'') = evaluate e2 s'
-evaluate (Or e1 e2) s = evaluate (And (Not e1) (Not e2)) s 
+evaluate (Or e1 e2) s = evaluate (Not (And (Not e1) (Not e2))) s 
 
 -- Evaluates a program with an initially empty state
 run :: Expression -> (Value, Store)

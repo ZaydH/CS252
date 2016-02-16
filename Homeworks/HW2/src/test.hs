@@ -37,6 +37,15 @@ testUnit = do
   putStrLn $ show $ WhileInterp.run (And (Val (BoolVal True)) (Val (BoolVal False)))
   -- Should be: (BoolVal True,fromList [])
   putStrLn $ show $ WhileInterp.run (And (Val (BoolVal True)) (Val (BoolVal True)))
+  -- Should be: (BoolVal False,fromList [])
+  putStrLn $ show $ WhileInterp.run (Or (Val (BoolVal False)) (Val (BoolVal False)))
+  -- Should be: (BoolVal True,fromList [])
+  putStrLn $ show $ WhileInterp.run (Or (Val (BoolVal False)) (Val (BoolVal True)))
+  -- Should be: (BoolVal True,fromList [])
+  putStrLn $ show $ WhileInterp.run (Or (Val (BoolVal True)) (Val (BoolVal False)))
+  -- Should be: (BoolVal True,fromList [])
+  putStrLn $ show $ WhileInterp.run (Or (Val (BoolVal True)) (Val (BoolVal True)))
+  putStrLn ""
 
 main :: IO ()
 main = do

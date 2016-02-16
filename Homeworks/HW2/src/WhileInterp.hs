@@ -56,8 +56,6 @@ data Value =
 -- The first case is done for you.
 -- Be sure to explicitly check for a divide by 0 and throw an error.
 applyOp :: Binop -> Value -> Value -> Value
-applyOp _ (BoolVal i) _ = error "Invalid type for applyOp"
-applyOp _ _ (BoolVal i) = error "Invalid type for applyOp" 
 applyOp Plus (IntVal i) (IntVal j) = IntVal $ i + j
 applyOp Minus (IntVal i) (IntVal j) = IntVal $ i - j
 applyOp Times (IntVal i) (IntVal j) = IntVal $ i * j
@@ -67,26 +65,30 @@ applyOp Gt (IntVal i) (IntVal j) = BoolVal $ i > j
 applyOp Ge (IntVal i) (IntVal j) = BoolVal $ i >= j
 applyOp Lt (IntVal i) (IntVal j) = BoolVal $ i < j
 applyOp Le (IntVal i) (IntVal j) = BoolVal $ i <= j
-applyOp _ _ _ = error "TBD"
+applyOp _ _ _ = error "Invalid call to applyOp" 
 
 
 -- Implement this function according to the specified semantics
 evaluate :: Expression -> Store -> (Value, Store)
-evaluate (Var x) s = do case (Map.lookup "b" s) of
+evaluate (Var x) s = do case (Map.lookup (show x) s) of
                               Just i -> (i, s)
                               _      -> error "Key is not in the map"
 evaluate (Val x) s = (x, s)
-evaluate (Assign a e) s = (eVal, Map.insert a eVal s')
-    where (eVal, s') = evaluate e s
+evaluate (Assign a e) s = (eVal, s'')
+    where   (eVal, s') = evaluate e s
+            s'' = Map.insert a eVal s'
 evaluate (Sequence e1 e2) s = (e2Val, s'') 
-    where (e1Val, s') = evaluate e1 s
-          (e2Val, s'') = (evaluate e2 s')
+    where (_, s') = evaluate e1 s
+          (e2Val, s'') = evaluate e2 s'
 evaluate (Op o e1 e2) s =
   let (v1,s1) = evaluate e1 s
       (v2,s') = evaluate e2 s1
   in (applyOp o v1 v2, s')
 evaluate (If e eTrue eFalse) s = if cond then (evaluate eTrue s') else (evaluate eFalse s')
     where (BoolVal cond, s') = evaluate e s 
+evaluate (While e1 e2) s = evaluate (If e1 eTrue eFalse) s 
+    where   eTrue = Sequence e2 (While e1 e2)
+            eFalse = Val (IntVal 0)
 evaluate _ _ = error "TBD"
 
 

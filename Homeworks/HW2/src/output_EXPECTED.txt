@@ -16,6 +16,21 @@
 (BoolVal True,fromList [])
 (BoolVal True,fromList [])
 (BoolVal True,fromList [])
+(BoolVal True,fromList [])
+(BoolVal False,fromList [])
+(BoolVal False,fromList [])
+(IntVal 2,fromList [])
+(IntVal 27,fromList [])
+(IntVal 7,fromList [])
+(BoolVal True,fromList [])
+(BoolVal True,fromList [])
+(BoolVal False,fromList [])
+(BoolVal False,fromList [])
+(BoolVal False,fromList [])
+(BoolVal True,fromList [])
+(BoolVal False,fromList [])
+(BoolVal True,fromList [])
+(BoolVal True,fromList [])
 
 fromList [("X",IntVal 0),("Y",IntVal 10)]
 fromList [("F",IntVal 2),("N",IntVal 0),("X",IntVal 1),("Z",IntVal 2)]

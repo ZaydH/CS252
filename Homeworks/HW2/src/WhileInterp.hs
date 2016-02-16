@@ -89,7 +89,7 @@ evaluate (If e eTrue eFalse) s = if cond then (evaluate eTrue s') else (evaluate
     where (BoolVal cond, s') = evaluate e s 
 evaluate (While e1 e2) s = evaluate (If e1 eTrue eFalse) s 
     where   eTrue = Sequence e2 (While e1 e2)
-            eFalse = Val (IntVal 0)
+            eFalse = Val (BoolVal False)
 evaluate (Not e) s = case x of
                             BoolVal True -> (BoolVal False, s')
                             BoolVal False -> (BoolVal True, s')

@@ -4,7 +4,7 @@
 (IntVal 11,fromList [])
 (IntVal 1,fromList [])
 (IntVal 2,fromList [])
-(BoolVal False,fromList [])
+(BoolVal 0,fromList [])
 (IntVal 666,fromList [("X",IntVal 666)])
 (BoolVal False,fromList [])
 (BoolVal True,fromList [])

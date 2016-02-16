@@ -70,13 +70,11 @@ applyOp _ _ _ = error "Invalid call to applyOp"
 
 -- Implement this function according to the specified semantics
 evaluate :: Expression -> Store -> (Value, Store)
-evaluate (Var x) s = do case (Map.lookup (show x) s) of
+evaluate (Var x) s = do case (Map.lookup x s) of
                               Just i -> (i, s)
                               _      -> error "Key is not in the map"
 evaluate (Val x) s = (x, s)
-evaluate (Assign a e) s = (eVal, s'')
-    where   (eVal, s') = evaluate e s
-            s'' = Map.insert (show a) eVal s'
+evaluate (Assign a e) s = let (eVal, s') = evaluate e s in (eVal, Map.insert a eVal s')
 evaluate (Sequence e1 e2) s = (e2Val, s'') 
     where (_, s') = evaluate e1 s
           (e2Val, s'') = evaluate e2 s'
@@ -89,7 +87,6 @@ evaluate (If e eTrue eFalse) s = if cond then (evaluate eTrue s') else (evaluate
 evaluate (While e1 e2) s = evaluate (If e1 eTrue eFalse) s 
     where   eTrue = Sequence e2 (While e1 e2)
             eFalse = Val (IntVal 0)
-evaluate _ _ = error "TBD"
 
 
 -- Evaluates a program with an initially empty state

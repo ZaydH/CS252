@@ -25,6 +25,18 @@ testUnit = do
   putStrLn $ show $ WhileInterp.run (Sequence
                                         (Assign "X" (Val (IntVal 666)))
                                         (Var "X"))
+  -- Should be: (BoolVal False,fromList [])
+  putStrLn $ show $ WhileInterp.run (Not (Val (BoolVal True)))
+    -- Should be: (BoolVal True,fromList [])
+  putStrLn $ show $ WhileInterp.run (Not (Val (BoolVal False)))
+  -- Should be: (BoolVal False,fromList [])
+  putStrLn $ show $ WhileInterp.run (And (Val (BoolVal False)) (Val (BoolVal False)))
+  -- Should be: (BoolVal False,fromList [])
+  putStrLn $ show $ WhileInterp.run (And (Val (BoolVal False)) (Val (BoolVal True)))
+  -- Should be: (BoolVal False,fromList [])
+  putStrLn $ show $ WhileInterp.run (And (Val (BoolVal True)) (Val (BoolVal False)))
+  -- Should be: (BoolVal True,fromList [])
+  putStrLn $ show $ WhileInterp.run (And (Val (BoolVal True)) (Val (BoolVal True)))
 
 main :: IO ()
 main = do

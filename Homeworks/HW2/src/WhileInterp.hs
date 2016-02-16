@@ -33,6 +33,9 @@ data Expression =
   | Op Binop Expression Expression
   | If Expression Expression Expression     -- if e1 then e2 else e3
   | While Expression Expression             -- while (e1) e2
+  | And Expression Expression               -- and e1
+  | Or Expression Expression                -- or e1
+  | Not Expression                          -- Not e1
   deriving (Show)
 
 data Binop =
@@ -87,7 +90,21 @@ evaluate (If e eTrue eFalse) s = if cond then (evaluate eTrue s') else (evaluate
 evaluate (While e1 e2) s = evaluate (If e1 eTrue eFalse) s 
     where   eTrue = Sequence e2 (While e1 e2)
             eFalse = Val (IntVal 0)
-
+evaluate (Not e) s = case x of
+                            BoolVal True -> (BoolVal False, s')
+                            BoolVal False -> (BoolVal True, s')
+                            _ -> error "\"Not\" only accepts Boolean values."
+    where (x, s') = evaluate e s
+evaluate (And e1 e2) s = case eVal1 of
+                            BoolVal False -> (BoolVal False, s'')
+                            BoolVal True  -> case eVal2 of
+                                                    BoolVal False   -> (BoolVal False, s'')
+                                                    BoolVal True    -> (BoolVal True, s'')           
+                                                    _               -> error "\"And\" only accepts Boolean values."
+                            _ -> error "\"And\" only accepts Boolean values."
+    where   (eVal1, s') = evaluate e1 s
+            (eVal2, s'') = evaluate e2 s'
+evaluate (Or e1 e2) s = evaluate (And (Not e1) (Not e2)) s 
 
 -- Evaluates a program with an initially empty state
 run :: Expression -> (Value, Store)

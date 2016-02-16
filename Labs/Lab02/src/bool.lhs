@@ -17,9 +17,13 @@ When an expression is evaluated, it returns a value.
 
 > data BoolVal = BVTrue
 >               | BVFalse
->               | BV0
->               | BVSucc BoolVal
+>               | BVNum BVInt
 >   deriving Show
+
+> data BVInt = BV0
+>             | BVSucc BVInt
+>   deriving Show
+
 
 The evaluate function takes an expression and returns a value
 The BTrue case has been done for you.
@@ -31,14 +35,16 @@ You must complete the other cases.
 > evaluate (Bif cond bExpTrue bExpFalse) = case (evaluate cond) of
 >   BVTrue -> evaluate bExpTrue
 >   BVFalse -> evaluate bExpFalse
-> evaluate (Bsucc bExp) = BVSucc $ evaluate bExp
-> evaluate (Bpred (Bsucc bExp)) = evaluate bExp
+> evaluate B0 = (BVNum BV0)
+> evaluate (Bpred (Bsucc bExp)) = case (evaluate bExp) of
+>                                       BVNum bVal -> BVNum bVal 
+>                                       _       -> error "Invalid type."
+> evaluate (Bsucc bExp) = case (evaluate bExp) of
+>                              BVNum bExp'  -> BVNum $ BVSucc $ bExp'
+>                              _            -> error "Invalid call."
 > evaluate (Bpred bExp) = case (evaluate bExp) of 
->   BV0 -> BV0
->   BVSucc x -> x
-> evaluate B0 = BV0
-
-
+>                               BVNum BV0   -> (BVNum BV0)
+>                               BVNum (BVSucc x) -> BVNum x
 
 And here we have a couple of programs to test.
 prog1 should evaluate to BVTrue and prog2 should evaluate to BVFalse
@@ -51,6 +57,7 @@ prog1 should evaluate to BVTrue and prog2 should evaluate to BVFalse
 > prog6 = Bsucc $ Bsucc B0
 > prog7 = Bsucc $ Bpred B0
 > prog8 = Bpred $ Bpred $ Bsucc $ Bsucc $ Bsucc B0
+> prog9 = Bpred $ Bpred $ Bsucc $ Bsucc $ Bsucc $ Bpred B0
 
 The following lines evaluate the test Bool* expressions and display the results.
 Note the type of main.  'IO ()' indicates that the function performs IO and returns nothing.
@@ -68,6 +75,7 @@ when we deal with the great and terrible subject of _monads_.
 >   putStrLn $ "Evaluating '" ++ (show prog6) ++ "' results in " ++ (show $ evaluate prog6)
 >   putStrLn $ "Evaluating '" ++ (show prog7) ++ "' results in " ++ (show $ evaluate prog7)
 >   putStrLn $ "Evaluating '" ++ (show prog8) ++ "' results in " ++ (show $ evaluate prog8)
+>   putStrLn $ "Evaluating '" ++ (show prog9) ++ "' results in " ++ (show $ evaluate prog9)
 
 Once you have the evaluate function working
 you add in support the expressions 'succ e', 'pred e', and 'zero'.

@@ -1,22 +1,22 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{}
 
-\bibitem{calderwood}
-Dana Calderwood.
-\newblock Crossing over with john edward, Jan 2000.
+\bibitem[Calderwood, 2000]{calderwood}
+Calderwood, D. (2000).
+\newblock Crossing over with john edward.
 
-\bibitem{fitzpatrick2003cat}
-Sonya Fitzpatrick.
+\bibitem[Fitzpatrick, 2003]{fitzpatrick2003cat}
+Fitzpatrick, S. (2003).
 \newblock {\em Cat talk : the secrets of communicating with your cat}.
-\newblock Berkley Books, New York, 2003.
+\newblock Berkley Books, New York.
 
-\bibitem{fitzpatrick_2013}
-Sonya Fitzpatrick.
-\newblock About sonya fitzpatrick, 2013.
+\bibitem[Fitzpatrick, 2013]{fitzpatrick_2013}
+Fitzpatrick, S. (2013).
+\newblock About sonya fitzpatrick.
 
-\bibitem{fitzpatrick_smith_1997}
-Sonya Fitzpatrick and Patricia~Burkhart Smith.
+\bibitem[Fitzpatrick and Smith, 1997]{fitzpatrick_smith_1997}
+Fitzpatrick, S. and Smith, P.~B. (1997).
 \newblock {\em What the animals tell me: developing your innate telepathic
   skills to understand and communicate with your pets}.
-\newblock Hyperion, 1997.
+\newblock Hyperion.
 
 \end{thebibliography}

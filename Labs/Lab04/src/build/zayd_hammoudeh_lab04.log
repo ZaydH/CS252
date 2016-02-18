@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.2.18)  18 FEB 2016 02:55
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.2.18)  18 FEB 2016 03:10
 entering extended mode
 **./zayd_hammoudeh_lab04.tex
 (zayd_hammoudeh_lab04.tex
@@ -64,18 +64,18 @@ Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 aux)
 \openout1 = `zayd_hammoudeh_lab04.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 11.
-LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 10.
+LaTeX Font Info:    ... okay on input line 10.
 
 ("C:\Users\Zayd\AppData\Local\Programs\MiKTeX 2.9\tex\context\base\supp-pdf.mki
 i"
@@ -93,13 +93,13 @@ i"
 \everyMPtoPDFconversion=\toks16
 )
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 12.
+(Font)              <12> on input line 11.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 12.
+(Font)              <8> on input line 11.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 12.
+(Font)              <6> on input line 11.
 
-Underfull \hbox (badness 10000) in paragraph at lines 16--17
+Underfull \hbox (badness 10000) in paragraph at lines 15--16
 
  []
 
@@ -107,35 +107,47 @@ Underfull \hbox (badness 10000) in paragraph at lines 16--17
 File: ./images/muffins.jpg Graphic file (type jpg)
 
 <use ./images/muffins.jpg>
-Package pdftex.def Info: ./images/muffins.jpg used on input line 22.
+Package pdftex.def Info: ./images/muffins.jpg used on input line 21.
 (pdftex.def)             Requested size: 256.0748pt x 170.47304pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 26--27
+Underfull \hbox (badness 10000) in paragraph at lines 25--26
 
  []
+
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 27.
+("C:\Users\Zayd\AppData\Local\Programs\MiKTeX 2.9\tex\latex\base\omscmr.fd"
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 27.
 
 [1
 
 {C:/Users/Zayd/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <./images/muf
 fins.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 31--32
+Underfull \hbox (badness 10000) in paragraph at lines 35--36
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 37--38
 
  []
 
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 37.
+(Font)              <7> on input line 48.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 37.
+(Font)              <5> on input line 48.
 
 (C:\Users\Zayd\Desktop\Courses\CS252\Labs\Lab04\src\build\zayd_hammoudeh_lab04.
-bbl) [2]
+bbl [2]) [3]
 (C:\Users\Zayd\Desktop\Courses\CS252\Labs\Lab04\src\build\zayd_hammoudeh_lab04.
 aux) ) 
 Here is how much of TeX's memory you used:
- 1142 strings out of 493634
- 15938 string characters out of 3135647
- 70540 words of memory out of 3000000
- 4563 multiletter control sequences out of 15000+200000
+ 1160 strings out of 493634
+ 16278 string characters out of 3135647
+ 71520 words of memory out of 3000000
+ 4578 multiletter control sequences out of 15000+200000
  7626 words of font info for 27 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
  27i,6n,19p,470b,215s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -144,11 +156,12 @@ nts/cm/cmbx12.pfb><C:/Users/Zayd/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
 public/amsfonts/cm/cmr10.pfb><C:/Users/Zayd/AppData/Local/Programs/MiKTeX 2.9/f
 onts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/Zayd/AppData/Local/Programs/M
 iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/Zayd/AppData/Local
-/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Zayd/A
+ppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb>
 Output written on C:/Users/Zayd/Desktop/Courses/CS252/Labs/Lab04/src/build/zayd
-_hammoudeh_lab04.pdf (2 pages, 118083 bytes).
+_hammoudeh_lab04.pdf (3 pages, 125736 bytes).
 PDF statistics:
- 30 PDF objects out of 1000 (max. 8388607)
+ 37 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 

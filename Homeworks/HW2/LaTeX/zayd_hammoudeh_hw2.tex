@@ -157,9 +157,58 @@ to note with the $\rel{ss-while}$ rule.
 \]
 \end{figure}
 
+\begin{figure}[H]\label{fig:condRules}
+\caption{Condition ({\tt if}) Small-Step Semantics Evaluation Order Rules}
+{\bf Conditional Statement ({\tt if}) Evaluation Rules:} \\
+\[
+\begin{array}{r@{\qquad\qquad}l}
+\ssrule{ss-ifContext}{
+  \sstep{e_1}{\sigma}{e_1'}{\sigma'}
+}{
+  \sstep{\ife{e_1}{e_2}{e_3}}{\sigma}{\ife{e_1'}{e_2}{e_3}}{\sigma}
+}
+\ssrule{ss-ifTrueReduction}{
+}{
+  \sstep{\ife{\true}{e_1}{e_2}}{\sigma}{e_1}{\sigma}
+}
+\ssrule{ss-ifFalseReduction}{
+}{
+  \sstep{\ife{\false}{e_1}{e_2}}{\sigma}{e_2}{\sigma}
+}
+\end{array}
+\]
+\end{figure}
+
+\begin{figure}[H]\label{fig:whileRules}
+\caption{{\tt while} Small-Step Semantics Evaluation Order Rules}
+{\bf {\tt while} Evaluation Rules:} \\
+\[
+\begin{array}{r@{\qquad\qquad}l}
+\ssrule{ss-ifContext}{
+  \sstep{e_1}{\sigma}{e_1'}{\sigma'}
+}{
+  \sstep{\ife{e_1}{e_2}{e_3}}{\sigma}{\ife{e_1'}{e_2}{e_3}}{\sigma}
+}
+\ssrule{ss-ifTrueReduction}{
+}{
+  \sstep{\ife{\true}{e_1}{e_2}}{\sigma}{e_1}{\sigma}
+}
+\ssrule{ss-ifFalseReduction}{
+}{
+  \sstep{\ife{\false}{e_1}{e_2}}{\sigma}{e_2}{\sigma}
+}
+\end{array}
+\]
+\end{figure}
+
+%---------
+\section{Boolean Expressions Small-Step Semantics}
+
+In this section, I add three new expression types to the WHILE language namely: {\tt not}, {\tt and}, and {\tt or}.  The evaluation order rules for each are below.
+
 \begin{figure}[H]\label{fig:notRules}
-\caption{not Evaluation Order Rules}
-{\bf not Evaluation Rules:} \\
+\caption{{\tt not} Small-Step Semantics Evaluation Order Rules}
+{\bf {\tt not} Evaluation Rules:} \\
 \[
 \begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-notContext}{
@@ -180,8 +229,8 @@ to note with the $\rel{ss-while}$ rule.
 \end{figure}
 
 \begin{figure}[H]\label{fig:andRules}
-\caption{and Evaluation Order Rules}
-{\bf and Evaluation Rules:} \\
+\caption{{\tt and} Small-Step Semantics Evaluation Order Rules}
+{\bf {\tt and} Evaluation Rules:} \\
 \[
 \begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-andContext1}{
@@ -211,8 +260,8 @@ to note with the $\rel{ss-while}$ rule.
 \end{figure}
 
 \begin{figure}[H]\label{fig:orRules}
-\caption{or Evaluation Order Rule}
-{\bf or Evaluation Rules:} \\
+\caption{{\tt or} Evaluation Order Rule}
+{\bf {\tt or} Evaluation Rules:} \\
 \[
 \begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-orReduction}{

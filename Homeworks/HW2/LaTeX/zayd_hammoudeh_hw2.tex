@@ -141,6 +141,11 @@ to note with the $\rel{ss-while}$ rule.
 }{
   \sstep{\whilee{e_1}{e_2}}{\sigma}{\ife{e_1}{e_2;\whilee{e_1}{e_2}}{\false}}{\sigma}
 }
+\ssrule{ss-notcontext}{
+  \sstep{e}{\sigma}{e'}{\sigma'}
+}{
+  \sstep{e'}{\sigma}{e'}{\sigma'}
+}
 \end{array}
 \]
 \end{figure}

@@ -86,7 +86,6 @@ you will implement the semantics for a small imperative language, named WHILE.
 }
 \newcommand{\sstep}[4]{{#1},{#2} \rightarrow {#3},{#4}}
 \newcommand{\sstepraw}[4]{{#1},{#2} \rightarrow {#3},{#4}}
-\newcommand{\ctxt}{C}
 
 
 Most of these rules are fairly straightforward, but there are a couple of points
@@ -139,9 +138,41 @@ to note with the $\rel{ss-while}$ rule.
 \]
 \end{figure}
 
+\begin{figure}[H]\label{fig:varRules}
+\caption{Variable Small-Step Semantics Evaluation Order Rules}
+{\bf Variable Evaluation Rules:} \\
+\[
+\begin{array}{r@{\qquad\qquad}l}
+\ssrule{ss-var}{
+  x \in domain(\sigma) \qquad \sigma(x)=v
+}{
+  \sstep{x}{\sigma}{v}{\sigma}
+}
+\end{array}
+\]
+\end{figure}
+
+\begin{figure}[H]\label{fig:assignRules}
+\caption{Set/Assignment Small-Step Semantics Evaluation Order Rules}
+{\bf Set/Assignment Evaluation Rules:} \\
+\[
+\begin{array}{r@{\qquad\qquad}l}
+\ssrule{ss-assignContext}{
+  \sstep{e}{\sigma}{e'}{\sigma'}
+}{
+  \sstep{\assign{x}{e}}{\sigma}{\assign{x}{e'}}{\sigma'}
+}
+\ssrule{ss-assignReduction}{
+}{
+  \sstep{\assign{x}{v}}{\sigma}{v}{\sigma[x:=v]}
+}
+\end{array}
+\]
+\end{figure}
+
 \begin{figure}[H]\label{fig:seqRules}
-\caption{sequence (;) Evaluation Order Rules}
-{\bf Sequence Evaluation Rules:} \\
+\caption{Sequence ({\tt ;}) Evaluation Order Rules}
+{\bf Sequence ({\tt ;}) Evaluation Rules:} \\
 \[
 \begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-seqContext}{
@@ -158,14 +189,14 @@ to note with the $\rel{ss-while}$ rule.
 \end{figure}
 
 \begin{figure}[H]\label{fig:condRules}
-\caption{Condition ({\tt if}) Small-Step Semantics Evaluation Order Rules}
+\caption{Conditional ({\tt if}) Small-Step Semantics Evaluation Order Rules}
 {\bf Conditional Statement ({\tt if}) Evaluation Rules:} \\
 \[
 \begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-ifContext}{
   \sstep{e_1}{\sigma}{e_1'}{\sigma'}
 }{
-  \sstep{\ife{e_1}{e_2}{e_3}}{\sigma}{\ife{e_1'}{e_2}{e_3}}{\sigma}
+  \sstep{\ife{e_1}{e_2}{e_3}}{\sigma}{\ife{e_1'}{e_2}{e_3}}{\sigma'}
 }
 \ssrule{ss-ifTrueReduction}{
 }{
@@ -184,18 +215,9 @@ to note with the $\rel{ss-while}$ rule.
 {\bf {\tt while} Evaluation Rules:} \\
 \[
 \begin{array}{r@{\qquad\qquad}l}
-\ssrule{ss-ifContext}{
-  \sstep{e_1}{\sigma}{e_1'}{\sigma'}
+\ssrule{ss-while}{
 }{
-  \sstep{\ife{e_1}{e_2}{e_3}}{\sigma}{\ife{e_1'}{e_2}{e_3}}{\sigma}
-}
-\ssrule{ss-ifTrueReduction}{
-}{
-  \sstep{\ife{\true}{e_1}{e_2}}{\sigma}{e_1}{\sigma}
-}
-\ssrule{ss-ifFalseReduction}{
-}{
-  \sstep{\ife{\false}{e_1}{e_2}}{\sigma}{e_2}{\sigma}
+  \sstep{\whilee{e_1}{e_2}}{\sigma}{\ife{e_1}{e_2;\whilee{e_1}{e_2}}{\false}}{\sigma}
 }
 \end{array}
 \]
@@ -204,7 +226,9 @@ to note with the $\rel{ss-while}$ rule.
 %---------
 \section{Boolean Expressions Small-Step Semantics}
 
-In this section, I add three new expression types to the WHILE language namely: {\tt not}, {\tt and}, and {\tt or}.  The evaluation order rules for each are below.
+In this section, I add three new expression types to the WHILE language namely: {\tt not}, {\tt and}, and {\tt or}.  The evaluation order rules for each are below.\\
+
+\bf Do I need the parentheses is in the "{\tt and}" and "{\tt or}" statements?  Is an infix style more typically used?
 
 \begin{figure}[H]\label{fig:notRules}
 \caption{{\tt not} Small-Step Semantics Evaluation Order Rules}
@@ -216,6 +240,21 @@ In this section, I add three new expression types to the WHILE language namely: 
 }{
   \sstep{\note{e}}{\sigma}{\note{e'}}{\sigma'}
 }
+\end{array}
+\]
+{\bf Not sure if I need this.  If I do, then why?  Why is this not like the 
+"{\tt op}" case:} \\
+\[
+\begin{array}{r@{\qquad\qquad}l}
+\ssrule{ss-notReduction}{
+}{
+  \sstep{\note{v}}{\sigma}{\ife{v}{\false}{\true}}{\sigma}
+}
+\end{array}
+\]
+{\bf I believe the above rule makes these unnecessary.  Would most define as above or like below?} \\
+\[
+\begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-notTrue}{
 }{
   \sstep{\note{\true}}{\sigma}{\false}{\sigma}
@@ -233,11 +272,20 @@ In this section, I add three new expression types to the WHILE language namely: 
 {\bf {\tt and} Evaluation Rules:} \\
 \[
 \begin{array}{r@{\qquad\qquad}l}
-\ssrule{ss-andContext1}{
+\ssrule{ss-andContext}{
   \sstep{e_1}{\sigma}{e_1'}{\sigma'}
 }{
   \sstep{\ande{e_1}{e_2}}{\sigma}{\ande{e_1'}{e_2}}{\sigma'}
 }
+\ssrule{ss-andReduction}{
+}{
+  \sstep{\ande{v}{e}}{\sigma}{\ife{v}{e}{\false}}{\sigma}
+}
+\end{array}
+\]
+{\bf Using the above, I think I do not need these:} \\
+\[
+\begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-andContext2}{
   \sstep{e}{\sigma}{e'}{\sigma'}
 }{
@@ -261,7 +309,7 @@ In this section, I add three new expression types to the WHILE language namely: 
 
 \begin{figure}[H]\label{fig:orRules}
 \caption{{\tt or} Evaluation Order Rule}
-{\bf {\tt or} Evaluation Rules:} \\
+{\bf {\tt or} Evaluation Rules: (Is defining "temporary variables" as I did allowed in small step semantics?)} \\
 \[
 \begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-orReduction}{

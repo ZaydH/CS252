@@ -96,7 +96,7 @@ evaluate (Not e) s = case x of
                             _ -> error "\"Not\" only accepts Boolean values."
     where (x, s') = evaluate e s
 evaluate (And e1 e2) s = case eVal1 of
-                            BoolVal False -> (BoolVal False, s'')
+                            BoolVal False -> (BoolVal False, s')
                             BoolVal True  -> case eVal2 of
                                                     BoolVal False   -> (BoolVal False, s'')
                                                     BoolVal True    -> (BoolVal True, s'')           

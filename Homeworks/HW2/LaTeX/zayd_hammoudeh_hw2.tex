@@ -24,8 +24,8 @@
 \newcommand{\ife}[3]{\mbox{\tt if}~{#1}~\mbox{\tt then}~{#2}~\mbox{\tt else}~{#3}}
 \newcommand{\whilee}[2]{\mbox{\tt while}~(#1)~#2}
 \newcommand{\note}[1]{\mbox{\tt not}~#1}
-\newcommand{\ande}[2]{\mbox{\tt and}~(#1)~#2}
-\newcommand{\ore}[2]{\mbox{\tt or}~(#1)~#2}
+\newcommand{\ande}[2]{\mbox{\tt and}~(#1)~(#2)}
+\newcommand{\ore}[2]{\mbox{\tt or}~(#1)~(#2)}
 \newcommand{\true}{\mbox{\tt true}}
 \newcommand{\false}{\mbox{\tt false}}
 
@@ -67,8 +67,8 @@ The "WHILE" language is a basic language that was defined in class.  Figure \ref
   \mydefcase{\ife e e e}{conditional expressions}
   \mydefcase{\whilee e e}{while expressions}
   \mydefcase{\note e}{not expressions}
-  \mydefcase{\ande e e}{and expressions}
-  \mydefcase{\ore e e}{or expressions}
+  \mydefcase{\ande e e}{and expressions ({\bf Are the parentheses ok?})}
+  \mydefcase{\ore e e}{or expressions ({\bf Are the parentheses ok?})}
   \\
   \mydefhead{v ::=\qquad\qquad\qquad\qquad}{Values}
   \mydefcase{i}{integer values}
@@ -84,10 +84,10 @@ The "WHILE" language is a basic language that was defined in class.  Figure \ref
 
 
 %---------
-\section{Base WHILE Language}
+\section{Base WHILE Language Small-Step Semantics Rules}
 
 
-The following figures enumerate the execution order, small-step semantics rules for the WHILE language as defined in class.  
+The following figures enumerate the execution order, small-step semantics rules for the WHILE language expressions as defined in class.  
 
 \iffalse
 \begin{figure}[H]\label{fig:smallstep}
@@ -216,7 +216,7 @@ The following figures enumerate the execution order, small-step semantics rules 
 }
 \ssrule{ss-seqReduction}{
 }{
-  \sstep{v ; e}{\sigma}{e}{\sigma'}
+  \sstep{v ; e}{\sigma}{e}{\sigma}
 }
 \end{array}
 \]
@@ -251,7 +251,7 @@ The following figures enumerate the execution order, small-step semantics rules 
 \[
 \\
 \begin{array}{r@{\qquad\qquad}l}
-\ssrule{ss-while}{
+\ssrule{ss-whileReduction}{
 }{
   \sstep{\whilee{e_1}{e_2}}{\sigma}{\ife{e_1}{e_2;\whilee{e_1}{e_2}}{\false}}{\sigma}
 }
@@ -260,7 +260,7 @@ The following figures enumerate the execution order, small-step semantics rules 
 \end{figure}
 
 %---------
-\section{Boolean Expressions Small-Step Semantics}
+\section{Boolean Expressions Small-Step Semantics Rules}
 
 
 In this section, I add three new expression types to the WHILE language namely: {\tt not}, {\tt and}, and {\tt or}.  The evaluation order rules for each are below.
@@ -281,8 +281,7 @@ In this section, I add three new expression types to the WHILE language namely: 
 }
 \end{array}
 \]
-{\bf Not sure if I need this.  If I do, then why?  Why is this not like the 
-"{\tt op}" case:} 
+{\bf Not sure if I need this.  If I do, then why?  Why is this not like the  "{\tt op}" case?} 
 \[
 \\
 \begin{array}{r@{\qquad\qquad}l}
@@ -292,7 +291,7 @@ In this section, I add three new expression types to the WHILE language namely: 
 }
 \end{array}
 \]
-{\bf I believe the above rule makes these unnecessary.  Would most define as above or like below?} 
+{\bf I believe the above rule makes these unnecessary.  Would most define as above or like below (assuming they are even necessary)?} 
 \[
 \\
 \begin{array}{r@{\qquad\qquad}l}
@@ -325,7 +324,8 @@ In this section, I add three new expression types to the WHILE language namely: 
 }
 \end{array}
 \]
-{\bf Using the above, I think I do not need these:} 
+{\bf Using the above, I think I do not need these.  However, I believe the implementation
+from an execution perspective of these is slightly different since the above case is short circuit compare (which could affect the store) while the lower case is not.  Correct me if I am wrong.} 
 \[
 \\
 \begin{array}{r@{\qquad\qquad}l}
@@ -352,7 +352,7 @@ In this section, I add three new expression types to the WHILE language namely: 
 
 \begin{figure}[H]\label{fig:orRules}
 \caption{{\tt or} Evaluation Order Rule}
-{\bf {\tt or} Evaluation Rules: (Is defining "temporary variables" as I did allowed in small step semantics?  I assumed it was because of how you handled the "{\tt op}" case.  I also assume that defining these temp variables is required since they enforce the evaluation order (correct me if I am wrong))} 
+{\bf {\tt or} Evaluation Rules: (Is defining "temporary variables" as I did allowed in small step semantics?  I assumed it was because of how you handled the "{\tt op}" case.  I also assumed that defining these temp variables is required since they enforce the evaluation order (correct me if I am wrong).} 
 \[
 \\
 \begin{array}{r@{\qquad\qquad}l}

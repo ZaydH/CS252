@@ -42,8 +42,8 @@ you will implement the semantics for a small imperative language, named WHILE.
 \newcommand{\ife}[3]{\mbox{\tt if}~{#1}~\mbox{\tt then}~{#2}~\mbox{\tt else}~{#3}}
 \newcommand{\whilee}[2]{\mbox{\tt while}~(#1)~#2}
 \newcommand{\note}[1]{\mbox{\tt not}~#1}
-\newcommand{\ande}[2]{\mbox{\tt and}~#1~#2}
-\newcommand{\ore}[2]{\mbox{\tt or}~#1~#2}
+\newcommand{\ande}[2]{\mbox{\tt and}~(#1)~#2}
+\newcommand{\ore}[2]{\mbox{\tt or}~(#1)~#2}
 \newcommand{\true}{\mbox{\tt true}}
 \newcommand{\false}{\mbox{\tt false}}
 
@@ -84,7 +84,7 @@ you will implement the semantics for a small imperative language, named WHILE.
        {\strut\begin{array}{@{}c@{}} #3 \end{array}}
    \\~\\
 }
-\newcommand{\sstep}[4]{\ctxt[{#1}],{#2} \rightarrow \ctxt[{#3}],{#4}}
+\newcommand{\sstep}[4]{{#1},{#2} \rightarrow {#3},{#4}}
 \newcommand{\sstepraw}[4]{{#1},{#2} \rightarrow {#3},{#4}}
 \newcommand{\ctxt}{C}
 
@@ -98,12 +98,6 @@ to note with the $\rel{ss-while}$ rule.
 {\bf Runtime Syntax:}
 \[
 \begin{array}{rclcl}
-  \ctxt & \in & {Context} \quad & ::= & \quad \ctxt; e
-        ~|~ \ctxt ~op~ e
-        ~|~ v ~op~ \ctxt
-        ~|~ \assign{x}{\ctxt}
-        ~|~ \ife{\ctxt}{e_1}{e_2}
-        ~|~ \bullet \\
   \sigma & \in & {Store} \quad  & = & \quad {variable} ~\rightarrow ~v \\
   \\
 \end{array}
@@ -141,16 +135,94 @@ to note with the $\rel{ss-while}$ rule.
 }{
   \sstep{\whilee{e_1}{e_2}}{\sigma}{\ife{e_1}{e_2;\whilee{e_1}{e_2}}{\false}}{\sigma}
 }
-\ssrule{ss-notcontext}{
-  \sstep{e}{\sigma}{e'}{\sigma'}
+\end{array}
+\]
+\end{figure}
+
+\begin{figure}[H]\label{fig:seqRules}
+\caption{sequence (;) Evaluation Order Rules}
+{\bf Sequence Evaluation Rules:} \\
+\[
+\begin{array}{r@{\qquad\qquad}l}
+\ssrule{ss-seqContext}{
+  \sstep{e_1}{\sigma}{e_1'}{\sigma'}
 }{
-  \sstep{e'}{\sigma}{e'}{\sigma'}
+  \sstep{e_1 ; e_2}{\sigma}{e_1' ; e_2}{\sigma'}
+}
+\ssrule{ss-seqReduction}{
+}{
+  \sstep{v ; e}{\sigma}{e}{\sigma'}
 }
 \end{array}
 \]
 \end{figure}
 
+\begin{figure}[H]\label{fig:notRules}
+\caption{not Evaluation Order Rules}
+{\bf not Evaluation Rules:} \\
+\[
+\begin{array}{r@{\qquad\qquad}l}
+\ssrule{ss-notContext}{
+  \sstep{e}{\sigma}{e'}{\sigma'}
+}{
+  \sstep{\note{e}}{\sigma}{\note{e'}}{\sigma'}
+}
+\ssrule{ss-notTrue}{
+}{
+  \sstep{\note{\true}}{\sigma}{\false}{\sigma}
+}
+\ssrule{ss-notFalse}{
+}{
+  \sstep{\note{\false}}{\sigma}{\true}{\sigma}
+}
+\end{array}
+\]
+\end{figure}
 
+\begin{figure}[H]\label{fig:andRules}
+\caption{and Evaluation Order Rules}
+{\bf and Evaluation Rules:} \\
+\[
+\begin{array}{r@{\qquad\qquad}l}
+\ssrule{ss-andContext1}{
+  \sstep{e_1}{\sigma}{e_1'}{\sigma'}
+}{
+  \sstep{\ande{e_1}{e_2}}{\sigma}{\ande{e_1'}{e_2}}{\sigma'}
+}
+\ssrule{ss-andContext2}{
+  \sstep{e}{\sigma}{e'}{\sigma'}
+}{
+  \sstep{\ande{v}{e}}{\sigma}{\ande{v}{e'}}{\sigma'}
+}
+\ssrule{ss-andAllTrue}{
+}{
+  \sstep{\ande{\true}{\true}}{\sigma}{\true}{\sigma}
+}
+\ssrule{ss-andFalse1}{
+}{
+  \sstep{\ande{\false}{v}}{\sigma}{\false}{\sigma}
+}
+\ssrule{ss-andFalse2}{
+}{
+  \sstep{\ande{v}{\false}}{\sigma}{\false}{\sigma}
+}
+\end{array}
+\]
+\end{figure}
+
+\begin{figure}[H]\label{fig:orRules}
+\caption{or Evaluation Order Rule}
+{\bf or Evaluation Rules:} \\
+\[
+\begin{array}{r@{\qquad\qquad}l}
+\ssrule{ss-orReduction}{
+  e_1'=\note{e_1} \qquad e_2'=\note{e_2} \qquad e_3=\ande{e_1'}{e_2'}
+}{
+  \sstep{\ore{e_1}{e_2}}{\sigma}{\note{e_3}}{\sigma}
+}
+\end{array}
+\]
+\end{figure}
 
 \end{document}
 

@@ -45,7 +45,7 @@
 
 \section{Introduction to the WHILE Language}
 
-The "WHILE" language is a basic language that was defined in class.  Figure \ref{fig:lang} defines the expressions, values, and operators in this language.  This notation for expressions ($e$), values ($v$), variables/addresses ($x$), and store ($\sigma$) applies to all sections of this document.
+The ``WHILE'' language is a basic language that was defined in class.  Figure \ref{fig:lang} defines the expressions, values, and operators in this language.  This notation for expressions ($e$), values ($v$), variables/addresses ($x$), and store ($\sigma$) applies to all sections of this document.
 
 \newcommand{\ssrule}[3]{
   \rel{#1} &
@@ -191,7 +191,7 @@ The following figures enumerate the execution order, small-step semantics rules 
 }
 \end{array}
 \]
-{\bf Is there a reason you used the infix op notation here instead of the notation from class "$\tt v_3 = apply(op, v_1, v_2)$"}
+{\bf Is there a reason you used the infix op notation here instead of the notation from class ``$\tt v_3 = apply(op, v_1, v_2)$''}
 \[
 \\
 \begin{array}{r@{\qquad\qquad}l}
@@ -267,7 +267,7 @@ The following figures enumerate the execution order, small-step semantics rules 
 In this section, I add three new expression types to the WHILE language namely: {\tt not}, {\tt and}, and {\tt or}.  The evaluation order rules for each are below.
 
 
-\bf Can I have the parentheses in the "{\tt and}" and "{\tt or}" statements?  Is an infix style more typically used?
+\bf Can I have the parentheses in the ``{\tt and}'' and ``{\tt or}'' statements?  Is an infix style more typically used?
 
 \begin{figure}[H]\label{fig:notRules}
 \caption{{\tt not} Small-Step Semantics Evaluation Order Rules}
@@ -282,7 +282,7 @@ In this section, I add three new expression types to the WHILE language namely: 
 }
 \end{array}
 \]
-{\bf Not sure if I need this.  If I do, then why?  Why is this not like the  "{\tt op}" case?  Can this be used to enforce that the value types are boolean?} 
+{\bf Not sure if I need this.  If I do, then why?  Why is this not like the  ``{\tt op}'' case?  Can this be used to enforce that the value types are boolean?} 
 \[
 \\
 \begin{array}{r@{\qquad\qquad}l}
@@ -310,7 +310,7 @@ In this section, I add three new expression types to the WHILE language namely: 
 
 \begin{figure}[H]\label{fig:andRules}
 \caption{{\tt and} Small-Step Semantics Evaluation Order Rules}
-{\bf {\tt and} Evaluation Rules: (In the case of rule "SS-ANDREDUCTION", "$e$" could return an integer.  I do not enforce any typing here while I do in the lower set of rules.  Is that ok?  Rather than just making it "$e$", I could make it "${\tt AND~e~True}$")}
+{\bf {\tt and} Evaluation Rules: (In the case of rule ``SS-ANDREDUCTION'', ``$e$'' could return an integer.  I do not enforce any typing here while I do in the lower set of rules.  Is that ok?  Rather than just making it ``$e$'', I could make it ``${\tt AND~e~True}$'')}
 \[
 \\
 \begin{array}{r@{\qquad\qquad}l}
@@ -353,7 +353,7 @@ from an execution perspective of these is slightly different since the above cas
 
 \begin{figure}[H]\label{fig:orRules}
 \caption{{\tt or} Small-Step Semantics Evaluation Order Rule}
-{\bf {\tt or} Evaluation Rule: (Is defining "temporary variables" as I did allowed in small step semantics?  I assumed it was because of how you handled the "{\tt op}" expression.  I also assumed that defining these temp variables is required since they enforce the evaluation order (correct me if I am wrong).} 
+{\bf {\tt or} Evaluation Rule: (Is defining ``temporary variables'' as I did allowed in small step semantics?  I assumed it was because of how you handled the ``{\tt op}'' expression.  I also assumed that defining these temp variables is required since they enforce the evaluation order (correct me if I am wrong).} 
 \[
 \\
 \begin{array}{r@{\qquad\qquad}l}

@@ -15,18 +15,6 @@
 
 
 \newcommand{\rel}[1]{ \mbox{\sc [#1]} }
-
-\title{Homework 2: Operational Semantics for the WHILE Language}
-
-\author{
-  Zayd Hammoudeh \\
-  (zayd.hammoudeh@sjsu.edu)
-  }
-\date{}
-
-\begin{document}
-\maketitle
-
 % Commands for formatting figure
 \newcommand{\mydefhead}[2]{\multicolumn{2}{l}{{#1}}&\mbox{\emph{#2}}\\}
 \newcommand{\mydefcase}[2]{\qquad\qquad& #1 &\mbox{#2}\\}
@@ -40,6 +28,19 @@
 \newcommand{\ore}[2]{\mbox{\tt or}~(#1)~#2}
 \newcommand{\true}{\mbox{\tt true}}
 \newcommand{\false}{\mbox{\tt false}}
+
+\title{Homework 2: Operational Semantics for the WHILE Language}
+
+\author{
+  Zayd Hammoudeh \\
+  (zayd.hammoudeh@sjsu.edu)
+  }
+\date{}
+
+\setlength\parskip{\baselineskip}
+
+\begin{document}
+\maketitle
 
 \section{Introduction to the WHILE Language}
 
@@ -189,8 +190,9 @@ The following figures enumerate the execution order, small-step semantics rules 
 }
 \end{array}
 \]
-{\bf Is there a reason you used the infix op notation here instead of the notation from class "$\tt v_3 = apply(op, v_1, v_2)$"} \\
+{\bf Is there a reason you used the infix op notation here instead of the notation from class "$\tt v_3 = apply(op, v_1, v_2)$"}
 \[
+\\
 \begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-opReduction}{
   v_3 = v_1 ~op~ v_2
@@ -203,8 +205,9 @@ The following figures enumerate the execution order, small-step semantics rules 
 
 \begin{figure}[H]\label{fig:seqRules}
 \caption{Sequence ({\tt ;}) Evaluation Order Rules}
-{\bf Sequence ({\tt ;}) Evaluation Rules:} \\
+{\bf Sequence ({\tt ;}) Evaluation Rules:}
 \[
+\\
 \begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-seqContext}{
   \sstep{e_1}{\sigma}{e_1'}{\sigma'}
@@ -221,8 +224,9 @@ The following figures enumerate the execution order, small-step semantics rules 
 
 \begin{figure}[H]\label{fig:condRules}
 \caption{Conditional ({\tt if}) Small-Step Semantics Evaluation Order Rules}
-{\bf Conditional Statement ({\tt if}) Evaluation Rules:} \\
+{\bf Conditional Statement ({\tt if}) Evaluation Rules:}
 \[
+\\
 \begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-ifContext}{
   \sstep{e_1}{\sigma}{e_1'}{\sigma'}
@@ -243,8 +247,9 @@ The following figures enumerate the execution order, small-step semantics rules 
 
 \begin{figure}[H]\label{fig:whileRules}
 \caption{{\tt while} Small-Step Semantics Evaluation Order Rules}
-{\bf {\tt while} Evaluation Rules:} \\
+{\bf {\tt while} Evaluation Rules:} 
 \[
+\\
 \begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-while}{
 }{
@@ -257,14 +262,17 @@ The following figures enumerate the execution order, small-step semantics rules 
 %---------
 \section{Boolean Expressions Small-Step Semantics}
 
-In this section, I add three new expression types to the WHILE language namely: {\tt not}, {\tt and}, and {\tt or}.  The evaluation order rules for each are below.\\
+
+In this section, I add three new expression types to the WHILE language namely: {\tt not}, {\tt and}, and {\tt or}.  The evaluation order rules for each are below.
+
 
 \bf Do I need the parentheses is in the "{\tt and}" and "{\tt or}" statements?  Is an infix style more typically used?
 
 \begin{figure}[H]\label{fig:notRules}
 \caption{{\tt not} Small-Step Semantics Evaluation Order Rules}
-{\bf {\tt not} Evaluation Rules:} \\
+{\bf {\tt not} Evaluation Rules:} 
 \[
+\\
 \begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-notContext}{
   \sstep{e}{\sigma}{e'}{\sigma'}
@@ -274,8 +282,9 @@ In this section, I add three new expression types to the WHILE language namely: 
 \end{array}
 \]
 {\bf Not sure if I need this.  If I do, then why?  Why is this not like the 
-"{\tt op}" case:} \\
+"{\tt op}" case:} 
 \[
+\\
 \begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-notReduction}{
 }{
@@ -283,8 +292,9 @@ In this section, I add three new expression types to the WHILE language namely: 
 }
 \end{array}
 \]
-{\bf I believe the above rule makes these unnecessary.  Would most define as above or like below?} \\
+{\bf I believe the above rule makes these unnecessary.  Would most define as above or like below?} 
 \[
+\\
 \begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-notTrue}{
 }{
@@ -300,8 +310,9 @@ In this section, I add three new expression types to the WHILE language namely: 
 
 \begin{figure}[H]\label{fig:andRules}
 \caption{{\tt and} Small-Step Semantics Evaluation Order Rules}
-{\bf {\tt and} Evaluation Rules:} \\
+{\bf {\tt and} Evaluation Rules:}
 \[
+\\
 \begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-andContext}{
   \sstep{e_1}{\sigma}{e_1'}{\sigma'}
@@ -314,8 +325,9 @@ In this section, I add three new expression types to the WHILE language namely: 
 }
 \end{array}
 \]
-{\bf Using the above, I think I do not need these:} \\
+{\bf Using the above, I think I do not need these:} 
 \[
+\\
 \begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-andContext2}{
   \sstep{e}{\sigma}{e'}{\sigma'}
@@ -340,8 +352,9 @@ In this section, I add three new expression types to the WHILE language namely: 
 
 \begin{figure}[H]\label{fig:orRules}
 \caption{{\tt or} Evaluation Order Rule}
-{\bf {\tt or} Evaluation Rules: (Is defining "temporary variables" as I did allowed in small step semantics?  I assumed it was because of how you handled the "{\tt op}" case.  I also assume that defining these temp variables is required since they enforce the evaluation order (correct me if I am wrong))} \\
+{\bf {\tt or} Evaluation Rules: (Is defining "temporary variables" as I did allowed in small step semantics?  I assumed it was because of how you handled the "{\tt op}" case.  I also assume that defining these temp variables is required since they enforce the evaluation order (correct me if I am wrong))} 
 \[
+\\
 \begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-orReduction}{
   e_1'=\note{e_1} \qquad e_2'=\note{e_2} \qquad e_3=\ande{e_1'}{e_2'}

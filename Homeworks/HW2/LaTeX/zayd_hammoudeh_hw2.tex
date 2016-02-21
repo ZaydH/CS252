@@ -16,22 +16,16 @@
 
 \newcommand{\rel}[1]{ \mbox{\sc [#1]} }
 
-\title{Homework 2: Operational Semantics for WHILE}
+\title{Homework 2: Operational Semantics for the WHILE Language}
 
 \author{
-  CS 252: Advanced Programming Languages \\
-  Prof. Thomas H. Austin \\
-  San Jos\'{e} State University \\
+  Zayd Hammoudeh \\
+  (zayd.hammoudeh@sjsu.edu)
   }
 \date{}
 
 \begin{document}
 \maketitle
-
-\section{Introduction}
-
-For this assignment,
-you will implement the semantics for a small imperative language, named WHILE.
 
 % Commands for formatting figure
 \newcommand{\mydefhead}[2]{\multicolumn{2}{l}{{#1}}&\mbox{\emph{#2}}\\}
@@ -47,7 +41,19 @@ you will implement the semantics for a small imperative language, named WHILE.
 \newcommand{\true}{\mbox{\tt true}}
 \newcommand{\false}{\mbox{\tt false}}
 
-\begin{figure}\label{fig:lang}
+\section{Introduction to the WHILE Language}
+
+The "WHILE" language is a basic language that was defined in class.  Figure \ref{fig:lang} defines the expressions, values, and operators in this language.  This notation for expressions (e.g. $e$), values ($v$), variables/addresses ($x$), and store ($\sigma$) applies to all sections of this document.
+
+\newcommand{\ssrule}[3]{
+  \rel{#1} &
+  \frac{\strut\begin{array}{@{}c@{}} #2 \end{array}}
+       {\strut\begin{array}{@{}c@{}} #3 \end{array}}
+   \\~\\
+}
+\newcommand{\sstep}[4]{{#1},{#2} \rightarrow {#3},{#4}}
+\newcommand{\sstepraw}[4]{{#1},{#2} \rightarrow {#3},{#4}}
+\begin{figure}[H]\label{fig:lang}
 \caption{The WHILE language}
 \[
 \begin{array}{llr}
@@ -67,31 +73,22 @@ you will implement the semantics for a small imperative language, named WHILE.
   \mydefcase{i}{integer values}
   \mydefcase{b}{boolean values}
   \\
-  op ::= & + ~|~ - ~|~ * ~|~ / ~|~ > ~|~ >= ~|~ < ~|~ <=  & \mbox{\emph{Binary operators}} \\
+  op ::= & + ~|~ - ~|~ * ~|~ / ~|~ > ~|~ >= ~|~ < ~|~ <=  & \mbox{\emph{Binary operators}} 
+  \\
+  \\
+  \mydefhead{\sigma}{Store} 
 \end{array}
 \]
 \end{figure}
-($e_1;e_2$)
-
 
 
 %---------
-\section{Small-step semantics}
-
-\newcommand{\ssrule}[3]{
-  \rel{#1} &
-  \frac{\strut\begin{array}{@{}c@{}} #2 \end{array}}
-       {\strut\begin{array}{@{}c@{}} #3 \end{array}}
-   \\~\\
-}
-\newcommand{\sstep}[4]{{#1},{#2} \rightarrow {#3},{#4}}
-\newcommand{\sstepraw}[4]{{#1},{#2} \rightarrow {#3},{#4}}
+\section{Base WHILE Language}
 
 
-Most of these rules are fairly straightforward, but there are a couple of points
-to note with the $\rel{ss-while}$ rule.
+The following figures enumerate the execution order, small-step semantics rules for the WHILE language as defined in class.  
 
-
+\iffalse
 \begin{figure}[H]\label{fig:smallstep}
 \caption{Small-step semantics for WHILE}
 {\bf Runtime Syntax:}
@@ -137,11 +134,13 @@ to note with the $\rel{ss-while}$ rule.
 \end{array}
 \]
 \end{figure}
+\fi
 
 \begin{figure}[H]\label{fig:varRules}
 \caption{Variable Small-Step Semantics Evaluation Order Rules}
-{\bf Variable Evaluation Rules:} \\
+{\bf Variable Evaluation Rules:}
 \[
+\\
 \begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-var}{
   x \in domain(\sigma) \qquad \sigma(x)=v
@@ -154,8 +153,9 @@ to note with the $\rel{ss-while}$ rule.
 
 \begin{figure}[H]\label{fig:assignRules}
 \caption{Set/Assignment Small-Step Semantics Evaluation Order Rules}
-{\bf Set/Assignment Evaluation Rules:} \\
+{\bf Set/Assignment Evaluation Rules:} 
 \[
+\\
 \begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-assignContext}{
   \sstep{e}{\sigma}{e'}{\sigma'}
@@ -165,6 +165,37 @@ to note with the $\rel{ss-while}$ rule.
 \ssrule{ss-assignReduction}{
 }{
   \sstep{\assign{x}{v}}{\sigma}{v}{\sigma[x:=v]}
+}
+\end{array}
+\]
+\end{figure}
+
+
+\begin{figure}[H]\label{fig:opRules}
+\caption{Binary Operator ({\tt op}) Evaluation Order Rules}
+{\bf Binary Operator ({\tt op}) Evaluation Rules:}
+\[
+\\
+\begin{array}{r@{\qquad\qquad}l}
+\ssrule{ss-opContext1}{
+  \sstep{e_1}{\sigma}{e_1'}{\sigma'}
+}{
+  \sstep{e_1~op~e_2}{\sigma}{e_1'~op~e_2}{\sigma'}
+}
+\ssrule{ss-opContext2}{
+  \sstep{e}{\sigma}{e'}{\sigma'}
+}{
+  \sstep{v~op~e}{\sigma}{v~op~e'}{\sigma'}
+}
+\end{array}
+\]
+{\bf Is there a reason you used the infix op notation here instead of the notation from class "$\tt v_3 = apply(op, v_1, v_2)$"} \\
+\[
+\begin{array}{r@{\qquad\qquad}l}
+\ssrule{ss-opReduction}{
+  v_3 = v_1 ~op~ v_2
+}{
+  \sstep{v_1~op~v_2}{\sigma}{v_3}{\sigma}
 }
 \end{array}
 \]
@@ -309,7 +340,7 @@ In this section, I add three new expression types to the WHILE language namely: 
 
 \begin{figure}[H]\label{fig:orRules}
 \caption{{\tt or} Evaluation Order Rule}
-{\bf {\tt or} Evaluation Rules: (Is defining "temporary variables" as I did allowed in small step semantics?)} \\
+{\bf {\tt or} Evaluation Rules: (Is defining "temporary variables" as I did allowed in small step semantics?  I assumed it was because of how you handled the "{\tt op}" case.  I also assume that defining these temp variables is required since they enforce the evaluation order (correct me if I am wrong))} \\
 \[
 \begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-orReduction}{

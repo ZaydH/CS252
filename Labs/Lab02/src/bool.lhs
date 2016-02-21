@@ -43,8 +43,9 @@ You must complete the other cases.
 >                              BVNum bExp'  -> BVNum $ BVSucc $ bExp'
 >                              _            -> error "Invalid call."
 > evaluate (Bpred bExp) = case (evaluate bExp) of 
->                               BVNum BV0   -> (BVNum BV0)
+>                               BVNum BV0        -> (BVNum BV0)
 >                               BVNum (BVSucc x) -> BVNum x
+>                               _                -> error "Invalid call."
 
 And here we have a couple of programs to test.
 prog1 should evaluate to BVTrue and prog2 should evaluate to BVFalse

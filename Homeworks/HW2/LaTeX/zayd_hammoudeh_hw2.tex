@@ -189,12 +189,6 @@ The following figures enumerate the execution order, small-step semantics rules 
 }{
   \sstep{v~op~e}{\sigma}{v~op~e'}{\sigma'}
 }
-\end{array}
-\]
-{\bf Is there a reason you used the infix op notation here instead of the notation from class ``$\tt v_3 = apply(op, v_1, v_2)$''}
-\[
-\\
-\begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-opReduction}{
   v_3 = v_1 ~op~ v_2
 }{
@@ -266,43 +260,15 @@ The following figures enumerate the execution order, small-step semantics rules 
 
 In this section, I add three new expression types to the WHILE language namely: {\tt not}, {\tt and}, and {\tt or}.  The evaluation order rules for each are below.
 
-
-\bf Can I have the parentheses in the ``{\tt and}'' and ``{\tt or}'' statements?  Is an infix style more typically used?
-
 \begin{figure}[H]\label{fig:notRules}
 \caption{{\tt not} Small-Step Semantics Evaluation Order Rules}
 {\bf {\tt not} Evaluation Rules:} 
 \[
 \\
 \begin{array}{r@{\qquad\qquad}l}
-\ssrule{ss-notContext}{
-  \sstep{e}{\sigma}{e'}{\sigma'}
-}{
-  \sstep{\note{e}}{\sigma}{\note{e'}}{\sigma'}
-}
-\end{array}
-\]
-{\bf Not sure if I need this.  If I do, then why?  Why is this not like the  ``{\tt op}'' case?  Can this be used to enforce that the value types are boolean?} 
-\[
-\\
-\begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-notReduction}{
 }{
-  \sstep{\note{v}}{\sigma}{\ife{v}{\false}{\true}}{\sigma}
-}
-\end{array}
-\]
-{\bf I believe the above rule makes these unnecessary.  Would most define as above or like below (assuming they are even necessary)?} 
-\[
-\\
-\begin{array}{r@{\qquad\qquad}l}
-\ssrule{ss-notTrue}{
-}{
-  \sstep{\note{\true}}{\sigma}{\false}{\sigma}
-}
-\ssrule{ss-notFalse}{
-}{
-  \sstep{\note{\false}}{\sigma}{\true}{\sigma}
+  \sstep{\note{e}}{\sigma}{\ife{e}{\false}{\true}}{\sigma}
 }
 \end{array}
 \]
@@ -353,7 +319,7 @@ from an execution perspective of these is slightly different since the above cas
 
 \begin{figure}[H]\label{fig:orRules}
 \caption{{\tt or} Small-Step Semantics Evaluation Order Rule}
-{\bf {\tt or} Evaluation Rule: (Is defining ``temporary variables'' as I did allowed in small step semantics?  I assumed it was because of how you handled the ``{\tt op}'' expression.  I also assumed that defining these temp variables is required since they enforce the evaluation order (correct me if I am wrong).} 
+{\bf {\tt or} Evaluation Rule:} 
 \[
 \\
 \begin{array}{r@{\qquad\qquad}l}

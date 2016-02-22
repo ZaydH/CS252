@@ -68,8 +68,8 @@ The ``WHILE'' language is a basic language that was defined in class.  Figure \r
   \mydefcase{\ife e e e}{conditional expressions}
   \mydefcase{\whilee e e}{while expressions}
   \mydefcase{\note e}{not expressions}
-  \mydefcase{\ande e e}{and expressions ({\bf Are the parentheses ok?})}
-  \mydefcase{\ore e e}{or expressions ({\bf Are the parentheses ok?})}
+  \mydefcase{\ande e e}{and expressions}
+  \mydefcase{\ore e e}{or expressions}
   \\
   \mydefhead{v ::=\qquad\qquad\qquad\qquad}{Values}
   \mydefcase{i}{integer values}
@@ -248,7 +248,7 @@ The following figures enumerate the execution order, small-step semantics rules 
 \begin{array}{r@{\qquad\qquad}l}
 \ssrule{ss-whileReduction}{
 }{
-  \sstep{\whilee{e_1}{e_2}}{\sigma}{\ife{e_1}{e_2;\whilee{e_1}{e_2}}{\false}}{\sigma}
+  \sstep{\whilee{e_1}{e_2}}{\sigma}{\ife{e_1}{(e_2;\whilee{e_1}{e_2})}{\false}}{\sigma}
 }
 \end{array}
 \]
@@ -258,7 +258,7 @@ The following figures enumerate the execution order, small-step semantics rules 
 \section{Boolean Expressions Small-Step Semantics Rules}
 
 
-In this section, I add three new expression types to the WHILE language namely: {\tt not}, {\tt and}, and {\tt or}.  The evaluation order rules for each are below.
+In this section, I describe three additional expression types in the updated the WHILE language namely: {\tt not}, {\tt and}, and {\tt or}.  The evaluation order rules for each are below.
 
 \begin{figure}[H]\label{fig:notRules}
 \caption{{\tt not} Small-Step Semantics Evaluation Order Rules}

@@ -1,0 +1,34 @@
+%\documentclass[twocolumn]{article}
+\documentclass{article}
+
+\usepackage{url}
+\usepackage{indentfirst}
+
+\title{Run Haskell Anywhere with Java and Jython}
+
+\author{
+  Zayd Hammoudeh
+  (zayd.hammoudeh@sjsu.edu)
+  }
+
+% Skip lines after each paragraph.
+\setlength\parskip{\baselineskip}
+
+\begin{document}
+\maketitle
+
+\section{Running in the Java Virtual Machine}
+
+C is one of the most commonly used languages when it comes to maximizing execution performance.  However, C/C++'s "write once compile anywhere" paradigm makes it less portable.  In contrast, the near ubiquity of the Java Virtual Machine (JVM) allows it to be "write once run anywhere."  
+
+On many occasions, the global development community has leveraged the Java environment to allow other languages to take advantage of Java's "run anywhere" capability.  Examples include: JRuby for the Ruby programming language \cite{jruby}, Scala \cite{scala}, Renjin for the R programming language \cite{renjin}, and Jython for the Python programming language \cite{jython_jvm}.
+
+Currently, there is no full implementation of Haskell in the JVM.  One Haskell dialect that is runnable in Java is Frege \cite{frege}.  
+
+In this project, I will implement a stripped down version of Haskell in the Java Virtual Machine.  
+
+%\bibliographystyle{plainurl}
+\bibliographystyle{alpha}
+\bibliography{proposal_biblio}
+
+\end{document}

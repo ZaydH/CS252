@@ -1,15 +1,22 @@
 %\documentclass[twocolumn]{article}
-\documentclass{article}
+\documentclass{report}
 
 \usepackage{url}
 \usepackage{indentfirst}
+\usepackage{float}
+\usepackage{listings} % Include the listings-package
+\usepackage{mdframed}
+\usepackage[numbers,sort]{natbib}
 
-\title{Run Haskell Anywhere with Java and Jython}
+\title{HamSkill: Run Haskell Anywhere with Jython\\[1in]
+	   CS252 Project Proposal}
 
 \author{
-  Zayd Hammoudeh\\
+  Zayd Hammoudeh \\
   (zayd.hammoudeh@sjsu.edu)
   }
+\date{}
+
 
 % Skip lines after each paragraph.
 \setlength\parskip{\baselineskip}
@@ -17,32 +24,85 @@
 \begin{document}
 \maketitle
 
+\renewcommand\thesection{\arabic{section}}
 \section{Running in the Java Virtual Machine}
 
-C is one of the most commonly used languages when it comes to maximizing execution performance.  However, C/C++'s "write once compile anywhere" paradigm makes it less portable.  In contrast, the near ubiquity of the Java Virtual Machine (JVM) allows it to be "write once run anywhere."  
+C is one of the most commonly used languages when the goal is maximum performance.  However, C/C++'s "write once, compile anywhere" paradigm limits its portability.  In contrast, the near ubiquity of the Java Virtual Machine (JVM) allows it to be "write once, run anywhere."  
 
-On many occasions, the global development community has leveraged the Java environment to allow other languages to take advantage of Java's "run anywhere" capability.  Examples include: JRuby for the Ruby programming language \cite{jruby}, Scala \cite{scala}, Renjin for the R programming language \cite{renjin}, and Jython for the Python programming language \cite{jython_jvm}.
+On many occasions, developers have leveraged the Java environment to allow other languages to take advantage of the JVM's "run anywhere" capability.  Examples include: JRuby for the Ruby programming language \cite{jruby}, Scala \cite{scala}, Renjin for the R programming language \cite{renjin}, and Jython for the Python programming language \cite{jython_jvm}.
 
 Currently, there is no full implementation of Haskell in the JVM.  One Haskell dialect that is runnable in Java is Frege \cite{frege}.  
 
-In this project, I will implement, \emph{Hamskill}, a stripped down version of Haskell in the Java Virtual Machine.  
+In this project, I will implement, \emph{HamSkill}, a stripped down version of Haskell in the Java Virtual Machine.
 
 \section{Implementation Proposal}
 
 This section outlines the overall implementation plan for this project.  It is divided into subsections based on the overall themes and ideas.  
 
-\subsection{Types}
+\subsection{Programming Language}
 
-\emph{Hamskill} will only support a select subset of the available types.  The list of planned types are: {\tt Bool}, {\tt Integer} (i.e. bounded), {\tt Char}, and {\tt List} (currently only bounded is planned, but that may change depending on the speed and complexity of implementation).
+When selecting the implementation language, my criteria were: runnable in Java, maximum flexibility, and I wanted to have some exposure to the language to reduce the number of variables.  The language that best fit this criteria was Jython.  My preliminary experiments indicate that with some degree of manipulation the overall plan is achievable.  
 
-While implementing floating point numbers would not add substantial complexity at a general level, ensuring that the floating point behavior of \emph{Hamskill} and Haskell are identical seems beyond the scope of this project.
+\begin{figure}[H]\label{fig:stringBasedRecursion}
+\begin{mdframed}
+\begin{lstlisting}[language=Python]
+
+# Create a temporary memory space
+temp_heap = {'x': 10}
+    
+# Define the recursive function as a string.
+my_func = """\
+             def string_fibonacci(n):
+                 if n==0 or n==1:
+                     return n
+                 return my_func(n-1) + my_func(n-2)
+
+             result = my_func(x)"""    
+
+# Run the function above
+exec(my_func, temp_heap)
+    
+# Print the result
+print temp_heap['result']
+
+\end{lstlisting}
+\end{mdframed}
+\caption{Jython Function Creation on the Fly Using {\tt exec}}
+\end{figure}
+
+For example, figure \ref{fig:stringBasedRecursion} shows example code I write in Jython that is executed purely from a string.  This paradigm will allow me to take code either from a file or from command line and execute it in real time.  What is more, this code also supports passing arguments as I am doing with argument ``{\tt x}''.
+
+Some of the guidance for implementing this style of code came from \cite{stackOverflowExecRecursive}.
+
+\subsection{Supported Types}
+
+\emph{HamSkill} will only support a select subset of Haskell's available types.  The list of planned types are: {\tt Bool}, {\tt Integer} (i.e. bounded), {\tt Char}, and {\tt List} (currently only finite lists are planned, but that may change depending on the speed and complexity of the implementation).
+
+While implementing floating point numbers would not add substantial complexity at a basic level, ensuring that the floating point behavior of \emph{HamSkill} and Haskell are identical is beyond the scope of this project.
 
 \subsection{Memory Management}
- 
+
+Given the use model of Python's {\tt exec} command as shown in figure \ref{fig:stringBasedRecursion}, the local variables will need to be kept in a Python Dictionary.  I expect that I will need to build some amount of structure around that to ensure objects are immutable.  However, that remains to be seen.
 
 
-%\bibliographystyle{plainurl}
-\bibliographystyle{apalike}
+\subsection{GHCII-like Behavior}
+
+One of the reasons I am planning to use {\tt exec} and not simply translate code to a file is to allow for a GHCI-like terminal where a user can enter supported Haskell code, and it will be executed in real-time by \emph{HamSkill}.
+
+\subsection{Higher Order Support}
+
+By representing functions as strings, I expect I will be able to pass them as parameters and perform actions on them.  The specifics of this part of the implementation has not been entirely thought through.  There may need to be some unforeseen tradeoffs.
+
+\subsection{Currying}
+
+Given that the heap object I pass into the {\tt exec} function is under my control, I expect to be able to perform currying of functions.
+
+\section{Tentative Schedule}
+
+If you are satisfied with this plan, I will draft a schedule.  I did not want to put too much thought into this until I got your buyoff on the plan as a whole.
+
+\pagebreak
+\bibliographystyle{plainurl}
 \bibliography{proposal_biblio}
 
 \end{document}

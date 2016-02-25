@@ -7,7 +7,7 @@
 \title{Run Haskell Anywhere with Java and Jython}
 
 \author{
-  Zayd Hammoudeh
+  Zayd Hammoudeh\\
   (zayd.hammoudeh@sjsu.edu)
   }
 
@@ -25,10 +25,24 @@ On many occasions, the global development community has leveraged the Java envir
 
 Currently, there is no full implementation of Haskell in the JVM.  One Haskell dialect that is runnable in Java is Frege \cite{frege}.  
 
-In this project, I will implement a stripped down version of Haskell in the Java Virtual Machine.  
+In this project, I will implement, \emph{Hamskill}, a stripped down version of Haskell in the Java Virtual Machine.  
+
+\section{Implementation Proposal}
+
+This section outlines the overall implementation plan for this project.  It is divided into subsections based on the overall themes and ideas.  
+
+\subsection{Types}
+
+\emph{Hamskill} will only support a select subset of the available types.  The list of planned types are: {\tt Bool}, {\tt Integer} (i.e. bounded), {\tt Char}, and {\tt List} (currently only bounded is planned, but that may change depending on the speed and complexity of implementation).
+
+While implementing floating point numbers would not add substantial complexity at a general level, ensuring that the floating point behavior of \emph{Hamskill} and Haskell are identical seems beyond the scope of this project.
+
+\subsection{Memory Management}
+ 
+
 
 %\bibliographystyle{plainurl}
-\bibliographystyle{alpha}
+\bibliographystyle{apalike}
 \bibliography{proposal_biblio}
 
 \end{document}

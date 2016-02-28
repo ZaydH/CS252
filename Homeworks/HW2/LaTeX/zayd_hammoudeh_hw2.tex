@@ -45,7 +45,7 @@
 
 \section{Introduction to the WHILE Language}
 
-The ``WHILE" language is a basic language that was defined in class.  Figure \ref{fig:lang} defines the expressions, values, and operators in this language.  This notation for expressions ($e$), values ($v$), variables/addresses ($x$), and store ($\sigma$) applies to all sections of this document.
+The ``WHILE" language is a basic language that was defined in class.  Figure \ref{fig:lang} defines the expressions, values, operators, and store in this language; the notation for expressions ($e$), values ($v$), variables/addresses ($x$), and store ($\sigma$) applies to all sections of this document.
 
 \newcommand{\ssrule}[3]{
   \rel{#1} &
@@ -87,56 +87,21 @@ The ``WHILE" language is a basic language that was defined in class.  Figure \re
 %---------
 \section{Base WHILE Language Small-Step Semantics Rules}
 
+In the WHILE language, the basic evaluation relation takes the form shown in figure \ref{fig:whileRelation}.
 
-The following figures enumerate the execution order, small-step semantics rules for the WHILE language expressions that were defined in class.  
-
-\iffalse
-\begin{figure}[H]\label{fig:smallstep}
-\caption{Small-step semantics for WHILE}
-{\bf Runtime Syntax:}
+\begin{figure}[H]\label{fig:whileRelation}
+\caption{WHILE Language Evaluation Relation}
 \[
-\begin{array}{rclcl}
-  \sigma & \in & {Store} \quad  & = & \quad {variable} ~\rightarrow ~v \\
-  \\
-\end{array}
-\]
-{\bf Evaluation Rules:~~~ \fbox{$\sstepraw{e}{\sigma}{e'}{\sigma'}$}} \\
-\[
+\\
 \begin{array}{r@{\qquad\qquad}l}
-\ssrule{ss-var}{
-  x \in domain(\sigma) \qquad \sigma(x)=v
-}{
-  \sstep{x}{\sigma}{v}{\sigma}
-}
-\ssrule{ss-assign}{
-}{
-  \sstep{\assign{x}{v}}{\sigma}{v}{\sigma[x:=v]}
-}
-\ssrule{ss-op}{
-  v = v_1 ~op~ v_2
-}{
-  \sstep{v_1~op~v_2}{\sigma}{v}{\sigma}
-}
-\ssrule{ss-seq}{
-}{
-  \sstep{v;e}{\sigma}{e}{\sigma}
-}
-\ssrule{ss-iftrue}{
-}{
-  \sstep{\ife{\true}{e_1}{e_2}}{\sigma}{e_1}{\sigma}
-}
-\ssrule{ss-iffalse}{
-}{
-  \sstep{\ife{\false}{e_1}{e_2}}{\sigma}{e_2}{\sigma}
-}
-\ssrule{ss-while}{
-}{
-  \sstep{\whilee{e_1}{e_2}}{\sigma}{\ife{e_1}{e_2;\whilee{e_1}{e_2}}{\false}}{\sigma}
-}
+
+  \sstep{e}{\sigma}{e'}{\sigma'}
+
 \end{array}
 \]
 \end{figure}
-\fi
+
+The following figures enumerate the evaluation order, small-step semantics rules for the WHILE language expressions that were defined in class.  
 
 \begin{figure}[H]\label{fig:varRules}
 \caption{Variable Small-Step Semantics Evaluation Order Rule}

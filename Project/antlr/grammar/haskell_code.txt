@@ -1,2 +1,9 @@
-myFunc :: a -> b -> c
+myFunc :: Int -> Int -> Int
+myFunc x y = 3 + 5
+ 
+
+
+
+myFunc :: Int -> Int -> Int -> Int
+myFunc x y z = 3 * 9 * 10
 

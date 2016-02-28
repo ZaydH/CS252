@@ -6,19 +6,46 @@
 
 grammar haskell;
 
-prog:   func;
+prog : haskell_program;
 
-func:   FUNCNAME ARG_TYPES typesignature NEWLINE
+haskell_program : func haskell_program
+                | NEWLINE haskell_program;
+
+func:   NAME ARG_TYPES typesignature NEWLINE funcbody
     ;
 
-typesignature: TYPE_PARAM 
-             | TYPE_PARAM '->' typesignature 
-             | '(' typesignature ')'
+typesignature: type (TYPE_SEPARATOR type)*
+            ;
+
+funcbody : NAME func_arguments '=' expr NEWLINE funcbody 
+         | NEWLINE
+         ;
+
+// A type object can either be a type name or a function.
+type: TYPE_NAME 
+    | type_function
+    ;
+
+// Arguments passed to the function if any.
+func_arguments : NAME*;
+
+// Function expressions.
+expr : INT_VAL (INT_OP INT_VAL)*; // Integer expression
+
+
+
+// Format of function as a type.
+type_function: '(' typesignature ')'
              ;
 
-FUNCNAME : [()'a-zA-Z]+;
+// Integer operations
+INT_OP : '+' | '-' | '*' | '==' | '/=' | '>' | '<' | '<=' | '>=' ;
+TYPE_NAME : '[Int]' | 'Int' | '[Char]' | 'Char';
+INT_VAL : [0-9]+;       // Integer values
+NAME : ['a-zA-Z0-9]+;  // Names of functions
 ARG_TYPES : '::';
 TYPE_SEPARATOR : '->';
-TYPE_PARAM : [a-zA-Z]+;
+
+
 NEWLINE : '\r'? '\n' ;  //Returns a newline
 WS : [ \t]+ -> skip ; // toss out whitespace

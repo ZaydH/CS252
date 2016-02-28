@@ -7,3 +7,4 @@ export PATH=$PATH:"/cygdrive/C/Program Files/Java/jdk1.7.0_79/bin/"
 
 #cd grammar
 $antlr4 $1
+javac *.java

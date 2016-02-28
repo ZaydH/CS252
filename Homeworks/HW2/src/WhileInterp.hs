@@ -1,9 +1,9 @@
 {-
-  Name: <Your name here>
+  Name: Zayd Hammoudeh
   Class: CS 252
   Assigment: HW2
-  Date: <Date assignment is due>
-  Description: <Describe the program and what it does>
+  Date: Due March 3, 2016
+  Description: A Basic Interpreter for the WHILE Language
 -}
 
 

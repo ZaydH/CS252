@@ -75,7 +75,8 @@ testUnit = do
   putStrLn $ show $ WhileInterp.run (Op Le (Val (IntVal 9)) (Val (IntVal 9)))
   -- Should be: (BoolVal True,fromList [])
   putStrLn $ show $ WhileInterp.run (Op Le (Val (IntVal 9)) (Val (IntVal 11)))
-
+  -- Should be: (BoolVal False,fromList [("X",IntVal 13)])
+  putStrLn $ show $ WhileInterp.run (And (Sequence (Assign "X" (Val $ IntVal 13)) (Val $ BoolVal False)) (Sequence (Assign "X" (Val $ IntVal 19)) (Val $ BoolVal True)))
   putStrLn ""
 
 main :: IO ()

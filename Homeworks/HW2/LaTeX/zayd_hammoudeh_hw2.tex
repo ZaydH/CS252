@@ -30,7 +30,7 @@
 \newcommand{\true}{\mbox{\tt true}}
 \newcommand{\false}{\mbox{\tt false}}
 
-\title{Homework 2: Operational Semantics for the WHILE Language}
+\title{Homework \#2: Operational Semantics for the WHILE Language}
 
 \author{
   Zayd Hammoudeh \\
@@ -45,7 +45,7 @@
 
 \section{Introduction to the WHILE Language}
 
-The ``WHILE'' language is a basic language that was defined in class.  Figure \ref{fig:lang} defines the expressions, values, and operators in this language.  This notation for expressions ($e$), values ($v$), variables/addresses ($x$), and store ($\sigma$) applies to all sections of this document.
+The ``WHILE" language is a basic language that was defined in class.  Figure \ref{fig:lang} defines the expressions, values, and operators in this language.  This notation for expressions ($e$), values ($v$), variables/addresses ($x$), and store ($\sigma$) applies to all sections of this document.
 
 \newcommand{\ssrule}[3]{
   \rel{#1} &
@@ -88,7 +88,7 @@ The ``WHILE'' language is a basic language that was defined in class.  Figure \r
 \section{Base WHILE Language Small-Step Semantics Rules}
 
 
-The following figures enumerate the execution order, small-step semantics rules for the WHILE language expressions as defined in class.  
+The following figures enumerate the execution order, small-step semantics rules for the WHILE language expressions that were defined in class.  
 
 \iffalse
 \begin{figure}[H]\label{fig:smallstep}
@@ -258,7 +258,11 @@ The following figures enumerate the execution order, small-step semantics rules 
 \section{Boolean Expressions Small-Step Semantics Rules}
 
 
-In this section, I describe three additional expression types in the updated the WHILE language namely: {\tt not}, {\tt and}, and {\tt or}.  The evaluation order rules for each are below.
+In following subsections, I describe three additional expression types in the updated the WHILE language namely: {\tt not}, {\tt and}, and {\tt or}.  
+
+\subsection{{\tt not} Expression}\label{subSec:not}
+
+{\tt not} in my modified version of the WHILE language behaves as a standard Boolean {\tt not}.  It takes a single Boolean value and returns its complement.  If an expression is passed, the language simplifies that expression until it is in normal form at which point it applies the Boolean {\tt not}.
 
 \begin{figure}[H]\label{fig:notRules}
 \caption{{\tt not} Small-Step Semantics Evaluation Order Rule}
@@ -274,9 +278,13 @@ In this section, I describe three additional expression types in the updated the
 \]
 \end{figure}
 
+\subsection{{\tt and} Expression}\label{subSec:and}
+
+{\tt and} is designed to mimic the Boolean {\tt and} with the exception that it supports short circuit compare.  Hence, if the first expression in the {\tt and} evaluates to {\false}, the second parameter is not evaluated at all.
+
 \begin{figure}[H]\label{fig:andRules}
 \caption{{\tt and} Small-Step Semantics Evaluation Order Rules}
-{\bf {\tt and} Evaluation Rules: (In the case of rule ``SS-ANDREDUCTION'', ``$e$'' could return an integer.  I do not enforce any typing here while I do in the lower set of rules.  Is that ok?  Rather than just making it ``$e$'', I could make it ``${\tt AND~e~True}$'')}
+{\bf {\tt and} Evaluation Rules:}
 \[
 \\
 \begin{array}{r@{\qquad\qquad}l}
@@ -286,36 +294,17 @@ In this section, I describe three additional expression types in the updated the
   \sstep{\ande{e_1}{e_2}}{\sigma}{\ande{e_1'}{e_2}}{\sigma'}
 }
 \ssrule{ss-andReduction}{
+e'=\ife{e}{\true}{\false}
 }{
-  \sstep{\ande{v}{e}}{\sigma}{\ife{v}{e}{\false}}{\sigma}
-}
-\end{array}
-\]
-{\bf Using the above, I think I do not need these.  However, I believe the implementation
-from an execution perspective of these is slightly different since the above case is short circuit compare (which could affect the store) while the lower case is not.  Correct me if I am wrong.} 
-\[
-\\
-\begin{array}{r@{\qquad\qquad}l}
-\ssrule{ss-andContext2}{
-  \sstep{e}{\sigma}{e'}{\sigma'}
-}{
-  \sstep{\ande{v}{e}}{\sigma}{\ande{v}{e'}}{\sigma'}
-}
-\ssrule{ss-andAllTrue}{
-}{
-  \sstep{\ande{\true}{\true}}{\sigma}{\true}{\sigma}
-}
-\ssrule{ss-andFalse1}{
-}{
-  \sstep{\ande{\false}{v}}{\sigma}{\false}{\sigma}
-}
-\ssrule{ss-andFalse2}{
-}{
-  \sstep{\ande{v}{\false}}{\sigma}{\false}{\sigma}
+  \sstep{\ande{v}{e}}{\sigma}{\ife{v}{e'}{\false}}{\sigma}
 }
 \end{array}
 \]
 \end{figure}
+
+\subsection{{\tt or} Expression}
+
+{\tt or} is a composite of the expressions ``{\tt not}" and ``{\tt and}" described in sections \ref{subSec:not} and \ref{subSec:and} respectively.
 
 \begin{figure}[H]\label{fig:orRules}
 \caption{{\tt or} Small-Step Semantics Evaluation Order Rule}

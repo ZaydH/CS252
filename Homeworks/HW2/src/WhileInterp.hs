@@ -97,13 +97,9 @@ evaluate (Not e) s = case x of
     where (x, s') = evaluate e s
 evaluate (And e1 e2) s = case eVal1 of
                             BoolVal False -> (BoolVal False, s')
-                            BoolVal True  -> case eVal2 of
-                                                    BoolVal False   -> (BoolVal False, s'')
-                                                    BoolVal True    -> (BoolVal True, s'')           
-                                                    _               -> error "\"And\" only accepts Boolean values."
+                            BoolVal True  -> evaluate (If e2 (Val (BoolVal True)) (Val (BoolVal False))) s' 
                             _ -> error "\"And\" only accepts Boolean values."
     where   (eVal1, s') = evaluate e1 s
-            (eVal2, s'') = evaluate e2 s'
 evaluate (Or e1 e2) s = evaluate (Not (And (Not e1) (Not e2))) s 
 
 -- Evaluates a program with an initially empty state

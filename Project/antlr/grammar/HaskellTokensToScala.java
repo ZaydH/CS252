@@ -7,6 +7,8 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     private String scalaModuleName;
     private int indentLevel = 0;
     
+    private boolean firstPatternMatchingArgument;
+    
     /**
      * Operator separating the "case" statement and any pattern matching parameters and
      * the expression.
@@ -141,8 +143,9 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * @param ctx ANTLR Context
      */
     @Override public void enterFuncPrototype(HaskellParser.FuncPrototypeContext ctx) { 
-        // Puts the file header.
+        // Puts the file name
         fileContents.append(ctx.functionName().getText());
+        fileContents.append(" ");
     }
     /**
      * Closes the function prototype.
@@ -192,7 +195,9 @@ public class HaskellTokensToScala extends HaskellBaseListener {
         
         // Add the parameter name and type.
         fileContents.append(getInputParameterName());
+        fileContents.append(" ");
         fileContents.append(SCALAR_INPUT_PARAMETER_CALL_BY_TYPE);
+        fileContents.append(" ");
         fileContents.append(ctx.getText());
     }
     /**
@@ -211,10 +216,21 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      */
     @Override public void enterReturnType(HaskellParser.ReturnTypeContext ctx) {
         fileContents.append(  ": " + ctx.getText() + " = ");
+        fileContents.append("(");
+        
+        // List all parameters for the function.
+        for(int i = BASE_PARAM_NUMBER; i < nextParamNumber; i++){
+            // Comma separate multiple arguments
+            if(i != BASE_PARAM_NUMBER) fileContents.append(", ");
+            
+            // Put the parameter name
+            fileContents.append(getInputParameterName(i));
+        }
+        fileContents.append(") ");
         fileContents.append(SCALA_USE_HASKELL_PATTERN_MATCHING_STYLE);
     }
     /**
-     * Handles the entry to a single function/pattern matching statement.
+     * Handles the entry to a single function/pattern ing statement.
      */
     @Override public void enterFuncStatement(HaskellParser.FuncStatementContext ctx) {
         // Increment the indent and print them.
@@ -230,21 +246,35 @@ public class HaskellTokensToScala extends HaskellBaseListener {
         decrementIndentLevel(false);
     }
     /**
+     * End of a ALL pattern matching arguments.  This puts a pattern matching Scala symbol into the string.
+     */
+    @Override public void enterPatternMatchingArguments(HaskellParser.PatternMatchingArgumentsContext ctx) { 
+        fileContents.append(" (");
+        firstPatternMatchingArgument = true;
+        
+    }
+    /**
+     * End of a ALL pattern matching arguments.  This puts a pattern matching Scala symbol into the string.
+     */
+    @Override public void exitPatternMatchingArguments(HaskellParser.PatternMatchingArgumentsContext ctx) {         
+        fileContents.append(") ");
+        fileContents.append(PATTERN_MATCHING_OPERATOR);
+    }
+    /**
      * Handles a single pattern matching argument.
      */
     @Override public void enterPatternMatchingArgument(HaskellParser.PatternMatchingArgumentContext ctx) { 
-        fileContents.append(" " + ctx.getText());
+        // If not the first pattern matching argument, then comma separate.
+        if(!firstPatternMatchingArgument)
+            fileContents.append(", ");
+        firstPatternMatchingArgument = false;
+        // Print the parameter information.
+        fileContents.append(ctx.getText());
     }
     /**
      * End of a pattern matching argument.  Currently a no-op
      */
     @Override public void exitPatternMatchingArgument(HaskellParser.PatternMatchingArgumentContext ctx) { }
-    /**
-     * End of a ALL pattern matching arguments.  This puts a pattern matching Scala symbol into the string.
-     */
-    @Override public void exitPatternMatchingArguments(HaskellParser.PatternMatchingArgumentsContext ctx) { 
-        fileContents.append(PATTERN_MATCHING_OPERATOR);
-    }
     /**
      * Opens an expression. For robustness, everything is put in paranetheses so this puts a left "(" 
      * parentheses at the beginning of the expression.

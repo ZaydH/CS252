@@ -24,7 +24,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     /**
      * Select type of call by parameter.  Right now using lazy parameters.
      */
-    private String SCALAR_INPUT_PARAMETER_CALL_BY_TYPE = ": => ";
+    private String SCALAR_INPUT_PARAMETER_CALL_BY_TYPE = ": =>";
     /**
      * Used to invoke the pattern matching syntax.
      */
@@ -77,18 +77,49 @@ public class HaskellTokensToScala extends HaskellBaseListener {
         addIndent(); // Add indent if any.
         fileContents.append("}\n");
     }
-    
+    /** 
+     * General handler that is called when any contiguous block of code (including a comment)
+     * is invoked.
+     */
+    @Override public void enterCodeBlock(HaskellParser.CodeBlockContext ctx) { 
+        // Increase the indent by one level then print it.
+        incrementIndentLevel(false); 
+     }
+    /** 
+     * General cleanup funciton when a code block is done.
+     */
+    @Override public void exitCodeBlock(HaskellParser.CodeBlockContext ctx) { 
+        // Decrease the indent by one level
+        decrementIndentLevel(false);
+    }
+    /**
+     * Takes a line comment from Haskell and adds it to the Scala file.
+     */
+    @Override public void enterLineComment(HaskellParser.LineCommentContext ctx) { 
+        // Increase the indent by one level then print it.
+        addIndent();
+        fileContents.append("//");
+     }
+    /**
+     * Handles the close of a line comment.
+     */
+    @Override public void exitLineComment(HaskellParser.LineCommentContext ctx) { 
+        // Increase the indent by one level then print it.
+        addIndent();
+        fileContents.append("\n");
+     }
+    @Override public void enterCommentWord(HaskellParser.CommentWordContext ctx) { 
+        fileContents.append(" ");
+        fileContents.append(ctx.getText());
+    }
     /**
      * Entry to the Haskell function
      * 
      * @param ctx ANTLR Context
      */
     @Override public void enterFunc(HaskellParser.FuncContext ctx) { 
-        
-        // Increase the indent by one level then print it.
-        incrementIndentLevel(true);
-        
         // Puts the file header.
+        addIndent();
         fileContents.append("def ");
         
         // Reset the parameter number
@@ -103,9 +134,6 @@ public class HaskellTokensToScala extends HaskellBaseListener {
         // Decrement the number of indents and then add it to the file.
         addIndent();
         fileContents.append(  "} // End of function\n\n");
-        
-        // Decrease the indent by one level
-        decrementIndentLevel(false);
     }
     /**
      * Entry to the Haskell function prototype
@@ -156,17 +184,6 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     @Override public void exitTypeSignature(HaskellParser.TypeSignatureContext ctx) { 
         fileContents.append(  ") ");
     }
-    /**
-     * At the entry to the pattern matching expression, we put the operator separating the pattern
-     * matching portion and the expression.
-     */
-    @Override public void enterPatternMatchingExpression(HaskellParser.PatternMatchingExpressionContext ctx) { 
-        fileContents.append(PATTERN_MATCHING_OPERATOR);
-    }
-    /**
-     * At the end of the pattern matching expression.  Currently a no-op.
-     */
-    @Override public void exitPatternMatchingExpression(HaskellParser.PatternMatchingExpressionContext ctx) { }    
     /**
      * Performs the handling of the type in function prototype.
      */
@@ -219,10 +236,35 @@ public class HaskellTokensToScala extends HaskellBaseListener {
         fileContents.append(" " + ctx.getText());
     }
     /**
-     * End of a pattern matching argument.  Currently a noop.
+     * End of a pattern matching argument.  Currently a no-op
      */
-    @Override public void exitPatternMatchingArgument(HaskellParser.PatternMatchingArgumentContext ctx) { 
-        
+    @Override public void exitPatternMatchingArgument(HaskellParser.PatternMatchingArgumentContext ctx) { }
+    /**
+     * End of a ALL pattern matching arguments.  This puts a pattern matching Scala symbol into the string.
+     */
+    @Override public void exitPatternMatchingArguments(HaskellParser.PatternMatchingArgumentsContext ctx) { 
+        fileContents.append(PATTERN_MATCHING_OPERATOR);
+    }
+    /**
+     * Opens an expression. For robustness, everything is put in paranetheses so this puts a left "(" 
+     * parentheses at the beginning of the expression.
+     */
+    @Override public void enterPatternMatchingExpression(HaskellParser.PatternMatchingExpressionContext ctx) { 
+        fileContents.append(" (");
+    }
+    /**
+     * Closes expression.  For robustness, everything is put in paranetheses so this puts right ")" 
+     * parentheses at the beginning of the expression.
+     */
+    @Override public void exitPatternMatchingExpression(HaskellParser.PatternMatchingExpressionContext ctx) { 
+        fileContents.append(" )");
+    }
+    /**
+     * Prints a pattern matching term.
+     */
+    @Override public void enterPatternMatchingTerm(HaskellParser.PatternMatchingTermContext ctx) { 
+        fileContents.append(" ");
+        fileContents.append(ctx.getText());
     }
     /**
      * Outputs the converted Haskell code to Scala.

@@ -21,7 +21,8 @@ public class Translator {
     public static void main(String args[]) throws IOException {
         
         // Read the Input from a specified file.
-        ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(new File(args[0])));
+        String fileName = args[0];
+        ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(new File(fileName)));
         
         // Create a lexer that feeds off of input CharStream
         HaskellLexer lexer = new HaskellLexer(input);
@@ -36,8 +37,18 @@ public class Translator {
         //Create a generic parse tree walker that can trigger callbacks
         ParseTreeWalker walker = new ParseTreeWalker();
         
+        // Get the Haskell file name
+        int periodIndex = fileName.lastIndexOf(".");
+        String haskellFileName = fileName;
+        if(periodIndex >= 0)
+            haskellFileName = haskellFileName.substring(0, periodIndex);
+        // Get any preceding slashes
+        int slashIndex = Math.max(haskellFileName.lastIndexOf("\\"), haskellFileName.lastIndexOf("/"));
+        if(slashIndex >= 0)
+            haskellFileName = haskellFileName.substring(slashIndex + 1, haskellFileName.length());
+        
         // Walk the tree created during the parse, trigger callbacks
-        HaskellTokensToScala scalaCode = new HaskellTokensToScala();
+        HaskellTokensToScala scalaCode = new HaskellTokensToScala(haskellFileName);
         walker.walk(scalaCode, tree);
         
         System.out.println(scalaCode);

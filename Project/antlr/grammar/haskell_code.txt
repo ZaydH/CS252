@@ -1,6 +1,6 @@
 myFunc :: Int -> Int -> Int
 myFunc x y = 3 + 5
- 
+
 
 
 

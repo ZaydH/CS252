@@ -8,38 +8,56 @@ grammar Haskell;
 
 program : (NEWLINE* func)*;
 
-func:   NAME ARG_TYPES typesignature NEWLINE funcbody NEWLINE*;
+func    :  funcPrototype funcbody NEWLINE*;
 
-typesignature: type (TYPE_SEPARATOR type)*
-            ;
+funcPrototype : functionName ARG_TYPES typeSignature returnType NEWLINE ;
 
-// A Function body conditions of one or more function statements
-funcbody : (func_statement)+;
-// A function statement has a function name, arguments, and some expression.
-func_statement: NAME func_arguments EQUAL_SIGN expr NEWLINE;
+// A Haskell function definition takes a set of argument.
+// This object represents the different haskell types.
+typeSignature: (inputType TYPE_SEPARATOR)* ;
+
+functionName : MAIN_FUNCTION
+             | NAME;
+
+// Last type is the return type which every haskell function has.
+inputType: type;
+
+// Last type is the return type which every haskell function has.
+returnType: type;
 
 // A parameter type can either be a type name or a function.
-type: TYPE_NAME 
-    | type_function
-    ;
+type: TYPE_NAME | typeFunction;
+
+// A Function body conditions of one or more function statements
+funcbody : (funcStatement)+;
+// A function statement has a function name, arguments, and some expression.
+funcStatement: NAME patterMatchingArguments EQUAL_SIGN patternMatchingExpression NEWLINE;
+
+// Encapulates all pattern matching arguments
+patterMatchingArguments : patternMatchingArgument*;
 
 // Arguments passed to the function if any.
-func_arguments : NAME*;
+patternMatchingArgument : NAME
+                          //Handle case here paremter is in parentheses.
+                        |  LEFT_PARENTHESES patternMatchingArgument RIGHT_PARENTHESES 
+                        ; 
+
 
 // Function expressions.
-expr : INT_VAL (INT_OP INT_VAL)*; // Integer expression
-
-
+patternMatchingExpression : INT_VAL (INT_OP INT_VAL)*; // Integer expression
 
 // Format of function as a type.
-type_function: '(' typesignature ')';
+typeFunction: '(' typeSignature ')';
 
 // Integer operations
+LEFT_PARENTHESES : '(';
+RIGHT_PARENTHESES : ')';
 EQUAL_SIGN : '=';
 INT_OP : '+' | '-' | '*' | '==' | '/=' | '>' | '<' | '<=' | '>=' ;
 TYPE_NAME : '[Int]' | 'Int' | '[Char]' | 'Char' | 'Bool';
 INT_VAL : [0-9]+;       // Integer values
 NAME : ['a-zA-Z0-9]+;  // Names of functions
+MAIN_FUNCTION : 'main';
 ARG_TYPES : '::';
 TYPE_SEPARATOR : '->';  // Separates type in the function definition
 NEWLINE : '\r'? '\n' ;  // return newlines to parser (is end-statement signal)

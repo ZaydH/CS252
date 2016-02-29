@@ -1,4 +1,0 @@
-addInt :: Int -> Int -> Int--Comment
-addInt x y = x + y
-
-

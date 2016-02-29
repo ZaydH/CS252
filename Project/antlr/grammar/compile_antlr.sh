@@ -6,5 +6,9 @@ export PATH=$PATH:"/cygdrive/C/Program Files/Java/jdk1.7.0_79/bin/"
 # Need to manually add the grammar directory to the CLASSPATH environment variable.
 
 #cd grammar
-$antlr4 $1
+if [ $# -eq 0 ]; then
+	$antlr4 Haskell.g4
+else
+	$antlr4 $1
+fi
 javac *.java

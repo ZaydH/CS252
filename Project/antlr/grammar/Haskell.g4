@@ -6,9 +6,22 @@
 
 grammar Haskell;
 
-program : (NEWLINE* func)*;
+// May have exactly one header comment block.
+program : headerComment? (NEWLINE* codeBlock)* NEWLINE*;
 
+// A code block is a set of contiguous code.
+codeBlock : func | lineComment;
+
+// Placeholder for handling a header comment.
+headerComment : HEADER_COMMENT_OPEN (NAME)* HEADER_COMMENT_CLOSE;
+// Handle a function
 func    :  funcPrototype funcbody NEWLINE*;
+// Line comment is a comment that takes a whole line.
+lineComment : generalComment NEWLINE;
+
+// General comment is any comment after the header.
+generalComment : INLINE_COMMENT_SYMBOL (commentWord)*;
+commentWord : NAME;
 
 funcPrototype : functionName ARG_TYPES typeSignature returnType NEWLINE ;
 
@@ -31,32 +44,38 @@ type: TYPE_NAME | typeFunction;
 // A Function body conditions of one or more function statements
 funcbody : (funcStatement)+;
 // A function statement has a function name, arguments, and some expression.
-funcStatement: NAME patterMatchingArguments EQUAL_SIGN patternMatchingExpression NEWLINE;
+funcStatement: NAME patternMatchingArguments EQUAL_SIGN patternMatchingExpression NEWLINE;
 
 // Encapulates all pattern matching arguments
-patterMatchingArguments : patternMatchingArgument*;
+patternMatchingArguments : patternMatchingArgument*;
 
 // Arguments passed to the function if any.
 patternMatchingArgument : NAME
                           //Handle case here paremter is in parentheses.
-                        |  LEFT_PARENTHESES patternMatchingArgument RIGHT_PARENTHESES 
+                        |  LEFT_PAREN patternMatchingArgument RIGHT_PAREN 
                         ; 
 
 
-// Function expressions.
-patternMatchingExpression : INT_VAL (INT_OP INT_VAL)*; // Integer expression
+// Currently only integer expressions.
+patternMatchingExpression : patternMatchingTerm+;
+patternMatchingTerm : INT_VAL 
+                     | INT_OP 
+                     | LEFT_PAREN patternMatchingExpression RIGHT_PAREN; 
 
 // Format of function as a type.
 typeFunction: '(' typeSignature ')';
 
 // Integer operations
-LEFT_PARENTHESES : '(';
-RIGHT_PARENTHESES : ')';
+HEADER_COMMENT_OPEN : '{-';
+HEADER_COMMENT_CLOSE : '-}';
+LEFT_PAREN : '(';
+RIGHT_PAREN : ')';
+INLINE_COMMENT_SYMBOL : '--';
 EQUAL_SIGN : '=';
 INT_OP : '+' | '-' | '*' | '==' | '/=' | '>' | '<' | '<=' | '>=' ;
 TYPE_NAME : '[Int]' | 'Int' | '[Char]' | 'Char' | 'Bool';
 INT_VAL : [0-9]+;       // Integer values
-NAME : ['a-zA-Z0-9]+;  // Names of functions
+NAME : ['a-zA-Z0-9.]+;  // Name of Something
 MAIN_FUNCTION : 'main';
 ARG_TYPES : '::';
 TYPE_SEPARATOR : '->';  // Separates type in the function definition

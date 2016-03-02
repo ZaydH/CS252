@@ -48,7 +48,7 @@
 
 \section{Introduction to the WHILE Language}
 
-The ``WHILE" language is a basic language that was discussed in class.  Figure~\ref{fig:lang} defines the expressions, values, operators, and store in this language; the notation for expressions ($e$), values ($v$), variables/addresses ($x$), and store ($\sigma$) applies to all sections of this document.
+The ``WHILE" language is a basic language that was discussed in class.  Figure~\ref{fig:lang} enumerates the expressions, values, operators, and store in this language; the notation for expressions ($e$), values ($v$), variables/addresses ($x$), and store ($\sigma$) applies to all sections of this document.
 
 \newcommand{\ssrule}[3]{
   \rel{#1} &
@@ -87,7 +87,7 @@ The ``WHILE" language is a basic language that was discussed in class.  Figure~\
 \]
 \end{figure}
 
-The store ($\sigma$) is a container that holds key value pairs of variables to values.  It is defined via the notation shown in figure~\ref{fig:sigma}.
+The store ($\sigma$) is a container that holds key-value pairs of variables to values.  It is defined via the notation shown in figure~\ref{fig:sigma}.
 
 \begin{figure}[H]
 \caption{Store ($\sigma$) in the WHILE Language}
@@ -120,7 +120,7 @@ The following subsections enumerate the evaluation order, small-step semantics r
 
 \subsection{Variable Expression}
 
-The variable expression is used to specify a key, which should correspond to a specific value in the store.  Note that it is possible for the key (i.e. variable) to not exist in the store.
+The variable expression is used to specify a key, which should correspond to a specific value in the store.  Note that it is possible for the key (i.e. variable) to not exist in the store.  The small-step evaluation order semantic rules for this expression type is enumerated in figure~\ref{fig:varRules}.
 
 \begin{figure}[H]
 \caption{Variable Small-Step Semantics Evaluation Order Rule}
@@ -138,9 +138,9 @@ The variable expression is used to specify a key, which should correspond to a s
 \]
 \end{figure}
 
-\subsection{Set/Assign Expression}
+\subsection{Set/Assignment Expression}
 
-The set/assignment expression is the complement of the variable expression.  In contrast to variable which extracts a value from the store, set/assign expression specifies a key (variable) and value, the pair of which is preserved in the store.
+The set/assignment expression is the complement of the variable expression.  In contrast to variable which extracts a value from the store, set/assign expression specifies a key (variable) and value, the pair of which is preserved in the store.  The small-step evaluation order semantic rules for this expression type are enumerated in figure~\ref{fig:assignRules}.
 
 \begin{figure}[H]
 \caption{Set/Assignment Small-Step Semantics Evaluation Order Rules}
@@ -164,7 +164,7 @@ The set/assignment expression is the complement of the variable expression.  In 
 
 \subsection{Binary Operator Expression}
 
-By definition, binary operators take exactly two input parameters and return a result.  Figure~\ref{fig:opRules} defines the binary operator small-step evaluation order rules for the WHILE language.  Also, note that the supported set of binary operators is specified in figure~\ref{fig:lang}.
+By definition, binary operators take exactly two input parameters and return a result.  Figure~\ref{fig:opRules} defines the binary operator, small-step, evaluation order rules for the WHILE language.  Also, note that the supported set of binary operators is specified in figure~\ref{fig:lang}.  
 
 \begin{figure}[H]
 \caption{Binary Operator ({\tt op}) Evaluation Order Rules}
@@ -192,9 +192,12 @@ By definition, binary operators take exactly two input parameters and return a r
 \]
 \end{figure}
 
+In the accompanying program that implements these rules, only integer values are supported for these binary operators. 
+
+
 \subsection{Sequence Expression}
 
-The sequence expression is used when two or more distinct expressions need to be executed in a specific order; as such, it defines which of the set of specified expressions has precedence.  The rules in figure~\ref{fig:seqRules} are for two expressions, but this is extensible to an arbitrary number of expressions by chaining.
+The sequence expression is used when two or more distinct expressions need to be executed in a specific order; as such, it defines which of the set of specified expressions has precedence.  The rules in figure~\ref{fig:seqRules} are for two expressions (e.g. $e_1$, $e_2$), but this is extensible to an arbitrary number of expressions by chaining multiple sequences.
 
 \begin{figure}[H]
 \caption{Sequence ({\tt ;}) Evaluation Order Rules}
@@ -218,7 +221,7 @@ The sequence expression is used when two or more distinct expressions need to be
 
 \subsection{Conditional ({\tt if}) Expression}
 
-The conditional ({\tt if}) in the WHILE language is similar to that of other languages in that it takes a Boolean value (e.g. \true or \false) and returns one of two possible results depending on that Boolean value.  The rules for {\tt if} are in figure~\ref{fig:condRules}.
+The conditional ({\tt if}) in the WHILE language is similar to that of other languages in that it takes a Boolean value (e.g. {\true} or {\false}) and returns one of two possible results depending on that Boolean value.  The rules for {\tt if} are in figure~\ref{fig:condRules}.
 
 \begin{figure}[H]
 \caption{Conditional ({\tt if}) Small-Step Semantics Evaluation Order Rules}
@@ -246,7 +249,7 @@ The conditional ({\tt if}) in the WHILE language is similar to that of other lan
 
 \subsection{While Expression}
 
-Similar to the {\tt while} construct in other programming languages, the {\tt while} expression in this language takes two expressions and will evaluate the second expression as long as the first expression evaluates to \true.
+Similar to the {\tt while} construct in other programming languages, the {\tt while} expression in this language takes two expressions and will evaluate the second expression as long as the first expression evaluates to \true.  The reduction rule for this expression is in figure~\ref{fig:whileRules}.
 
 \begin{figure}[H]
 \caption{{\tt while} Small-Step Semantics Evaluation Order Rule}
@@ -267,11 +270,11 @@ Similar to the {\tt while} construct in other programming languages, the {\tt wh
 \section{Boolean Expression Small-Step Semantics Rules for an Extended WHILE Language}
 
 
-In following subsections, I describe three additional expression types in the updated/extended WHILE language namely: {\tt not}, {\tt and}, and {\tt or}.  
+In following subsections, I describe three additional expression types in the updated/extended WHILE language, namely: {\tt not}, {\tt and}, and {\tt or}.  
 
 \subsection{{\tt not} Expression}\label{subSec:not}
 
-{\tt not} in my modified version of the WHILE language behaves as a standard Boolean {\tt not}.  It takes a single Boolean value and returns its complement.  If an expression is passed, the language simplifies that expression until it is in normal form at which point it applies the Boolean {\tt not}.
+{\tt not} in my modified version of the WHILE language behaves as a standard Boolean {\tt not}.  It takes a single Boolean value and returns its complement.  If an expression is passed, the language simplifies that expression until it is in normal form, at which point it applies the Boolean {\tt not}.  The evaluation order, small step semantic rule for {\tt not} is in figure~\ref{fig:notRules}.
 
 \begin{figure}[H]
 \caption{{\tt not} Small-Step Semantics Evaluation Order Rule}
@@ -290,7 +293,7 @@ In following subsections, I describe three additional expression types in the up
 
 \subsection{{\tt and} Expression}\label{subSec:and}
 
-{\tt and} is designed to mimic the Boolean {\tt and} with the exception that it supports short circuit compare.  Hence, if the first expression in the {\tt and} evaluates to {\false}, the second parameter is not evaluated at all.
+{\tt and} is designed to mimic the Boolean {\tt and} with the exception that it supports short circuit compare.  Hence, if the first expression in the {\tt and} evaluates to {\false}, the second parameter is not evaluated at all.  The behavior of {\tt and} is shown in figure~\ref{fig:andRules}.
 
 \begin{figure}[H]
 \caption{{\tt and} Small-Step Semantics Evaluation Order Rules}
@@ -315,7 +318,7 @@ e'=\ife{e}{\true}{\false}
 
 \subsection{{\tt or} Expression}
 
-{\tt or} is a composite of the expressions ``{\tt not}" and ``{\tt and}" described in sections \ref{subSec:not} and \ref{subSec:and} respectively.
+{\tt or} is a composite of the expressions ``{\tt not}" and ``{\tt and}" described in sections \ref{subSec:not} and \ref{subSec:and} respectively.  Its behavior is detailed in figure~\ref{fig:orRules}.
 
 \begin{figure}[H]
 \caption{{\tt or} Small-Step Semantics Evaluation Order Rule}

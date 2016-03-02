@@ -105,7 +105,7 @@ While implementing floating point numbers would not add substantial complexity a
 
 The function in Haskell to convert data to string is ``{\tt show}". In contrast, the syntax in Scala to convert an object (e.g. ``x") to a string is ``{\tt x.toString()}".  Due to this, the ANTLR parser will need to be able to convert a prefix function to an object method call.
 
-\subsection{Nested Function Calls}
+\subsection{Nested Function Calls}\label{sec:nestedFunctionCalls}
 
 Imperative languages (e.g. Java) are generally more verbose than functional languages; Haskell is no exception to this.  Conciseness introduces significant challenges when writing a parser as the contextual information is reduced.  For example, figure \ref{fig:addTwoNumbersHaskell} is a simple line of Haskell code that prints to the screen the result of a function ``{\tt addTwoNumbs}" that takes two integers (e.g. ``{\tt x}" and ``{\tt y}") and sums them. 
 
@@ -146,7 +146,7 @@ A program in Haskell is composed of a set of ``{\tt module}" files.  The ``{\tt 
 
 \subsection{Partially Applied Functions}\label{partiallyAppliedFunctions}
 
-Haskell supports partially applied functions.  Figure \ref{fig:addFiveHaskell} shows the {\tt addTwoInts} method with a single argument (i.e. ``{\tt 5}") being stored in a variable ``{\tt addFive}".  
+Haskell supports partially applied functions.  Figure \ref{fig:addFiveHaskell} shows the {\tt addTwoInts} function with a single argument (i.e. ``{\tt 5}") being stored in a variable ``{\tt addFive}".  
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -157,7 +157,7 @@ let addFive = addTwoInts 5
 \caption{Partially Applied addTwoInts Function in \textbf{Haskell}}\label{fig:addFiveHaskell}
 \end{figure}
 
-Partially applied functions in Scala has advantages and disadvantages in comparison to Haskell.  One of these disadvantages is evident when figures \ref{fig:addFiveHaskell} and \ref{fig:addFiveScala} are compared.  Note that the Scala function requires an underscore ("\_") for each missing argument as well as the type for that argument.  This makes converting Haskell code to Scala problematic as the function prototype must be fixed and known at conversion time.  
+Partially applied functions in Scala have advantages and disadvantages in comparison to Haskell.  One of these disadvantages is evident when figures \ref{fig:addFiveHaskell} and \ref{fig:addFiveScala} are compared.  Note that the Scala function requires an underscore ("\_") for each missing argument as well as the type for that argument.  This makes converting Haskell code to Scala problematic as the function prototype must be fixed and known at conversion time.  
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -168,7 +168,7 @@ val addFive = addTwoInts(5, _: Int)
 \caption{Partially Applied {\tt addTwoInts} Function in \textbf{Scala}}\label{fig:addFiveScala}
 \end{figure}
 
-To simplify this, \emph{HamSkill} will require that any partially defined functions are either declared in the same file/module.  I will investigate using a predefined list of functions, but this may not be feasible or support will be very limited due to the requirement to define the parameter type.
+To simplify this, \emph{HamSkill} will require that any partially defined functions are declared in the same file/module.  I will investigate using a predefined list of functions, but this may not be feasible or support will be very limited due to the requirement to define the parameter type.  What is more, partially applied functions will use need to use the "double parentheses style" described in section \ref{sec:nestedFunctionCalls}.
 
 \subsection{Higher Order Support}
 
@@ -176,11 +176,11 @@ Scala and Haskell are both functional programming languages; one important conse
 
 \subsection{Lambda to Anonymous Functions}
 
-There is significant similarity between a Lamda function in Haskell and an anonymous function in Scala.  One primary difference is that Scala requires the developer to specify the types of the parameters in the anonymous function while Scala does not.  
+There is significant similarity between a Lamda function in Haskell and an anonymous function in Scala.  One primary difference is that Scala requires the developer to specify the types of the parameters in the anonymous function while Scala does not. For this project, I will implement support for anonymous functions either as parameters to other functions or for support for an operation such as folding or filtering a list. 
 
 \section{Tentative Schedule}
 
-The following is a preliminary schedule of the task completion.  It is subject to change due to unforeseen implementation complexity.
+The following is a preliminary, end-to-end schedule for the project.  It is subject to change if unforeseen implementation complexity arises.  It is important to note that the schedule does not encapsulate the significant work I have done to date to develop the base parser for simple Haskell code.
 
 \begin{table}[h]
 
@@ -190,7 +190,7 @@ The following is a preliminary schedule of the task completion.  It is subject t
     Present to March 10 & Work on proposal. \\ \hline
     March 14 to 18 & Implement \textbf{nested function support}. \\ \hline
     March 21 to 25 & Implement \textbf{function (e.g. show) to method conversion}. \\ \hline
-    March 28 to April 1 & Develop a test bench for comparing output of Haskell and HamSkill. \\ \hline
+    March 28 to April 1 & Develop a test bench for comparing the output of Haskell and HamSkill. \\ \hline
     April 4 to 8 & Implement \textbf{lambda/anonymous function support} and create the associated test cases. \\ \hline
     April 11 to 15 & Implement \textbf{module} and begin draft of project report.  Create associated test cases. \\ \hline
     April 18 to 22 & Implement \textbf{higher order functions} and create associated test cases. \\ \hline

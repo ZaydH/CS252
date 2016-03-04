@@ -10,7 +10,7 @@ main :: IO ()
 main = do
   test "zayd.imp"
   test "abs.imp"
-  --test "extra.imp"
+  test "extra.imp"
   test "fact.imp"
   test "times.imp"
   test "test.imp"

@@ -50,7 +50,7 @@ data Binop =
   | Ge       -- >= :: Int -> Int -> Bool
   | Lt       -- <  :: Int -> Int -> Bool
   | Le       -- <= :: Int -> Int -> Bool
-  deriving (Show)
+  deriving (Show, Eq)
 
 data Value =
     IntVal Int
@@ -208,11 +208,15 @@ applyOp _ _ _ = error "TBD_BadOp"
 -- should return Either values.  Left <error msg> indicates an error,
 -- whereas Right <something> indicates a successful execution.
 evaluate :: Expression -> Store -> Either ErrorMsg (Value, Store)
-evaluate (Op o e1 e2) s = do
-                          (v1,s1) <- evaluate e1 s
-                          (v2,s') <- evaluate e2 s1
-                          v <- applyOp o v1 v2
-                          return (v, s')
+evaluate (Op o e1 e2) s
+        | (o == Times) || (o == Divide) = do 
+                                        (v2, o2, e3) <- return $ evaluateOpBackTrack e2
+                                        (v12', s') <- evaluateOp o e1 (Val (IntVal v2)) s 
+                                        evaluateOp o2 (Val v12') e3 s'
+        | (o == Plus) || (o == Minus) = do
+                                        (v2, s') <- evaluate e2 s 
+                                        evaluateOp o e1 (Val v2) s'
+        | otherwise = evaluateOp o e1 e2 s
 evaluate (If e eTrue eFalse) s = do
                                  (BoolVal cond, s') <- evaluate e s
                                  if cond then (evaluate eTrue s') else (evaluate eFalse s')
@@ -230,6 +234,18 @@ evaluate (Sequence e1 e2) s = do
                               evaluate e2 s'
 --evaluate _ _ = error "TBD_NoEvaluate"
 
+
+evaluateOp :: Binop -> Expression -> Expression -> Store -> Either ErrorMsg (Value, Store)
+evaluateOp o e1 e2 s = do
+                          (v1,s1) <- evaluate e1 s
+                          (v2,s') <- evaluate e2 s1
+                          v <- applyOp o v1 v2
+                          return (v, s')
+
+
+evaluateOpBackTrack :: Expression -> (Int, Binop, Expression)
+evaluateOpBackTrack (Val  (IntVal x)) = (x, Plus, (Val (IntVal 0)))
+evaluateOpBackTrack (Op o (Val (IntVal x)) e2) = (x, o, e2)            
 
 -- Evaluates a program with an initially empty state
 run :: Expression -> Either ErrorMsg (Value, Store)

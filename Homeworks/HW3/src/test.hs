@@ -8,6 +8,7 @@ test f = do
 
 main :: IO ()
 main = do
+  test "zayd.imp"
   test "abs.imp"
   --test "extra.imp"
   test "fact.imp"

@@ -210,11 +210,13 @@ evaluate (Op o e1 e2) s = do
 evaluate (If e eTrue eFalse) s = do
    (BoolVal cond, s') <- evaluate e s
    if cond then (evaluate eTrue s') else (evaluate eFalse s')
-evaluate (Val x) s = do
-   return (x, s)
+evaluate (Val x) s = do return (x, s)
 evaluate (Var x) s = do case (Map.lookup x s) of
                               Just i -> return (i, s)
                               _      -> error "Key is not in the map"
+evaluate (Assign a e) s = do
+                          (eVal, s') <- evaluate e s
+                          return (eVal, Map.insert a eVal s')
 evaluate _ _ = error "TBD_NoEvaluate"
 
 

@@ -126,9 +126,7 @@ termP = valP
     <|> whileP
     <|> parenP
     <|> varP
-    <|> lowerP
     <?> "value, variable, 'if', 'while', or '('"
-
 
 valP = do
   v <- boolP <|> numberP
@@ -149,8 +147,11 @@ numberP = do
 
 -- Variables are specified via a capital letter 
 --varP = error "TBD_varP"
+--varP = do
+--    varStr <- many1 upper
+--    return $ Var varStr
 varP = do
-    varStr <- many1 upper
+    varStr <- many1 letter
     return $ Var varStr
 
 --ifP = error "TBD_iFP"
@@ -164,7 +165,7 @@ ifP = do
     _ <- string "endif"
     return $ If e1 e2 e3
 
-
+-- Parse the While Loop
 --whileP = error "TBD_whileP"
 whileP = do
     _ <- string "while"
@@ -173,11 +174,6 @@ whileP = do
     e2 <- exprP
     _ <- string "endwhile"
     return $ While e1 e2
-    
-lowerP = do
-    strIllegal <- many1 lower
-    error $ "Invalid lowercase string \"" ++ strIllegal ++  "\" which is not in the set of reserved keywords\n" 
-             ++ "(e.g. \"if\", \"then\", \"else\", \"endif\", \"while\", \"do\", \"endwhile\")."
 
 -- An expression in parens, e.g. (9-5)*2
 --parenP = error "TBD_parenP"
@@ -217,9 +213,11 @@ evaluate (Op o e1 e2) s
                                         (v2, s') <- evaluate e2 s 
                                         evaluateOp o e1 (Val v2) s'
         | otherwise = evaluateOp o e1 e2 s
-evaluate (If e eTrue eFalse) s = do
-                                 (BoolVal cond, s') <- evaluate e s
-                                 if cond then (evaluate eTrue s') else (evaluate eFalse s')
+evaluate (If e eTrue eFalse) s = do 
+                                 (val, s') <- (evaluate e s) 
+                                 case val of
+                                      (BoolVal cond) -> if cond then (evaluate eTrue s') else (evaluate eFalse s')
+                                      (IntVal x) -> error $ "Non-boolean value '" ++ (show x) ++ "' used as a conditional"
 evaluate (Val x) s = do return (x, s)
 evaluate (Var x) s = do case (Map.lookup x s) of
                               Just i -> return (i, s)

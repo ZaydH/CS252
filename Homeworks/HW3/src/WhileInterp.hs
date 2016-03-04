@@ -1,8 +1,8 @@
 {-
-  Name: <Your name here>
+  Name: Zayd Hammoudeh
   Class: CS 252
   Assigment: HW3
-  Date: <Date assignment is due>
+  Date: March 24, 2016
   Description: <Describe the program and what it does>
 -}
 
@@ -73,7 +73,7 @@ exprP = do
 
 -- Expressions are divided into terms and expressions for the sake of
 -- parsing.  Note that binary operators **DO NOT** follow the expected
--- presidence rules.
+-- precedence rules.
 --
 -- ***FOR 5pts EXTRA CREDIT (hard, no partial credit)***
 -- Correct the precedence of the binary operators.
@@ -140,27 +140,42 @@ boolP = do
     "false" -> BoolVal False
     "skip" -> BoolVal False -- Treating the command 'skip' as a synonym for false, for ease of parsing
 
-numberP = error "TBD"
+-- Numbers are positive integers.
+--numberP = error "TBD_numberP"
+numberP = do
+    intStr <- string "([0-9]+)"
+    return $ IntVal (read intStr :: Int)
 
-varP = error "TBD"
+-- Variables are specified via a capital letter 
+--varP = error "TBD_varP"
+varP = do
+    varStr <- string "([A-Z]+[a-zA-z]*)"
+    return $ Var varStr
 
-ifP = error "TBD"
+ifP = error "TBD_iFP"
 
-whileP = error "TBD"
+
+whileP = error "TBD_whileP"
 
 -- An expression in parens, e.g. (9-5)*2
-parenP = error "TBD"
+parenP = error "TBD_parenP"
 
 
 -- This function will be useful for defining binary operations.
 -- Unlike in the previous assignment, this function returns an "Either value".
--- The right side represents a successful computaton.
+-- The right side represents a successful computation.
 -- The left side is an error message indicating a problem with the program.
 -- The first case is done for you.
 applyOp :: Binop -> Value -> Value -> Either ErrorMsg Value
 applyOp Plus (IntVal i) (IntVal j) = Right $ IntVal $ i + j
+applyOp Minus (IntVal i) (IntVal j) = Right $ IntVal $ i - j
+applyOp Times (IntVal i) (IntVal j) = Right $ IntVal $ i * j
+applyOp Divide (IntVal i) (IntVal j) = Right $ IntVal $ i `div` j
+applyOp Ge (IntVal i) (IntVal j) = Right $ BoolVal $ i >= j
+applyOp Gt (IntVal i) (IntVal j) = Right $ BoolVal $ i > j
+applyOp Le (IntVal i) (IntVal j) = Right $ BoolVal $ i <= j
+applyOp Lt (IntVal i) (IntVal j) = Right $ BoolVal $ i < j
 applyOp _ _ _ = error "TBD"
-
 
 -- As with the applyOp method, the semantics for this function
 -- should return Either values.  Left <error msg> indicates an error,
@@ -171,6 +186,14 @@ evaluate (Op o e1 e2) s = do
   (v2,s') <- evaluate e2 s1
   v <- applyOp o v1 v2
   return (v, s')
+evaluate (If e eTrue eFalse) s = do
+   (BoolVal cond, s') <- evaluate e s
+   if cond then (evaluate eTrue s') else (evaluate eFalse s')
+evaluate (Val x) s = do
+   return (x, s)
+evaluate (Var x) s = do case (Map.lookup x s) of
+                              Just i -> return (i, s)
+                              _      -> error "Key is not in the map"
 evaluate _ _ = error "TBD"
 
 

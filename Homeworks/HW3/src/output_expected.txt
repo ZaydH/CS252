@@ -2,7 +2,7 @@
 "fromList [(\"X\",IntVal 3)]"
 
 ***Testing extra.imp
-"fromList [(\"X\",IntVal 37),(\"Y\",IntVal 17),(\"Z\",IntVal 10)]"
+"fromList [(\"X\",IntVal 39),(\"Y\",IntVal 17),(\"Z\",IntVal 10)]"
 
 ***Testing fact.imp
 "fromList [(\"F\",IntVal 2),(\"N\",IntVal 0),(\"X\",IntVal 1),(\"Z\",IntVal 2)]"

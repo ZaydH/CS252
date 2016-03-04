@@ -126,6 +126,7 @@ termP = valP
     <|> whileP
     <|> parenP
     <|> varP
+    <|> lowerP
     <?> "value, variable, 'if', 'while', or '('"
 
 
@@ -172,6 +173,11 @@ whileP = do
     e2 <- exprP
     _ <- string "endwhile"
     return $ While e1 e2
+    
+lowerP = do
+    strIllegal <- many1 lower
+    error $ "Invalid lowercase string \"" ++ strIllegal ++  "\" which is not in the set of reserved keywords\n" 
+             ++ "(e.g. \"if\", \"then\", \"else\", \"endif\", \"while\", \"do\", \"endwhile\")."
 
 -- An expression in parens, e.g. (9-5)*2
 --parenP = error "TBD_parenP"

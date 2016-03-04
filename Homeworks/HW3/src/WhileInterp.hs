@@ -19,7 +19,7 @@ module WhileInterp (
 import Data.Map (Map)
 import qualified Data.Map as Map
 import Text.ParserCombinators.Parsec
-import Control.Monad.Error
+import Control.Monad.Except
 
 -- We represent variables as strings.
 type Variable = String
@@ -170,7 +170,7 @@ whileP = do
     e1 <- exprP
     _ <- string "do"
     e2 <- exprP
-    _ <- string "endWhile"
+    _ <- string "endwhile"
     return $ While e1 e2
 
 -- An expression in parens, e.g. (9-5)*2
@@ -203,24 +203,26 @@ applyOp _ _ _ = error "TBD_BadOp"
 -- whereas Right <something> indicates a successful execution.
 evaluate :: Expression -> Store -> Either ErrorMsg (Value, Store)
 evaluate (Op o e1 e2) s = do
-  (v1,s1) <- evaluate e1 s
-  (v2,s') <- evaluate e2 s1
-  v <- applyOp o v1 v2
-  return (v, s')
+                          (v1,s1) <- evaluate e1 s
+                          (v2,s') <- evaluate e2 s1
+                          v <- applyOp o v1 v2
+                          return (v, s')
 evaluate (If e eTrue eFalse) s = do
-   (BoolVal cond, s') <- evaluate e s
-   if cond then (evaluate eTrue s') else (evaluate eFalse s')
+                                 (BoolVal cond, s') <- evaluate e s
+                                 if cond then (evaluate eTrue s') else (evaluate eFalse s')
 evaluate (Val x) s = do return (x, s)
 evaluate (Var x) s = do case (Map.lookup x s) of
                               Just i -> return (i, s)
                               _      -> error "Key is not in the map"
+evaluate (While e1 e2) s = do
+                           evaluate (If e1 (Sequence e2 (While e1 e2)) (Val $ BoolVal False)) s
 evaluate (Assign a e) s = do
                           (eVal, s') <- evaluate e s
                           return (eVal, Map.insert a eVal s')
 evaluate (Sequence e1 e2) s = do
                               (_, s') <- evaluate e1 s
                               evaluate e2 s'
-evaluate _ _ = error "TBD_NoEvaluate"
+--evaluate _ _ = error "TBD_NoEvaluate"
 
 
 -- Evaluates a program with an initially empty state

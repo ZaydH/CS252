@@ -143,22 +143,43 @@ boolP = do
 -- Numbers are positive integers.
 --numberP = error "TBD_numberP"
 numberP = do
-    intStr <- string "([0-9]+)"
+    intStr <- many1 digit
     return $ IntVal (read intStr :: Int)
 
 -- Variables are specified via a capital letter 
 --varP = error "TBD_varP"
 varP = do
-    varStr <- string "([A-Z]+[a-zA-z]*)"
+    varStr <- many1 upper
     return $ Var varStr
 
-ifP = error "TBD_iFP"
+--ifP = error "TBD_iFP"
+ifP = do
+    _ <- string "if"
+    e1 <- exprP
+    _ <- string "then"
+    e2 <- exprP
+    _ <- string "else"
+    e3 <- exprP
+    _ <- string "endif"
+    return $ If e1 e2 e3
 
 
-whileP = error "TBD_whileP"
+--whileP = error "TBD_whileP"
+whileP = do
+    _ <- string "while"
+    e1 <- exprP
+    _ <- string "do"
+    e2 <- exprP
+    _ <- string "endWhile"
+    return $ While e1 e2
 
 -- An expression in parens, e.g. (9-5)*2
-parenP = error "TBD_parenP"
+--parenP = error "TBD_parenP"
+parenP = do
+    _ <- string "("
+    e <- exprP
+    _ <- string ")"
+    return e
 
 
 -- This function will be useful for defining binary operations.
@@ -175,7 +196,7 @@ applyOp Ge (IntVal i) (IntVal j) = Right $ BoolVal $ i >= j
 applyOp Gt (IntVal i) (IntVal j) = Right $ BoolVal $ i > j
 applyOp Le (IntVal i) (IntVal j) = Right $ BoolVal $ i <= j
 applyOp Lt (IntVal i) (IntVal j) = Right $ BoolVal $ i < j
-applyOp _ _ _ = error "TBD"
+applyOp _ _ _ = error "TBD_BadOp"
 
 -- As with the applyOp method, the semantics for this function
 -- should return Either values.  Left <error msg> indicates an error,
@@ -194,7 +215,7 @@ evaluate (Val x) s = do
 evaluate (Var x) s = do case (Map.lookup x s) of
                               Just i -> return (i, s)
                               _      -> error "Key is not in the map"
-evaluate _ _ = error "TBD"
+evaluate _ _ = error "TBD_NoEvaluate"
 
 
 -- Evaluates a program with an initially empty state

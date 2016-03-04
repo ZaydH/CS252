@@ -217,6 +217,9 @@ evaluate (Var x) s = do case (Map.lookup x s) of
 evaluate (Assign a e) s = do
                           (eVal, s') <- evaluate e s
                           return (eVal, Map.insert a eVal s')
+evaluate (Sequence e1 e2) s = do
+                              (_, s') <- evaluate e1 s
+                              evaluate e2 s'
 evaluate _ _ = error "TBD_NoEvaluate"
 
 

@@ -206,7 +206,7 @@ applyOp _ _ _ = error "TBD_BadOp"
 evaluate :: Expression -> Store -> Either ErrorMsg (Value, Store)
 evaluate (Op o e1 e2) s
         | (o == Times) || (o == Divide) = do 
-                                        (v2, o2, e3) <- return $ evaluateOpBackTrack e2
+                                        (v2, o2, e3) <- return $ evaluateOpBackTrack e2 s
                                         (v12', s') <- evaluateOp o e1 (Val (IntVal v2)) s 
                                         evaluate (Op o2 (Val v12') e3) s'
         | (o == Plus) || (o == Minus) = do
@@ -241,9 +241,12 @@ evaluateOp o e1 e2 s = do
                           return (v, s')
 
 
-evaluateOpBackTrack :: Expression -> (Int, Binop, Expression)
-evaluateOpBackTrack (Val  (IntVal x)) = (x, Plus, (Val (IntVal 0)))
-evaluateOpBackTrack (Op o (Val (IntVal x)) e2) = (x, o, e2)            
+evaluateOpBackTrack :: Expression -> Store -> (Int, Binop, Expression)
+evaluateOpBackTrack (Val  (IntVal x)) _ = (x, Plus, (Val (IntVal 0)))
+evaluateOpBackTrack (Op o (Val (IntVal x)) e2) _ = (x, o, e2)
+evaluateOpBackTrack (Op o (Var x) e2) s = (xVal, o, e2)
+                                        where 
+                                        Right ((IntVal xVal), _) = evaluate (Var x) s
 
 -- Evaluates a program with an initially empty state
 run :: Expression -> Either ErrorMsg (Value, Store)

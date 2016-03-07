@@ -208,7 +208,7 @@ evaluate (Op o e1 e2) s
         | (o == Times) || (o == Divide) = do 
                                         (v2, o2, e3) <- return $ evaluateOpBackTrack e2
                                         (v12', s') <- evaluateOp o e1 (Val (IntVal v2)) s 
-                                        evaluateOp o2 (Val v12') e3 s'
+                                        evaluate (Op o2 (Val v12') e3) s'
         | (o == Plus) || (o == Minus) = do
                                         (v2, s') <- evaluate e2 s 
                                         evaluateOp o e1 (Val v2) s'

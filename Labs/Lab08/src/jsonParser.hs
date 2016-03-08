@@ -28,6 +28,7 @@ jsonElem' = jsonArr
         <|> jsonString
         <|> jsonBool
         <|> jsonNull
+        <|> jsonNumber
         <?> "json element"
 
 jsonString :: GenParser Char st JValue
@@ -38,6 +39,11 @@ jsonStringDQ = do
   s <- many $ noneOf "\"" -- crude.  does not allow double quotes within strings
   char '"'
   return $ JString s
+  
+  
+jsonNumber = do
+  numb <- many1 digit
+  return $ JNumber $ read numb
 
 jsonStringSQ = do
   char '\''

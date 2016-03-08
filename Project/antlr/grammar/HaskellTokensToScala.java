@@ -364,7 +364,6 @@ public class HaskellTokensToScala extends HaskellBaseListener {
 	 * Handles the dollar sign operator in Haskell.  Surrounds the items by an close parenthesis.
 	 */
 	@Override public void exitDollarSignTerm(HaskellParser.DollarSignTermContext ctx) { 
-		System.out.println(fileContents);
 		fileContents.append(")");
 	}	
 	/**

@@ -14,8 +14,8 @@ object haskell_code {
       case (x, y, z) => ( -3) * 9 * 10
   } // End of function
 
-  def main(args : List[String]){
+  def main(args : Array[String]){
      println(( myFunc2( 3, 4, 5)).toString())
-    } // End of function
-
+  } // End of function
 }
+

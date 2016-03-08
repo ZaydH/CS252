@@ -11,4 +11,5 @@ if [ ${#scalaObject} -eq 0 ]; then
 fi
 
 echo "Running the compiled scala code in the object $scalaObject"
-scala $scalaObject.main(Array())
+scala -cp . $scalaObject
+

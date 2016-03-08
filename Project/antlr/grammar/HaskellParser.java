@@ -17,10 +17,11 @@ public class HaskellParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		LEFT_SQUARE_BRACKET=1, RIGHT_SQUARE_BRACKET=2, HEADER_COMMENT_OPEN=3, 
-		HEADER_COMMENT_CLOSE=4, LEFT_PAREN=5, RIGHT_PAREN=6, INLINE_COMMENT_SYMBOL=7, 
-		EQUAL_SIGN=8, IO=9, DO=10, LET=11, ARG_TYPE_SEPARATOR=12, TYPE_SEPARATOR=13, 
-		MAIN_FUNCTION=14, INT_VAL=15, INT_OP=16, TYPE_NAME=17, HASKELL_FUNCTION_NAME=18, 
-		UNIT_TYPE=19, NEWLINE=20, NAME=21, WS=22;
+		HEADER_COMMENT_CLOSE=4, FUNC_ARGS_OPEN_PAREN=5, FUNC_ARGS_CLOSE_PAREN=6, 
+		LEFT_PAREN=7, RIGHT_PAREN=8, INLINE_COMMENT_SYMBOL=9, EQUAL_SIGN=10, RIGHT_ASSOC_DOLLAR_SIGN=11, 
+		IO=12, DO=13, LET=14, ARG_TYPE_SEPARATOR=15, TYPE_SEPARATOR=16, MAIN_FUNCTION=17, 
+		INT_VAL=18, INT_OP=19, TYPE_NAME=20, HASKELL_FUNCTION_NAME=21, UNIT_TYPE=22, 
+		NEWLINE=23, NAME=24, WS=25;
 	public static final int
 		RULE_program = 0, RULE_codeBlock = 1, RULE_headerComment = 2, RULE_func = 3, 
 		RULE_lineComment = 4, RULE_generalComment = 5, RULE_commentWord = 6, RULE_mainFunction = 7, 
@@ -31,8 +32,9 @@ public class HaskellParser extends Parser {
 		RULE_funcbody = 21, RULE_funcStatement = 22, RULE_patternMatchingArguments = 23, 
 		RULE_patternMatchingArgument = 24, RULE_generalMatchingArgument = 25, 
 		RULE_patternMatchParentheses = 26, RULE_patternMatchingExpression = 27, 
-		RULE_patternMatchingTerm = 28, RULE_patternMatchArray = 29, RULE_patternMatchParen = 30, 
-		RULE_generalPatternMatchingTerm = 31, RULE_typeFunction = 32, RULE_haskellFunctionName = 33;
+		RULE_patternMatchingTerm = 28, RULE_dollarSignTerm = 29, RULE_patternMatchArray = 30, 
+		RULE_patternMatchParen = 31, RULE_generalPatternMatchingTerm = 32, RULE_generalFunctionCall = 33, 
+		RULE_typeFunction = 34, RULE_haskellFunctionName = 35;
 	public static final String[] ruleNames = {
 		"program", "codeBlock", "headerComment", "func", "lineComment", "generalComment", 
 		"commentWord", "mainFunction", "mainPrototype", "mainHeader", "mainStatement", 
@@ -40,20 +42,22 @@ public class HaskellParser extends Parser {
 		"typeSignature", "inputType", "returnType", "type", "unitType", "funcbody", 
 		"funcStatement", "patternMatchingArguments", "patternMatchingArgument", 
 		"generalMatchingArgument", "patternMatchParentheses", "patternMatchingExpression", 
-		"patternMatchingTerm", "patternMatchArray", "patternMatchParen", "generalPatternMatchingTerm", 
-		"typeFunction", "haskellFunctionName"
+		"patternMatchingTerm", "dollarSignTerm", "patternMatchArray", "patternMatchParen", 
+		"generalPatternMatchingTerm", "generalFunctionCall", "typeFunction", "haskellFunctionName"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
-		null, null, null, "'{-'", "'-}'", "'('", "')'", "'--'", "'='", "'IO'", 
-		"'do'", "'let'", "'::'", "'->'", "'main'", null, null, null, null, "'()'"
+		null, null, null, "'{-'", "'-}'", "'(('", "'))'", "'('", "')'", "'--'", 
+		"'='", "'$'", "'IO'", "'do'", "'let'", "'::'", "'->'", "'main'", null, 
+		null, null, null, "'()'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, "LEFT_SQUARE_BRACKET", "RIGHT_SQUARE_BRACKET", "HEADER_COMMENT_OPEN", 
-		"HEADER_COMMENT_CLOSE", "LEFT_PAREN", "RIGHT_PAREN", "INLINE_COMMENT_SYMBOL", 
-		"EQUAL_SIGN", "IO", "DO", "LET", "ARG_TYPE_SEPARATOR", "TYPE_SEPARATOR", 
-		"MAIN_FUNCTION", "INT_VAL", "INT_OP", "TYPE_NAME", "HASKELL_FUNCTION_NAME", 
-		"UNIT_TYPE", "NEWLINE", "NAME", "WS"
+		"HEADER_COMMENT_CLOSE", "FUNC_ARGS_OPEN_PAREN", "FUNC_ARGS_CLOSE_PAREN", 
+		"LEFT_PAREN", "RIGHT_PAREN", "INLINE_COMMENT_SYMBOL", "EQUAL_SIGN", "RIGHT_ASSOC_DOLLAR_SIGN", 
+		"IO", "DO", "LET", "ARG_TYPE_SEPARATOR", "TYPE_SEPARATOR", "MAIN_FUNCTION", 
+		"INT_VAL", "INT_OP", "TYPE_NAME", "HASKELL_FUNCTION_NAME", "UNIT_TYPE", 
+		"NEWLINE", "NAME", "WS"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -140,56 +144,56 @@ public class HaskellParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(69);
+			setState(73);
 			_la = _input.LA(1);
 			if (_la==HEADER_COMMENT_OPEN) {
 				{
-				setState(68);
+				setState(72);
 				headerComment();
 				}
 			}
 
-			setState(80);
+			setState(84);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					setState(74);
+					setState(78);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 					while (_la==NEWLINE) {
 						{
 						{
-						setState(71);
+						setState(75);
 						match(NEWLINE);
 						}
 						}
-						setState(76);
+						setState(80);
 						_errHandler.sync(this);
 						_la = _input.LA(1);
 					}
-					setState(77);
+					setState(81);
 					codeBlock();
 					}
 					} 
 				}
-				setState(82);
+				setState(86);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
 			}
-			setState(86);
+			setState(90);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==NEWLINE) {
 				{
 				{
-				setState(83);
+				setState(87);
 				match(NEWLINE);
 				}
 				}
-				setState(88);
+				setState(92);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -231,20 +235,20 @@ public class HaskellParser extends Parser {
 		CodeBlockContext _localctx = new CodeBlockContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_codeBlock);
 		try {
-			setState(91);
+			setState(95);
 			switch (_input.LA(1)) {
 			case MAIN_FUNCTION:
 			case NAME:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(89);
+				setState(93);
 				func();
 				}
 				break;
 			case INLINE_COMMENT_SYMBOL:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(90);
+				setState(94);
 				lineComment();
 				}
 				break;
@@ -291,23 +295,23 @@ public class HaskellParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(93);
-			match(HEADER_COMMENT_OPEN);
 			setState(97);
+			match(HEADER_COMMENT_OPEN);
+			setState(101);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==NAME) {
 				{
 				{
-				setState(94);
+				setState(98);
 				match(NAME);
 				}
 				}
-				setState(99);
+				setState(103);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(100);
+			setState(104);
 			match(HEADER_COMMENT_CLOSE);
 			}
 		}
@@ -355,28 +359,28 @@ public class HaskellParser extends Parser {
 		enterRule(_localctx, 6, RULE_func);
 		try {
 			int _alt;
-			setState(117);
+			setState(121);
 			switch (_input.LA(1)) {
 			case NAME:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(102);
+				setState(106);
 				funcPrototype();
-				setState(103);
-				funcbody();
 				setState(107);
+				funcbody();
+				setState(111);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,6,_ctx);
 				while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
 						{
-						setState(104);
+						setState(108);
 						match(NEWLINE);
 						}
 						} 
 					}
-					setState(109);
+					setState(113);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,6,_ctx);
 				}
@@ -385,21 +389,21 @@ public class HaskellParser extends Parser {
 			case MAIN_FUNCTION:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(110);
-				mainFunction();
 				setState(114);
+				mainFunction();
+				setState(118);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
 				while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
 						{
-						setState(111);
+						setState(115);
 						match(NEWLINE);
 						}
 						} 
 					}
-					setState(116);
+					setState(120);
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
 				}
@@ -445,9 +449,9 @@ public class HaskellParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(119);
+			setState(123);
 			generalComment();
-			setState(120);
+			setState(124);
 			match(NEWLINE);
 			}
 		}
@@ -491,19 +495,19 @@ public class HaskellParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(122);
-			match(INLINE_COMMENT_SYMBOL);
 			setState(126);
+			match(INLINE_COMMENT_SYMBOL);
+			setState(130);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==NAME) {
 				{
 				{
-				setState(123);
+				setState(127);
 				commentWord();
 				}
 				}
-				setState(128);
+				setState(132);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -542,7 +546,7 @@ public class HaskellParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(129);
+			setState(133);
 			match(NAME);
 			}
 		}
@@ -595,29 +599,29 @@ public class HaskellParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(131);
+			setState(135);
 			mainPrototype();
-			setState(132);
+			setState(136);
 			match(NEWLINE);
-			setState(133);
+			setState(137);
 			mainHeader();
-			setState(134);
+			setState(138);
 			match(NEWLINE);
-			setState(136); 
+			setState(140); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(135);
+				setState(139);
 				mainStatement();
 				}
 				}
-				setState(138); 
+				setState(142); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LEFT_PAREN) | (1L << INT_VAL) | (1L << HASKELL_FUNCTION_NAME) | (1L << NAME))) != 0) );
-			setState(140);
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LEFT_SQUARE_BRACKET) | (1L << FUNC_ARGS_OPEN_PAREN) | (1L << LEFT_PAREN) | (1L << RIGHT_ASSOC_DOLLAR_SIGN) | (1L << INT_VAL) | (1L << INT_OP) | (1L << HASKELL_FUNCTION_NAME) | (1L << NAME))) != 0) );
+			setState(144);
 			match(NEWLINE);
 			}
 		}
@@ -659,13 +663,13 @@ public class HaskellParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(142);
+			setState(146);
 			match(MAIN_FUNCTION);
-			setState(143);
+			setState(147);
 			match(ARG_TYPE_SEPARATOR);
-			setState(144);
+			setState(148);
 			match(IO);
-			setState(145);
+			setState(149);
 			unitType();
 			}
 		}
@@ -704,11 +708,11 @@ public class HaskellParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(147);
+			setState(151);
 			match(MAIN_FUNCTION);
-			setState(148);
+			setState(152);
 			match(EQUAL_SIGN);
-			setState(149);
+			setState(153);
 			match(DO);
 			}
 		}
@@ -725,11 +729,11 @@ public class HaskellParser extends Parser {
 
 	public static class MainStatementContext extends ParserRuleContext {
 		public TerminalNode NEWLINE() { return getToken(HaskellParser.NEWLINE, 0); }
-		public List<MainWordsContext> mainWords() {
-			return getRuleContexts(MainWordsContext.class);
+		public List<PatternMatchingTermContext> patternMatchingTerm() {
+			return getRuleContexts(PatternMatchingTermContext.class);
 		}
-		public MainWordsContext mainWords(int i) {
-			return getRuleContext(MainWordsContext.class,i);
+		public PatternMatchingTermContext patternMatchingTerm(int i) {
+			return getRuleContext(PatternMatchingTermContext.class,i);
 		}
 		public MainStatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -752,21 +756,21 @@ public class HaskellParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(152); 
+			setState(156); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(151);
-				mainWords();
+				setState(155);
+				patternMatchingTerm();
 				}
 				}
-				setState(154); 
+				setState(158); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LEFT_PAREN) | (1L << INT_VAL) | (1L << HASKELL_FUNCTION_NAME) | (1L << NAME))) != 0) );
-			setState(156);
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LEFT_SQUARE_BRACKET) | (1L << FUNC_ARGS_OPEN_PAREN) | (1L << LEFT_PAREN) | (1L << RIGHT_ASSOC_DOLLAR_SIGN) | (1L << INT_VAL) | (1L << INT_OP) | (1L << HASKELL_FUNCTION_NAME) | (1L << NAME))) != 0) );
+			setState(160);
 			match(NEWLINE);
 			}
 		}
@@ -809,19 +813,19 @@ public class HaskellParser extends Parser {
 		MainWordsContext _localctx = new MainWordsContext(_ctx, getState());
 		enterRule(_localctx, 22, RULE_mainWords);
 		try {
-			setState(161);
+			setState(165);
 			switch (_input.LA(1)) {
 			case HASKELL_FUNCTION_NAME:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(158);
+				setState(162);
 				haskellFunctionName();
 				}
 				break;
 			case LEFT_PAREN:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(159);
+				setState(163);
 				parenMainWord();
 				}
 				break;
@@ -829,7 +833,7 @@ public class HaskellParser extends Parser {
 			case NAME:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(160);
+				setState(164);
 				generalMainWord();
 				}
 				break;
@@ -878,23 +882,23 @@ public class HaskellParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(163);
+			setState(167);
 			match(LEFT_PAREN);
-			setState(165); 
+			setState(169); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(164);
+				setState(168);
 				mainWords();
 				}
 				}
-				setState(167); 
+				setState(171); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LEFT_PAREN) | (1L << INT_VAL) | (1L << HASKELL_FUNCTION_NAME) | (1L << NAME))) != 0) );
-			setState(169);
+			setState(173);
 			match(RIGHT_PAREN);
 			}
 		}
@@ -933,7 +937,7 @@ public class HaskellParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(171);
+			setState(175);
 			_la = _input.LA(1);
 			if ( !(_la==INT_VAL || _la==NAME) ) {
 			_errHandler.recoverInline(this);
@@ -985,15 +989,15 @@ public class HaskellParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(173);
-			functionName();
-			setState(174);
-			match(ARG_TYPE_SEPARATOR);
-			setState(175);
-			typeSignature();
-			setState(176);
-			returnType();
 			setState(177);
+			functionName();
+			setState(178);
+			match(ARG_TYPE_SEPARATOR);
+			setState(179);
+			typeSignature();
+			setState(180);
+			returnType();
+			setState(181);
 			match(NEWLINE);
 			}
 		}
@@ -1030,7 +1034,7 @@ public class HaskellParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(179);
+			setState(183);
 			match(NAME);
 			}
 		}
@@ -1077,21 +1081,21 @@ public class HaskellParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(186);
+			setState(190);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,14,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					setState(181);
+					setState(185);
 					inputType();
-					setState(182);
+					setState(186);
 					match(TYPE_SEPARATOR);
 					}
 					} 
 				}
-				setState(188);
+				setState(192);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,14,_ctx);
 			}
@@ -1132,7 +1136,7 @@ public class HaskellParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(189);
+			setState(193);
 			type();
 			}
 		}
@@ -1171,7 +1175,7 @@ public class HaskellParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(191);
+			setState(195);
 			type();
 			}
 		}
@@ -1212,26 +1216,26 @@ public class HaskellParser extends Parser {
 		TypeContext _localctx = new TypeContext(_ctx, getState());
 		enterRule(_localctx, 38, RULE_type);
 		try {
-			setState(196);
+			setState(200);
 			switch (_input.LA(1)) {
 			case TYPE_NAME:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(193);
+				setState(197);
 				match(TYPE_NAME);
 				}
 				break;
 			case LEFT_PAREN:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(194);
+				setState(198);
 				typeFunction();
 				}
 				break;
 			case UNIT_TYPE:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(195);
+				setState(199);
 				unitType();
 				}
 				break;
@@ -1272,7 +1276,7 @@ public class HaskellParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(198);
+			setState(202);
 			match(UNIT_TYPE);
 			}
 		}
@@ -1315,7 +1319,7 @@ public class HaskellParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(201); 
+			setState(205); 
 			_errHandler.sync(this);
 			_alt = 1;
 			do {
@@ -1323,7 +1327,7 @@ public class HaskellParser extends Parser {
 				case 1:
 					{
 					{
-					setState(200);
+					setState(204);
 					funcStatement();
 					}
 					}
@@ -1331,7 +1335,7 @@ public class HaskellParser extends Parser {
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(203); 
+				setState(207); 
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,16,_ctx);
 			} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
@@ -1378,15 +1382,15 @@ public class HaskellParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(205);
-			match(NAME);
-			setState(206);
-			patternMatchingArguments();
-			setState(207);
-			match(EQUAL_SIGN);
-			setState(208);
-			patternMatchingExpression();
 			setState(209);
+			match(NAME);
+			setState(210);
+			patternMatchingArguments();
+			setState(211);
+			match(EQUAL_SIGN);
+			setState(212);
+			patternMatchingExpression();
+			setState(213);
 			match(NEWLINE);
 			}
 		}
@@ -1429,17 +1433,17 @@ public class HaskellParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(214);
+			setState(218);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==LEFT_PAREN || _la==NAME) {
 				{
 				{
-				setState(211);
+				setState(215);
 				patternMatchingArgument();
 				}
 				}
-				setState(216);
+				setState(220);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -1481,19 +1485,19 @@ public class HaskellParser extends Parser {
 		PatternMatchingArgumentContext _localctx = new PatternMatchingArgumentContext(_ctx, getState());
 		enterRule(_localctx, 48, RULE_patternMatchingArgument);
 		try {
-			setState(219);
+			setState(223);
 			switch (_input.LA(1)) {
 			case LEFT_PAREN:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(217);
+				setState(221);
 				patternMatchParentheses();
 				}
 				break;
 			case NAME:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(218);
+				setState(222);
 				generalMatchingArgument();
 				}
 				break;
@@ -1534,7 +1538,7 @@ public class HaskellParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(221);
+			setState(225);
 			match(NAME);
 			}
 		}
@@ -1579,23 +1583,23 @@ public class HaskellParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(223);
+			setState(227);
 			match(LEFT_PAREN);
-			setState(225); 
+			setState(229); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(224);
+				setState(228);
 				patternMatchingArgument();
 				}
 				}
-				setState(227); 
+				setState(231); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( _la==LEFT_PAREN || _la==NAME );
-			setState(229);
+			setState(233);
 			match(RIGHT_PAREN);
 			}
 		}
@@ -1634,24 +1638,30 @@ public class HaskellParser extends Parser {
 	public final PatternMatchingExpressionContext patternMatchingExpression() throws RecognitionException {
 		PatternMatchingExpressionContext _localctx = new PatternMatchingExpressionContext(_ctx, getState());
 		enterRule(_localctx, 54, RULE_patternMatchingExpression);
-		int _la;
 		try {
+			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(232); 
+			setState(236); 
 			_errHandler.sync(this);
-			_la = _input.LA(1);
+			_alt = 1;
 			do {
-				{
-				{
-				setState(231);
-				patternMatchingTerm();
+				switch (_alt) {
+				case 1:
+					{
+					{
+					setState(235);
+					patternMatchingTerm();
+					}
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 				}
-				}
-				setState(234); 
+				setState(238); 
 				_errHandler.sync(this);
-				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LEFT_SQUARE_BRACKET) | (1L << LEFT_PAREN) | (1L << INT_VAL) | (1L << INT_OP) | (1L << HASKELL_FUNCTION_NAME) | (1L << NAME))) != 0) );
+				_alt = getInterpreter().adaptivePredict(_input,20,_ctx);
+			} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
 			}
 		}
 		catch (RecognitionException re) {
@@ -1666,6 +1676,12 @@ public class HaskellParser extends Parser {
 	}
 
 	public static class PatternMatchingTermContext extends ParserRuleContext {
+		public DollarSignTermContext dollarSignTerm() {
+			return getRuleContext(DollarSignTermContext.class,0);
+		}
+		public GeneralFunctionCallContext generalFunctionCall() {
+			return getRuleContext(GeneralFunctionCallContext.class,0);
+		}
 		public HaskellFunctionNameContext haskellFunctionName() {
 			return getRuleContext(HaskellFunctionNameContext.class,0);
 		}
@@ -1696,40 +1712,96 @@ public class HaskellParser extends Parser {
 		PatternMatchingTermContext _localctx = new PatternMatchingTermContext(_ctx, getState());
 		enterRule(_localctx, 56, RULE_patternMatchingTerm);
 		try {
-			setState(240);
+			setState(246);
 			switch (_input.LA(1)) {
-			case HASKELL_FUNCTION_NAME:
+			case RIGHT_ASSOC_DOLLAR_SIGN:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(236);
+				setState(240);
+				dollarSignTerm();
+				}
+				break;
+			case FUNC_ARGS_OPEN_PAREN:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(241);
+				generalFunctionCall();
+				}
+				break;
+			case HASKELL_FUNCTION_NAME:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(242);
 				haskellFunctionName();
 				}
 				break;
 			case INT_VAL:
 			case INT_OP:
 			case NAME:
-				enterOuterAlt(_localctx, 2);
+				enterOuterAlt(_localctx, 4);
 				{
-				setState(237);
+				setState(243);
 				generalPatternMatchingTerm();
 				}
 				break;
 			case LEFT_SQUARE_BRACKET:
-				enterOuterAlt(_localctx, 3);
+				enterOuterAlt(_localctx, 5);
 				{
-				setState(238);
+				setState(244);
 				patternMatchArray();
 				}
 				break;
 			case LEFT_PAREN:
-				enterOuterAlt(_localctx, 4);
+				enterOuterAlt(_localctx, 6);
 				{
-				setState(239);
+				setState(245);
 				patternMatchParen();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class DollarSignTermContext extends ParserRuleContext {
+		public TerminalNode RIGHT_ASSOC_DOLLAR_SIGN() { return getToken(HaskellParser.RIGHT_ASSOC_DOLLAR_SIGN, 0); }
+		public PatternMatchingExpressionContext patternMatchingExpression() {
+			return getRuleContext(PatternMatchingExpressionContext.class,0);
+		}
+		public DollarSignTermContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_dollarSignTerm; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof HaskellListener ) ((HaskellListener)listener).enterDollarSignTerm(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof HaskellListener ) ((HaskellListener)listener).exitDollarSignTerm(this);
+		}
+	}
+
+	public final DollarSignTermContext dollarSignTerm() throws RecognitionException {
+		DollarSignTermContext _localctx = new DollarSignTermContext(_ctx, getState());
+		enterRule(_localctx, 58, RULE_dollarSignTerm);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(248);
+			match(RIGHT_ASSOC_DOLLAR_SIGN);
+			setState(249);
+			patternMatchingExpression();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1765,15 +1837,15 @@ public class HaskellParser extends Parser {
 
 	public final PatternMatchArrayContext patternMatchArray() throws RecognitionException {
 		PatternMatchArrayContext _localctx = new PatternMatchArrayContext(_ctx, getState());
-		enterRule(_localctx, 58, RULE_patternMatchArray);
+		enterRule(_localctx, 60, RULE_patternMatchArray);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(242);
+			setState(251);
 			match(LEFT_SQUARE_BRACKET);
-			setState(243);
+			setState(252);
 			patternMatchingExpression();
-			setState(244);
+			setState(253);
 			match(RIGHT_SQUARE_BRACKET);
 			}
 		}
@@ -1810,15 +1882,15 @@ public class HaskellParser extends Parser {
 
 	public final PatternMatchParenContext patternMatchParen() throws RecognitionException {
 		PatternMatchParenContext _localctx = new PatternMatchParenContext(_ctx, getState());
-		enterRule(_localctx, 60, RULE_patternMatchParen);
+		enterRule(_localctx, 62, RULE_patternMatchParen);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(246);
+			setState(255);
 			match(LEFT_PAREN);
-			setState(247);
+			setState(256);
 			patternMatchingExpression();
-			setState(248);
+			setState(257);
 			match(RIGHT_PAREN);
 			}
 		}
@@ -1853,18 +1925,63 @@ public class HaskellParser extends Parser {
 
 	public final GeneralPatternMatchingTermContext generalPatternMatchingTerm() throws RecognitionException {
 		GeneralPatternMatchingTermContext _localctx = new GeneralPatternMatchingTermContext(_ctx, getState());
-		enterRule(_localctx, 62, RULE_generalPatternMatchingTerm);
+		enterRule(_localctx, 64, RULE_generalPatternMatchingTerm);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(250);
+			setState(259);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << INT_VAL) | (1L << INT_OP) | (1L << NAME))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			} else {
 				consume();
 			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class GeneralFunctionCallContext extends ParserRuleContext {
+		public TerminalNode FUNC_ARGS_OPEN_PAREN() { return getToken(HaskellParser.FUNC_ARGS_OPEN_PAREN, 0); }
+		public PatternMatchingExpressionContext patternMatchingExpression() {
+			return getRuleContext(PatternMatchingExpressionContext.class,0);
+		}
+		public TerminalNode FUNC_ARGS_CLOSE_PAREN() { return getToken(HaskellParser.FUNC_ARGS_CLOSE_PAREN, 0); }
+		public GeneralFunctionCallContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_generalFunctionCall; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof HaskellListener ) ((HaskellListener)listener).enterGeneralFunctionCall(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof HaskellListener ) ((HaskellListener)listener).exitGeneralFunctionCall(this);
+		}
+	}
+
+	public final GeneralFunctionCallContext generalFunctionCall() throws RecognitionException {
+		GeneralFunctionCallContext _localctx = new GeneralFunctionCallContext(_ctx, getState());
+		enterRule(_localctx, 66, RULE_generalFunctionCall);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(261);
+			match(FUNC_ARGS_OPEN_PAREN);
+			setState(262);
+			patternMatchingExpression();
+			setState(263);
+			match(FUNC_ARGS_CLOSE_PAREN);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1898,15 +2015,15 @@ public class HaskellParser extends Parser {
 
 	public final TypeFunctionContext typeFunction() throws RecognitionException {
 		TypeFunctionContext _localctx = new TypeFunctionContext(_ctx, getState());
-		enterRule(_localctx, 64, RULE_typeFunction);
+		enterRule(_localctx, 68, RULE_typeFunction);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(252);
+			setState(265);
 			match(LEFT_PAREN);
-			setState(253);
+			setState(266);
 			typeSignature();
-			setState(254);
+			setState(267);
 			match(RIGHT_PAREN);
 			}
 		}
@@ -1939,11 +2056,11 @@ public class HaskellParser extends Parser {
 
 	public final HaskellFunctionNameContext haskellFunctionName() throws RecognitionException {
 		HaskellFunctionNameContext _localctx = new HaskellFunctionNameContext(_ctx, getState());
-		enterRule(_localctx, 66, RULE_haskellFunctionName);
+		enterRule(_localctx, 70, RULE_haskellFunctionName);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(256);
+			setState(269);
 			match(HASKELL_FUNCTION_NAME);
 			}
 		}
@@ -1959,87 +2076,92 @@ public class HaskellParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\30\u0105\4\2\t\2"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\33\u0112\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
 		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36\4\37\t\37\4 \t \4!"+
-		"\t!\4\"\t\"\4#\t#\3\2\5\2H\n\2\3\2\7\2K\n\2\f\2\16\2N\13\2\3\2\7\2Q\n"+
-		"\2\f\2\16\2T\13\2\3\2\7\2W\n\2\f\2\16\2Z\13\2\3\3\3\3\5\3^\n\3\3\4\3\4"+
-		"\7\4b\n\4\f\4\16\4e\13\4\3\4\3\4\3\5\3\5\3\5\7\5l\n\5\f\5\16\5o\13\5\3"+
-		"\5\3\5\7\5s\n\5\f\5\16\5v\13\5\5\5x\n\5\3\6\3\6\3\6\3\7\3\7\7\7\177\n"+
-		"\7\f\7\16\7\u0082\13\7\3\b\3\b\3\t\3\t\3\t\3\t\3\t\6\t\u008b\n\t\r\t\16"+
-		"\t\u008c\3\t\3\t\3\n\3\n\3\n\3\n\3\n\3\13\3\13\3\13\3\13\3\f\6\f\u009b"+
-		"\n\f\r\f\16\f\u009c\3\f\3\f\3\r\3\r\3\r\5\r\u00a4\n\r\3\16\3\16\6\16\u00a8"+
-		"\n\16\r\16\16\16\u00a9\3\16\3\16\3\17\3\17\3\20\3\20\3\20\3\20\3\20\3"+
-		"\20\3\21\3\21\3\22\3\22\3\22\7\22\u00bb\n\22\f\22\16\22\u00be\13\22\3"+
-		"\23\3\23\3\24\3\24\3\25\3\25\3\25\5\25\u00c7\n\25\3\26\3\26\3\27\6\27"+
-		"\u00cc\n\27\r\27\16\27\u00cd\3\30\3\30\3\30\3\30\3\30\3\30\3\31\7\31\u00d7"+
-		"\n\31\f\31\16\31\u00da\13\31\3\32\3\32\5\32\u00de\n\32\3\33\3\33\3\34"+
-		"\3\34\6\34\u00e4\n\34\r\34\16\34\u00e5\3\34\3\34\3\35\6\35\u00eb\n\35"+
-		"\r\35\16\35\u00ec\3\36\3\36\3\36\3\36\5\36\u00f3\n\36\3\37\3\37\3\37\3"+
-		"\37\3 \3 \3 \3 \3!\3!\3\"\3\"\3\"\3\"\3#\3#\3#\2\2$\2\4\6\b\n\f\16\20"+
-		"\22\24\26\30\32\34\36 \"$&(*,.\60\62\64\668:<>@BD\2\4\4\2\21\21\27\27"+
-		"\4\2\21\22\27\27\u00fc\2G\3\2\2\2\4]\3\2\2\2\6_\3\2\2\2\bw\3\2\2\2\ny"+
-		"\3\2\2\2\f|\3\2\2\2\16\u0083\3\2\2\2\20\u0085\3\2\2\2\22\u0090\3\2\2\2"+
-		"\24\u0095\3\2\2\2\26\u009a\3\2\2\2\30\u00a3\3\2\2\2\32\u00a5\3\2\2\2\34"+
-		"\u00ad\3\2\2\2\36\u00af\3\2\2\2 \u00b5\3\2\2\2\"\u00bc\3\2\2\2$\u00bf"+
-		"\3\2\2\2&\u00c1\3\2\2\2(\u00c6\3\2\2\2*\u00c8\3\2\2\2,\u00cb\3\2\2\2."+
-		"\u00cf\3\2\2\2\60\u00d8\3\2\2\2\62\u00dd\3\2\2\2\64\u00df\3\2\2\2\66\u00e1"+
-		"\3\2\2\28\u00ea\3\2\2\2:\u00f2\3\2\2\2<\u00f4\3\2\2\2>\u00f8\3\2\2\2@"+
-		"\u00fc\3\2\2\2B\u00fe\3\2\2\2D\u0102\3\2\2\2FH\5\6\4\2GF\3\2\2\2GH\3\2"+
-		"\2\2HR\3\2\2\2IK\7\26\2\2JI\3\2\2\2KN\3\2\2\2LJ\3\2\2\2LM\3\2\2\2MO\3"+
-		"\2\2\2NL\3\2\2\2OQ\5\4\3\2PL\3\2\2\2QT\3\2\2\2RP\3\2\2\2RS\3\2\2\2SX\3"+
-		"\2\2\2TR\3\2\2\2UW\7\26\2\2VU\3\2\2\2WZ\3\2\2\2XV\3\2\2\2XY\3\2\2\2Y\3"+
-		"\3\2\2\2ZX\3\2\2\2[^\5\b\5\2\\^\5\n\6\2][\3\2\2\2]\\\3\2\2\2^\5\3\2\2"+
-		"\2_c\7\5\2\2`b\7\27\2\2a`\3\2\2\2be\3\2\2\2ca\3\2\2\2cd\3\2\2\2df\3\2"+
-		"\2\2ec\3\2\2\2fg\7\6\2\2g\7\3\2\2\2hi\5\36\20\2im\5,\27\2jl\7\26\2\2k"+
-		"j\3\2\2\2lo\3\2\2\2mk\3\2\2\2mn\3\2\2\2nx\3\2\2\2om\3\2\2\2pt\5\20\t\2"+
-		"qs\7\26\2\2rq\3\2\2\2sv\3\2\2\2tr\3\2\2\2tu\3\2\2\2ux\3\2\2\2vt\3\2\2"+
-		"\2wh\3\2\2\2wp\3\2\2\2x\t\3\2\2\2yz\5\f\7\2z{\7\26\2\2{\13\3\2\2\2|\u0080"+
-		"\7\t\2\2}\177\5\16\b\2~}\3\2\2\2\177\u0082\3\2\2\2\u0080~\3\2\2\2\u0080"+
-		"\u0081\3\2\2\2\u0081\r\3\2\2\2\u0082\u0080\3\2\2\2\u0083\u0084\7\27\2"+
-		"\2\u0084\17\3\2\2\2\u0085\u0086\5\22\n\2\u0086\u0087\7\26\2\2\u0087\u0088"+
-		"\5\24\13\2\u0088\u008a\7\26\2\2\u0089\u008b\5\26\f\2\u008a\u0089\3\2\2"+
-		"\2\u008b\u008c\3\2\2\2\u008c\u008a\3\2\2\2\u008c\u008d\3\2\2\2\u008d\u008e"+
-		"\3\2\2\2\u008e\u008f\7\26\2\2\u008f\21\3\2\2\2\u0090\u0091\7\20\2\2\u0091"+
-		"\u0092\7\16\2\2\u0092\u0093\7\13\2\2\u0093\u0094\5*\26\2\u0094\23\3\2"+
-		"\2\2\u0095\u0096\7\20\2\2\u0096\u0097\7\n\2\2\u0097\u0098\7\f\2\2\u0098"+
-		"\25\3\2\2\2\u0099\u009b\5\30\r\2\u009a\u0099\3\2\2\2\u009b\u009c\3\2\2"+
-		"\2\u009c\u009a\3\2\2\2\u009c\u009d\3\2\2\2\u009d\u009e\3\2\2\2\u009e\u009f"+
-		"\7\26\2\2\u009f\27\3\2\2\2\u00a0\u00a4\5D#\2\u00a1\u00a4\5\32\16\2\u00a2"+
-		"\u00a4\5\34\17\2\u00a3\u00a0\3\2\2\2\u00a3\u00a1\3\2\2\2\u00a3\u00a2\3"+
-		"\2\2\2\u00a4\31\3\2\2\2\u00a5\u00a7\7\7\2\2\u00a6\u00a8\5\30\r\2\u00a7"+
-		"\u00a6\3\2\2\2\u00a8\u00a9\3\2\2\2\u00a9\u00a7\3\2\2\2\u00a9\u00aa\3\2"+
-		"\2\2\u00aa\u00ab\3\2\2\2\u00ab\u00ac\7\b\2\2\u00ac\33\3\2\2\2\u00ad\u00ae"+
-		"\t\2\2\2\u00ae\35\3\2\2\2\u00af\u00b0\5 \21\2\u00b0\u00b1\7\16\2\2\u00b1"+
-		"\u00b2\5\"\22\2\u00b2\u00b3\5&\24\2\u00b3\u00b4\7\26\2\2\u00b4\37\3\2"+
-		"\2\2\u00b5\u00b6\7\27\2\2\u00b6!\3\2\2\2\u00b7\u00b8\5$\23\2\u00b8\u00b9"+
-		"\7\17\2\2\u00b9\u00bb\3\2\2\2\u00ba\u00b7\3\2\2\2\u00bb\u00be\3\2\2\2"+
-		"\u00bc\u00ba\3\2\2\2\u00bc\u00bd\3\2\2\2\u00bd#\3\2\2\2\u00be\u00bc\3"+
-		"\2\2\2\u00bf\u00c0\5(\25\2\u00c0%\3\2\2\2\u00c1\u00c2\5(\25\2\u00c2\'"+
-		"\3\2\2\2\u00c3\u00c7\7\23\2\2\u00c4\u00c7\5B\"\2\u00c5\u00c7\5*\26\2\u00c6"+
-		"\u00c3\3\2\2\2\u00c6\u00c4\3\2\2\2\u00c6\u00c5\3\2\2\2\u00c7)\3\2\2\2"+
-		"\u00c8\u00c9\7\25\2\2\u00c9+\3\2\2\2\u00ca\u00cc\5.\30\2\u00cb\u00ca\3"+
-		"\2\2\2\u00cc\u00cd\3\2\2\2\u00cd\u00cb\3\2\2\2\u00cd\u00ce\3\2\2\2\u00ce"+
-		"-\3\2\2\2\u00cf\u00d0\7\27\2\2\u00d0\u00d1\5\60\31\2\u00d1\u00d2\7\n\2"+
-		"\2\u00d2\u00d3\58\35\2\u00d3\u00d4\7\26\2\2\u00d4/\3\2\2\2\u00d5\u00d7"+
-		"\5\62\32\2\u00d6\u00d5\3\2\2\2\u00d7\u00da\3\2\2\2\u00d8\u00d6\3\2\2\2"+
-		"\u00d8\u00d9\3\2\2\2\u00d9\61\3\2\2\2\u00da\u00d8\3\2\2\2\u00db\u00de"+
-		"\5\66\34\2\u00dc\u00de\5\64\33\2\u00dd\u00db\3\2\2\2\u00dd\u00dc\3\2\2"+
-		"\2\u00de\63\3\2\2\2\u00df\u00e0\7\27\2\2\u00e0\65\3\2\2\2\u00e1\u00e3"+
-		"\7\7\2\2\u00e2\u00e4\5\62\32\2\u00e3\u00e2\3\2\2\2\u00e4\u00e5\3\2\2\2"+
-		"\u00e5\u00e3\3\2\2\2\u00e5\u00e6\3\2\2\2\u00e6\u00e7\3\2\2\2\u00e7\u00e8"+
-		"\7\b\2\2\u00e8\67\3\2\2\2\u00e9\u00eb\5:\36\2\u00ea\u00e9\3\2\2\2\u00eb"+
-		"\u00ec\3\2\2\2\u00ec\u00ea\3\2\2\2\u00ec\u00ed\3\2\2\2\u00ed9\3\2\2\2"+
-		"\u00ee\u00f3\5D#\2\u00ef\u00f3\5@!\2\u00f0\u00f3\5<\37\2\u00f1\u00f3\5"+
-		"> \2\u00f2\u00ee\3\2\2\2\u00f2\u00ef\3\2\2\2\u00f2\u00f0\3\2\2\2\u00f2"+
-		"\u00f1\3\2\2\2\u00f3;\3\2\2\2\u00f4\u00f5\7\3\2\2\u00f5\u00f6\58\35\2"+
-		"\u00f6\u00f7\7\4\2\2\u00f7=\3\2\2\2\u00f8\u00f9\7\7\2\2\u00f9\u00fa\5"+
-		"8\35\2\u00fa\u00fb\7\b\2\2\u00fb?\3\2\2\2\u00fc\u00fd\t\3\2\2\u00fdA\3"+
-		"\2\2\2\u00fe\u00ff\7\7\2\2\u00ff\u0100\5\"\22\2\u0100\u0101\7\b\2\2\u0101"+
-		"C\3\2\2\2\u0102\u0103\7\24\2\2\u0103E\3\2\2\2\30GLRX]cmtw\u0080\u008c"+
-		"\u009c\u00a3\u00a9\u00bc\u00c6\u00cd\u00d8\u00dd\u00e5\u00ec\u00f2";
+		"\t!\4\"\t\"\4#\t#\4$\t$\4%\t%\3\2\5\2L\n\2\3\2\7\2O\n\2\f\2\16\2R\13\2"+
+		"\3\2\7\2U\n\2\f\2\16\2X\13\2\3\2\7\2[\n\2\f\2\16\2^\13\2\3\3\3\3\5\3b"+
+		"\n\3\3\4\3\4\7\4f\n\4\f\4\16\4i\13\4\3\4\3\4\3\5\3\5\3\5\7\5p\n\5\f\5"+
+		"\16\5s\13\5\3\5\3\5\7\5w\n\5\f\5\16\5z\13\5\5\5|\n\5\3\6\3\6\3\6\3\7\3"+
+		"\7\7\7\u0083\n\7\f\7\16\7\u0086\13\7\3\b\3\b\3\t\3\t\3\t\3\t\3\t\6\t\u008f"+
+		"\n\t\r\t\16\t\u0090\3\t\3\t\3\n\3\n\3\n\3\n\3\n\3\13\3\13\3\13\3\13\3"+
+		"\f\6\f\u009f\n\f\r\f\16\f\u00a0\3\f\3\f\3\r\3\r\3\r\5\r\u00a8\n\r\3\16"+
+		"\3\16\6\16\u00ac\n\16\r\16\16\16\u00ad\3\16\3\16\3\17\3\17\3\20\3\20\3"+
+		"\20\3\20\3\20\3\20\3\21\3\21\3\22\3\22\3\22\7\22\u00bf\n\22\f\22\16\22"+
+		"\u00c2\13\22\3\23\3\23\3\24\3\24\3\25\3\25\3\25\5\25\u00cb\n\25\3\26\3"+
+		"\26\3\27\6\27\u00d0\n\27\r\27\16\27\u00d1\3\30\3\30\3\30\3\30\3\30\3\30"+
+		"\3\31\7\31\u00db\n\31\f\31\16\31\u00de\13\31\3\32\3\32\5\32\u00e2\n\32"+
+		"\3\33\3\33\3\34\3\34\6\34\u00e8\n\34\r\34\16\34\u00e9\3\34\3\34\3\35\6"+
+		"\35\u00ef\n\35\r\35\16\35\u00f0\3\36\3\36\3\36\3\36\3\36\3\36\5\36\u00f9"+
+		"\n\36\3\37\3\37\3\37\3 \3 \3 \3 \3!\3!\3!\3!\3\"\3\"\3#\3#\3#\3#\3$\3"+
+		"$\3$\3$\3%\3%\3%\2\2&\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,."+
+		"\60\62\64\668:<>@BDFH\2\4\4\2\24\24\32\32\4\2\24\25\32\32\u0109\2K\3\2"+
+		"\2\2\4a\3\2\2\2\6c\3\2\2\2\b{\3\2\2\2\n}\3\2\2\2\f\u0080\3\2\2\2\16\u0087"+
+		"\3\2\2\2\20\u0089\3\2\2\2\22\u0094\3\2\2\2\24\u0099\3\2\2\2\26\u009e\3"+
+		"\2\2\2\30\u00a7\3\2\2\2\32\u00a9\3\2\2\2\34\u00b1\3\2\2\2\36\u00b3\3\2"+
+		"\2\2 \u00b9\3\2\2\2\"\u00c0\3\2\2\2$\u00c3\3\2\2\2&\u00c5\3\2\2\2(\u00ca"+
+		"\3\2\2\2*\u00cc\3\2\2\2,\u00cf\3\2\2\2.\u00d3\3\2\2\2\60\u00dc\3\2\2\2"+
+		"\62\u00e1\3\2\2\2\64\u00e3\3\2\2\2\66\u00e5\3\2\2\28\u00ee\3\2\2\2:\u00f8"+
+		"\3\2\2\2<\u00fa\3\2\2\2>\u00fd\3\2\2\2@\u0101\3\2\2\2B\u0105\3\2\2\2D"+
+		"\u0107\3\2\2\2F\u010b\3\2\2\2H\u010f\3\2\2\2JL\5\6\4\2KJ\3\2\2\2KL\3\2"+
+		"\2\2LV\3\2\2\2MO\7\31\2\2NM\3\2\2\2OR\3\2\2\2PN\3\2\2\2PQ\3\2\2\2QS\3"+
+		"\2\2\2RP\3\2\2\2SU\5\4\3\2TP\3\2\2\2UX\3\2\2\2VT\3\2\2\2VW\3\2\2\2W\\"+
+		"\3\2\2\2XV\3\2\2\2Y[\7\31\2\2ZY\3\2\2\2[^\3\2\2\2\\Z\3\2\2\2\\]\3\2\2"+
+		"\2]\3\3\2\2\2^\\\3\2\2\2_b\5\b\5\2`b\5\n\6\2a_\3\2\2\2a`\3\2\2\2b\5\3"+
+		"\2\2\2cg\7\5\2\2df\7\32\2\2ed\3\2\2\2fi\3\2\2\2ge\3\2\2\2gh\3\2\2\2hj"+
+		"\3\2\2\2ig\3\2\2\2jk\7\6\2\2k\7\3\2\2\2lm\5\36\20\2mq\5,\27\2np\7\31\2"+
+		"\2on\3\2\2\2ps\3\2\2\2qo\3\2\2\2qr\3\2\2\2r|\3\2\2\2sq\3\2\2\2tx\5\20"+
+		"\t\2uw\7\31\2\2vu\3\2\2\2wz\3\2\2\2xv\3\2\2\2xy\3\2\2\2y|\3\2\2\2zx\3"+
+		"\2\2\2{l\3\2\2\2{t\3\2\2\2|\t\3\2\2\2}~\5\f\7\2~\177\7\31\2\2\177\13\3"+
+		"\2\2\2\u0080\u0084\7\13\2\2\u0081\u0083\5\16\b\2\u0082\u0081\3\2\2\2\u0083"+
+		"\u0086\3\2\2\2\u0084\u0082\3\2\2\2\u0084\u0085\3\2\2\2\u0085\r\3\2\2\2"+
+		"\u0086\u0084\3\2\2\2\u0087\u0088\7\32\2\2\u0088\17\3\2\2\2\u0089\u008a"+
+		"\5\22\n\2\u008a\u008b\7\31\2\2\u008b\u008c\5\24\13\2\u008c\u008e\7\31"+
+		"\2\2\u008d\u008f\5\26\f\2\u008e\u008d\3\2\2\2\u008f\u0090\3\2\2\2\u0090"+
+		"\u008e\3\2\2\2\u0090\u0091\3\2\2\2\u0091\u0092\3\2\2\2\u0092\u0093\7\31"+
+		"\2\2\u0093\21\3\2\2\2\u0094\u0095\7\23\2\2\u0095\u0096\7\21\2\2\u0096"+
+		"\u0097\7\16\2\2\u0097\u0098\5*\26\2\u0098\23\3\2\2\2\u0099\u009a\7\23"+
+		"\2\2\u009a\u009b\7\f\2\2\u009b\u009c\7\17\2\2\u009c\25\3\2\2\2\u009d\u009f"+
+		"\5:\36\2\u009e\u009d\3\2\2\2\u009f\u00a0\3\2\2\2\u00a0\u009e\3\2\2\2\u00a0"+
+		"\u00a1\3\2\2\2\u00a1\u00a2\3\2\2\2\u00a2\u00a3\7\31\2\2\u00a3\27\3\2\2"+
+		"\2\u00a4\u00a8\5H%\2\u00a5\u00a8\5\32\16\2\u00a6\u00a8\5\34\17\2\u00a7"+
+		"\u00a4\3\2\2\2\u00a7\u00a5\3\2\2\2\u00a7\u00a6\3\2\2\2\u00a8\31\3\2\2"+
+		"\2\u00a9\u00ab\7\t\2\2\u00aa\u00ac\5\30\r\2\u00ab\u00aa\3\2\2\2\u00ac"+
+		"\u00ad\3\2\2\2\u00ad\u00ab\3\2\2\2\u00ad\u00ae\3\2\2\2\u00ae\u00af\3\2"+
+		"\2\2\u00af\u00b0\7\n\2\2\u00b0\33\3\2\2\2\u00b1\u00b2\t\2\2\2\u00b2\35"+
+		"\3\2\2\2\u00b3\u00b4\5 \21\2\u00b4\u00b5\7\21\2\2\u00b5\u00b6\5\"\22\2"+
+		"\u00b6\u00b7\5&\24\2\u00b7\u00b8\7\31\2\2\u00b8\37\3\2\2\2\u00b9\u00ba"+
+		"\7\32\2\2\u00ba!\3\2\2\2\u00bb\u00bc\5$\23\2\u00bc\u00bd\7\22\2\2\u00bd"+
+		"\u00bf\3\2\2\2\u00be\u00bb\3\2\2\2\u00bf\u00c2\3\2\2\2\u00c0\u00be\3\2"+
+		"\2\2\u00c0\u00c1\3\2\2\2\u00c1#\3\2\2\2\u00c2\u00c0\3\2\2\2\u00c3\u00c4"+
+		"\5(\25\2\u00c4%\3\2\2\2\u00c5\u00c6\5(\25\2\u00c6\'\3\2\2\2\u00c7\u00cb"+
+		"\7\26\2\2\u00c8\u00cb\5F$\2\u00c9\u00cb\5*\26\2\u00ca\u00c7\3\2\2\2\u00ca"+
+		"\u00c8\3\2\2\2\u00ca\u00c9\3\2\2\2\u00cb)\3\2\2\2\u00cc\u00cd\7\30\2\2"+
+		"\u00cd+\3\2\2\2\u00ce\u00d0\5.\30\2\u00cf\u00ce\3\2\2\2\u00d0\u00d1\3"+
+		"\2\2\2\u00d1\u00cf\3\2\2\2\u00d1\u00d2\3\2\2\2\u00d2-\3\2\2\2\u00d3\u00d4"+
+		"\7\32\2\2\u00d4\u00d5\5\60\31\2\u00d5\u00d6\7\f\2\2\u00d6\u00d7\58\35"+
+		"\2\u00d7\u00d8\7\31\2\2\u00d8/\3\2\2\2\u00d9\u00db\5\62\32\2\u00da\u00d9"+
+		"\3\2\2\2\u00db\u00de\3\2\2\2\u00dc\u00da\3\2\2\2\u00dc\u00dd\3\2\2\2\u00dd"+
+		"\61\3\2\2\2\u00de\u00dc\3\2\2\2\u00df\u00e2\5\66\34\2\u00e0\u00e2\5\64"+
+		"\33\2\u00e1\u00df\3\2\2\2\u00e1\u00e0\3\2\2\2\u00e2\63\3\2\2\2\u00e3\u00e4"+
+		"\7\32\2\2\u00e4\65\3\2\2\2\u00e5\u00e7\7\t\2\2\u00e6\u00e8\5\62\32\2\u00e7"+
+		"\u00e6\3\2\2\2\u00e8\u00e9\3\2\2\2\u00e9\u00e7\3\2\2\2\u00e9\u00ea\3\2"+
+		"\2\2\u00ea\u00eb\3\2\2\2\u00eb\u00ec\7\n\2\2\u00ec\67\3\2\2\2\u00ed\u00ef"+
+		"\5:\36\2\u00ee\u00ed\3\2\2\2\u00ef\u00f0\3\2\2\2\u00f0\u00ee\3\2\2\2\u00f0"+
+		"\u00f1\3\2\2\2\u00f19\3\2\2\2\u00f2\u00f9\5<\37\2\u00f3\u00f9\5D#\2\u00f4"+
+		"\u00f9\5H%\2\u00f5\u00f9\5B\"\2\u00f6\u00f9\5> \2\u00f7\u00f9\5@!\2\u00f8"+
+		"\u00f2\3\2\2\2\u00f8\u00f3\3\2\2\2\u00f8\u00f4\3\2\2\2\u00f8\u00f5\3\2"+
+		"\2\2\u00f8\u00f6\3\2\2\2\u00f8\u00f7\3\2\2\2\u00f9;\3\2\2\2\u00fa\u00fb"+
+		"\7\r\2\2\u00fb\u00fc\58\35\2\u00fc=\3\2\2\2\u00fd\u00fe\7\3\2\2\u00fe"+
+		"\u00ff\58\35\2\u00ff\u0100\7\4\2\2\u0100?\3\2\2\2\u0101\u0102\7\t\2\2"+
+		"\u0102\u0103\58\35\2\u0103\u0104\7\n\2\2\u0104A\3\2\2\2\u0105\u0106\t"+
+		"\3\2\2\u0106C\3\2\2\2\u0107\u0108\7\7\2\2\u0108\u0109\58\35\2\u0109\u010a"+
+		"\7\b\2\2\u010aE\3\2\2\2\u010b\u010c\7\t\2\2\u010c\u010d\5\"\22\2\u010d"+
+		"\u010e\7\n\2\2\u010eG\3\2\2\2\u010f\u0110\7\27\2\2\u0110I\3\2\2\2\30K"+
+		"PV\\agqx{\u0084\u0090\u00a0\u00a7\u00ad\u00c0\u00ca\u00d1\u00dc\u00e1"+
+		"\u00e9\u00f0\u00f8";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

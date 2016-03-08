@@ -10,5 +10,5 @@ myFunc2 x y z = (-3) * 9 * 10
 
 main :: IO ()
 main = do
-	putStrLn(myFunc2 3 4 5)
+	putStrLn $ myFunc2 ((3 4 5))
 

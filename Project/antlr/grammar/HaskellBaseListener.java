@@ -363,6 +363,18 @@ public class HaskellBaseListener implements HaskellListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDollarSignTerm(HaskellParser.DollarSignTermContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDollarSignTerm(HaskellParser.DollarSignTermContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterPatternMatchArray(HaskellParser.PatternMatchArrayContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -394,6 +406,18 @@ public class HaskellBaseListener implements HaskellListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitGeneralPatternMatchingTerm(HaskellParser.GeneralPatternMatchingTermContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterGeneralFunctionCall(HaskellParser.GeneralFunctionCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGeneralFunctionCall(HaskellParser.GeneralFunctionCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

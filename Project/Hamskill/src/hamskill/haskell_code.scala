@@ -5,7 +5,7 @@
 object haskell_code {
 
   // Here's a comment.  
-  def myFunc(___0___ : => Array[Int], ___1___ : => Int) : Int = (___0___, ___1___) match {
+  def myFunc(___0___ : => List[Int], ___1___ : => Int) : Int = (___0___, ___1___) match {
       case (x, y) => 3 + 5
   } // End of function
 
@@ -16,6 +16,8 @@ object haskell_code {
 
   def main(args : Array[String]){
      println(( myFunc2( 3, 4, 5)).toString())
-  } // End of function
+    } // End of function
+
 }
+
 

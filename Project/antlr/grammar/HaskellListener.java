@@ -297,6 +297,16 @@ public interface HaskellListener extends ParseTreeListener {
 	 */
 	void exitPatternMatchingTerm(HaskellParser.PatternMatchingTermContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HaskellParser#dollarSignTerm}.
+	 * @param ctx the parse tree
+	 */
+	void enterDollarSignTerm(HaskellParser.DollarSignTermContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#dollarSignTerm}.
+	 * @param ctx the parse tree
+	 */
+	void exitDollarSignTerm(HaskellParser.DollarSignTermContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HaskellParser#patternMatchArray}.
 	 * @param ctx the parse tree
 	 */
@@ -326,6 +336,16 @@ public interface HaskellListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitGeneralPatternMatchingTerm(HaskellParser.GeneralPatternMatchingTermContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#generalFunctionCall}.
+	 * @param ctx the parse tree
+	 */
+	void enterGeneralFunctionCall(HaskellParser.GeneralFunctionCallContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#generalFunctionCall}.
+	 * @param ctx the parse tree
+	 */
+	void exitGeneralFunctionCall(HaskellParser.GeneralFunctionCallContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HaskellParser#typeFunction}.
 	 * @param ctx the parse tree

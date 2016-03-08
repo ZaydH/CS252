@@ -1,3 +1,4 @@
+import java.util.Stack;
 
 public class HaskellTokensToScala extends HaskellBaseListener {
 
@@ -6,6 +7,9 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     private int BASE_PARAM_NUMBER = 0;
     private String scalaModuleName;
     private int indentLevel = 0;
+    
+    private Stack<Boolean> commaSeparateTerms = new Stack<Boolean>();
+    private Stack<Boolean> firstCommaTerm = new Stack<Boolean>();
     
     private boolean firstPatternMatchingArgument;
     
@@ -303,7 +307,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * Opens a parenthesis for the pattern matching term.
      */
     @Override public void enterPatternMatchArray(HaskellParser.PatternMatchArrayContext ctx) { 
-        fileContents.append("Array(");
+        fileContents.append("List(");
     }
     /**
      * Opens a parenthesis for the pattern matching term.
@@ -315,8 +319,53 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * Opens a parenthesis for the pattern matching term.
      */
     @Override public void enterGeneralPatternMatchingTerm(HaskellParser.GeneralPatternMatchingTermContext ctx) { 
+    	
+    	if(!commaSeparateTerms.isEmpty()){
+    		// For the first term, just skip and do not put a comma,
+    		if(firstCommaTerm.peek() == Boolean.TRUE){
+    			firstCommaTerm.pop();
+    			firstCommaTerm.push(Boolean.FALSE);
+    		}
+    		// For everything after the first term, 
+    		else{
+    			// For multiple terms, comma separate the terms.
+    			fileContents.append(",");
+    		}    		
+    	}
         fileContents.append(" ").append(ctx.getText());
     }
+	/**
+	 * Used for a function call inside a Haskell program.  Opens the call for scala.
+	 */
+	@Override public void enterGeneralFunctionCall(HaskellParser.GeneralFunctionCallContext ctx) { 
+		fileContents.append("(");
+		
+		 commaSeparateTerms.push(Boolean.TRUE);
+		 firstCommaTerm.push(Boolean.TRUE);
+	}
+	/**
+	 * Used for a function call inside a Haskell Program.  Closes the call in Scala.
+	 */
+	@Override public void exitGeneralFunctionCall(HaskellParser.GeneralFunctionCallContext ctx) { 
+		fileContents.append(")");
+		// Clear any nested functions.
+		commaSeparateTerms.pop();
+		firstCommaTerm.pop();
+	}
+	/**
+	 * Handles the dollar sign operator in Haskell.  Surrounds the items by an open parenthesis.
+	 */
+	@Override public void enterDollarSignTerm(HaskellParser.DollarSignTermContext ctx) { 
+		fileContents.append("(");
+	}
+	/**
+	 * Handles the dollar sign operator in Haskell.  Surrounds the items by an close parenthesis.
+	 */
+	@Override public void exitDollarSignTerm(HaskellParser.DollarSignTermContext ctx) { 
+		System.out.println(fileContents);
+		fileContents.append(")");
+	}
+    
     
     /************************************************************************************
     *                    Methods Related to the Main Method Only                        *
@@ -329,7 +378,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * Defines the main function prototype
      */
     @Override public void enterMainPrototype(HaskellParser.MainPrototypeContext ctx) { 
-        fileContents.append("main(args : Array[String]){\n");
+        fileContents.append("main(args : List[String]){\n");
         incrementIndentLevel(false);
     }
     /**

@@ -328,7 +328,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     		}
     		// For everything after the first term, 
     		else{
-    			// For multiple terms, comma separate the terms.
+    			// For multiple terms, 
     			fileContents.append(",");
     		}    		
     	}
@@ -364,8 +364,51 @@ public class HaskellTokensToScala extends HaskellBaseListener {
 	@Override public void exitDollarSignTerm(HaskellParser.DollarSignTermContext ctx) { 
 		System.out.println(fileContents);
 		fileContents.append(")");
+	}	
+	/**
+	 * Called when converting a Haskell function (followed by a dollar sign) to a Scala object method. Currently a no-op.
+	 */
+	@Override public void enterFunctionToMethodDollarSign(HaskellParser.FunctionToMethodDollarSignContext ctx) { }
+	/**
+	 * Called when converting a Haskell function (followed by a dollar sign) to a Scala object method. Currently a no-op.
+	 */
+	@Override public void exitFunctionToMethodDollarSign(HaskellParser.FunctionToMethodDollarSignContext ctx) { }
+	/**
+	 * Called when converting a Haskell function (surrounded in a parenthesis) to a Scala object method. Currently a no-op.
+	 */
+	@Override public void enterFunctionToMethodParen(HaskellParser.FunctionToMethodParenContext ctx) { }
+	/**
+	 * Called when converting a Haskell function (surrounded in a parenthesis) to a Scala object method. Currently a no-op. 
+	 */
+	@Override public void exitFunctionToMethodParen(HaskellParser.FunctionToMethodParenContext ctx) { }
+	/**
+	 * To simplify support in Scala, we need to surrunound in parentheses.
+	 */
+	@Override public void enterFunctionToMethodTerm(HaskellParser.FunctionToMethodTermContext ctx) { 
+		fileContents.append("(");
+	}
+	/**
+	 * When just a simple term, need to surround in parenthesis.
+	 */
+	@Override public void exitFunctionToMethodTerm(HaskellParser.FunctionToMethodTermContext ctx) { 
+		fileContents.append(")");
+	}
+	/**
+	 * Some functions in Haskell are converted to methods in Scala.  This is called at the beginning of that.
+	 */
+	@Override public void enterFunctionToMethod(HaskellParser.FunctionToMethodContext ctx) { }
+	/**
+	 * Called at the end of function to method conversion.  Converts the Haskell function
+	 * name to scala.
+	 */
+	@Override public void exitFunctionToMethod(HaskellParser.FunctionToMethodContext ctx) { 
+		fileContents.append(".").append(convertHaskellFunctionToScalaMethod(ctx.getText())).append("()");
 	}
     
+	
+	
+	
+	
     
     /************************************************************************************
     *                    Methods Related to the Main Method Only                        *
@@ -524,6 +567,23 @@ public class HaskellTokensToScala extends HaskellBaseListener {
             case "putStr": return "print";
         }
         return baseErrorMessage + "FUNCTION NAME.";
+    }
+    
+    /**
+     * Since Haskell does not have objects in an object oriented way, all operations are done
+     * as functions.  In contrast, Scala supports objects so some of operations that in Haskell
+     * are functions are methods in Scala.  An example of this is "show" in Haskell which
+     * translates to "toString()" in Scala.
+     * 
+     * @param functionName Function name in Haskell
+     * 
+     * @return   Matching method name in Scala.
+     */
+    public String convertHaskellFunctionToScalaMethod(String functionName){
+    	switch(functionName){
+    	case "show": return "toString";
+    	}
+    	return baseErrorMessage + "FUNCTION NAME.";
     }
     
     

@@ -8,8 +8,10 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     private String scalaModuleName;
     private int indentLevel = 0;
     
+    // Stacks are used when data may need to be stored across nesting.
     private Stack<Boolean> commaSeparateTerms = new Stack<Boolean>();
     private Stack<Boolean> firstCommaTerm = new Stack<Boolean>();
+    private Stack<String> haskellFunctionToScalaMethodName = new Stack<String>();
     
     private boolean firstPatternMatchingArgument;
     
@@ -280,7 +282,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      */
     @Override public void exitPatternMatchingArgument(HaskellParser.PatternMatchingArgumentContext ctx) { }
     /**
-     * Opens an expression. For robustness, everything is put in paranetheses so this puts a left "(" 
+     * Opens an expression. For robustness, everything is put in parentheses so this puts a left "(" 
      * parentheses at the beginning of the expression.
      */
     @Override public void enterPatternMatchingExpression(HaskellParser.PatternMatchingExpressionContext ctx) { 
@@ -366,6 +368,13 @@ public class HaskellTokensToScala extends HaskellBaseListener {
 		fileContents.append(")");
 	}	
 	/**
+	 * Whenever a Haskell function that needs to be converted to a Scala method is found, this pushes that method
+	 * onto the function name stack. 
+	 */
+	@Override public void enterHaskellFunctionToScalaMethodName(HaskellParser.HaskellFunctionToScalaMethodNameContext ctx) { 
+		haskellFunctionToScalaMethodName.push(ctx.getText());
+	}
+	/**
 	 * Called when converting a Haskell function (followed by a dollar sign) to a Scala object method. Currently a no-op.
 	 */
 	@Override public void enterFunctionToMethodDollarSign(HaskellParser.FunctionToMethodDollarSignContext ctx) { }
@@ -399,10 +408,11 @@ public class HaskellTokensToScala extends HaskellBaseListener {
 	@Override public void enterFunctionToMethod(HaskellParser.FunctionToMethodContext ctx) { }
 	/**
 	 * Called at the end of function to method conversion.  Converts the Haskell function
-	 * name to scala.
+	 * name to scala.  Pops the function name off the stack.
 	 */
 	@Override public void exitFunctionToMethod(HaskellParser.FunctionToMethodContext ctx) { 
-		fileContents.append(".").append(convertHaskellFunctionToScalaMethod(ctx.getText())).append("()");
+		String haskellFuncName = haskellFunctionToScalaMethodName.pop();
+		fileContents.append(".").append(convertHaskellFunctionToScalaMethod(haskellFuncName)).append("()");
 	}
     
 	
@@ -421,7 +431,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * Defines the main function prototype
      */
     @Override public void enterMainPrototype(HaskellParser.MainPrototypeContext ctx) { 
-        fileContents.append("main(args : List[String]){\n");
+        fileContents.append("main(args : Array[String]){\n");
         incrementIndentLevel(false);
     }
     /**
@@ -546,7 +556,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
         // Handle the support Haskell types.
         switch(haskellType){
             case "Int": return "Int";
-            case "[Int]": return "Array[Int]";
+            case "[Int]": return "List[Int]";
             case "Bool": return "Boolean";
             case "[Char]": return "String";
             case "Char": return "Char";

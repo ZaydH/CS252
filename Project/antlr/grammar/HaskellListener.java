@@ -317,6 +317,16 @@ public interface HaskellListener extends ParseTreeListener {
 	 */
 	void exitFunctionToMethod(HaskellParser.FunctionToMethodContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HaskellParser#haskellFunctionToScalaMethodName}.
+	 * @param ctx the parse tree
+	 */
+	void enterHaskellFunctionToScalaMethodName(HaskellParser.HaskellFunctionToScalaMethodNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#haskellFunctionToScalaMethodName}.
+	 * @param ctx the parse tree
+	 */
+	void exitHaskellFunctionToScalaMethodName(HaskellParser.HaskellFunctionToScalaMethodNameContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HaskellParser#functionToMethodDollarSign}.
 	 * @param ctx the parse tree
 	 */

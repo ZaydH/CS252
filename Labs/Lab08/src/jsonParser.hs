@@ -83,14 +83,33 @@ jsonTuple = do
   return (name, elem)
 
 
-parseJSON :: String -> Either ParseError JValue
-parseJSON input = parse jsonFile "(unknown)" input
+printJSON :: JValue -> Int -> String
+printJSON (JObject jobj) tab = "{\n" ++ (printElement jobj (tab + 1)) ++ (printTabs tab) ++ "}"
+printJSON (JArray jobj) tab = "[\n" ++ (printArrElment jobj (tab + 1)) ++ (printTabs tab) ++ "]"
+printJSON (JNumber numb) _ = show numb
+printJSON (JBool boolVal) _ = show boolVal
+printJSON (JString str) _ = "\"" ++ str ++ "\""
+printJSON (JNull) _ = "null"
+
+
+printElement :: [(String, JValue)] -> Int -> String
+printElement [] _ = ""
+printElement ((name, jVal):xs) tab = (printTabs tab) ++ name ++ ": " ++ (printJSON jVal tab) ++ (if xs /= [] then ",\n" else "\n") ++ (printElement xs tab)
+
+printArrElment :: [JValue] -> Int -> String
+printArrElment [] _ = ""
+printArrElment (x:xs) tab = (printTabs tab) ++ (printJSON x tab) ++ (if xs /= [] then ",\n" else "\n") ++ (printArrElment xs tab)
+
+
+
+printTabs :: Int -> String
+printTabs cnt = concat $ replicate cnt "\t"
 
 main = do
   args <- getArgs
   p <- parseFromFile jsonFile (head args)
   case p of
     Left err  -> print err
-    Right json -> print json
+    Right json -> putStrLn $ printJSON json 0
 
 

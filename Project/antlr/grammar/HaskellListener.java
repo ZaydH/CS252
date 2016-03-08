@@ -297,6 +297,66 @@ public interface HaskellListener extends ParseTreeListener {
 	 */
 	void exitPatternMatchingTerm(HaskellParser.PatternMatchingTermContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HaskellParser#dollarSignTerm}.
+	 * @param ctx the parse tree
+	 */
+	void enterDollarSignTerm(HaskellParser.DollarSignTermContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#dollarSignTerm}.
+	 * @param ctx the parse tree
+	 */
+	void exitDollarSignTerm(HaskellParser.DollarSignTermContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#functionToMethod}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionToMethod(HaskellParser.FunctionToMethodContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#functionToMethod}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionToMethod(HaskellParser.FunctionToMethodContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#haskellFunctionToScalaMethodName}.
+	 * @param ctx the parse tree
+	 */
+	void enterHaskellFunctionToScalaMethodName(HaskellParser.HaskellFunctionToScalaMethodNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#haskellFunctionToScalaMethodName}.
+	 * @param ctx the parse tree
+	 */
+	void exitHaskellFunctionToScalaMethodName(HaskellParser.HaskellFunctionToScalaMethodNameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#functionToMethodDollarSign}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionToMethodDollarSign(HaskellParser.FunctionToMethodDollarSignContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#functionToMethodDollarSign}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionToMethodDollarSign(HaskellParser.FunctionToMethodDollarSignContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#functionToMethodParen}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionToMethodParen(HaskellParser.FunctionToMethodParenContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#functionToMethodParen}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionToMethodParen(HaskellParser.FunctionToMethodParenContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#functionToMethodTerm}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionToMethodTerm(HaskellParser.FunctionToMethodTermContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#functionToMethodTerm}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionToMethodTerm(HaskellParser.FunctionToMethodTermContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HaskellParser#patternMatchArray}.
 	 * @param ctx the parse tree
 	 */
@@ -326,6 +386,16 @@ public interface HaskellListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitGeneralPatternMatchingTerm(HaskellParser.GeneralPatternMatchingTermContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#generalFunctionCall}.
+	 * @param ctx the parse tree
+	 */
+	void enterGeneralFunctionCall(HaskellParser.GeneralFunctionCallContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#generalFunctionCall}.
+	 * @param ctx the parse tree
+	 */
+	void exitGeneralFunctionCall(HaskellParser.GeneralFunctionCallContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HaskellParser#typeFunction}.
 	 * @param ctx the parse tree

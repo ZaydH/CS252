@@ -1,3 +1,4 @@
+import java.util.Stack;
 
 public class HaskellTokensToScala extends HaskellBaseListener {
 
@@ -6,6 +7,11 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     private int BASE_PARAM_NUMBER = 0;
     private String scalaModuleName;
     private int indentLevel = 0;
+    
+    // Stacks are used when data may need to be stored across nesting.
+    private Stack<Boolean> commaSeparateTerms = new Stack<Boolean>();
+    private Stack<Boolean> firstCommaTerm = new Stack<Boolean>();
+    private Stack<String> haskellFunctionToScalaMethodName = new Stack<String>();
     
     private boolean firstPatternMatchingArgument;
     
@@ -276,7 +282,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      */
     @Override public void exitPatternMatchingArgument(HaskellParser.PatternMatchingArgumentContext ctx) { }
     /**
-     * Opens an expression. For robustness, everything is put in paranetheses so this puts a left "(" 
+     * Opens an expression. For robustness, everything is put in parentheses so this puts a left "(" 
      * parentheses at the beginning of the expression.
      */
     @Override public void enterPatternMatchingExpression(HaskellParser.PatternMatchingExpressionContext ctx) { 
@@ -303,7 +309,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * Opens a parenthesis for the pattern matching term.
      */
     @Override public void enterPatternMatchArray(HaskellParser.PatternMatchArrayContext ctx) { 
-        fileContents.append("Array(");
+        fileContents.append("List(");
     }
     /**
      * Opens a parenthesis for the pattern matching term.
@@ -315,8 +321,103 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * Opens a parenthesis for the pattern matching term.
      */
     @Override public void enterGeneralPatternMatchingTerm(HaskellParser.GeneralPatternMatchingTermContext ctx) { 
+    	
+    	if(!commaSeparateTerms.isEmpty()){
+    		// For the first term, just skip and do not put a comma,
+    		if(firstCommaTerm.peek() == Boolean.TRUE){
+    			firstCommaTerm.pop();
+    			firstCommaTerm.push(Boolean.FALSE);
+    		}
+    		// For everything after the first term, 
+    		else{
+    			// For multiple terms, 
+    			fileContents.append(",");
+    		}    		
+    	}
         fileContents.append(" ").append(ctx.getText());
     }
+	/**
+	 * Used for a function call inside a Haskell program.  Opens the call for scala.
+	 */
+	@Override public void enterGeneralFunctionCall(HaskellParser.GeneralFunctionCallContext ctx) { 
+		fileContents.append("(");
+		
+		 commaSeparateTerms.push(Boolean.TRUE);
+		 firstCommaTerm.push(Boolean.TRUE);
+	}
+	/**
+	 * Used for a function call inside a Haskell Program.  Closes the call in Scala.
+	 */
+	@Override public void exitGeneralFunctionCall(HaskellParser.GeneralFunctionCallContext ctx) { 
+		fileContents.append(")");
+		// Clear any nested functions.
+		commaSeparateTerms.pop();
+		firstCommaTerm.pop();
+	}
+	/**
+	 * Handles the dollar sign operator in Haskell.  Surrounds the items by an open parenthesis.
+	 */
+	@Override public void enterDollarSignTerm(HaskellParser.DollarSignTermContext ctx) { 
+		fileContents.append("(");
+	}
+	/**
+	 * Handles the dollar sign operator in Haskell.  Surrounds the items by an close parenthesis.
+	 */
+	@Override public void exitDollarSignTerm(HaskellParser.DollarSignTermContext ctx) { 
+		fileContents.append(")");
+	}	
+	/**
+	 * Whenever a Haskell function that needs to be converted to a Scala method is found, this pushes that method
+	 * onto the function name stack. 
+	 */
+	@Override public void enterHaskellFunctionToScalaMethodName(HaskellParser.HaskellFunctionToScalaMethodNameContext ctx) { 
+		haskellFunctionToScalaMethodName.push(ctx.getText());
+	}
+	/**
+	 * Called when converting a Haskell function (followed by a dollar sign) to a Scala object method. Currently a no-op.
+	 */
+	@Override public void enterFunctionToMethodDollarSign(HaskellParser.FunctionToMethodDollarSignContext ctx) { }
+	/**
+	 * Called when converting a Haskell function (followed by a dollar sign) to a Scala object method. Currently a no-op.
+	 */
+	@Override public void exitFunctionToMethodDollarSign(HaskellParser.FunctionToMethodDollarSignContext ctx) { }
+	/**
+	 * Called when converting a Haskell function (surrounded in a parenthesis) to a Scala object method. Currently a no-op.
+	 */
+	@Override public void enterFunctionToMethodParen(HaskellParser.FunctionToMethodParenContext ctx) { }
+	/**
+	 * Called when converting a Haskell function (surrounded in a parenthesis) to a Scala object method. Currently a no-op. 
+	 */
+	@Override public void exitFunctionToMethodParen(HaskellParser.FunctionToMethodParenContext ctx) { }
+	/**
+	 * To simplify support in Scala, we need to surrunound in parentheses.
+	 */
+	@Override public void enterFunctionToMethodTerm(HaskellParser.FunctionToMethodTermContext ctx) { 
+		fileContents.append("(");
+	}
+	/**
+	 * When just a simple term, need to surround in parenthesis.
+	 */
+	@Override public void exitFunctionToMethodTerm(HaskellParser.FunctionToMethodTermContext ctx) { 
+		fileContents.append(")");
+	}
+	/**
+	 * Some functions in Haskell are converted to methods in Scala.  This is called at the beginning of that.
+	 */
+	@Override public void enterFunctionToMethod(HaskellParser.FunctionToMethodContext ctx) { }
+	/**
+	 * Called at the end of function to method conversion.  Converts the Haskell function
+	 * name to scala.  Pops the function name off the stack.
+	 */
+	@Override public void exitFunctionToMethod(HaskellParser.FunctionToMethodContext ctx) { 
+		String haskellFuncName = haskellFunctionToScalaMethodName.pop();
+		fileContents.append(".").append(convertHaskellFunctionToScalaMethod(haskellFuncName)).append("()");
+	}
+    
+	
+	
+	
+	
     
     /************************************************************************************
     *                    Methods Related to the Main Method Only                        *
@@ -454,7 +555,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
         // Handle the support Haskell types.
         switch(haskellType){
             case "Int": return "Int";
-            case "[Int]": return "Array[Int]";
+            case "[Int]": return "List[Int]";
             case "Bool": return "Boolean";
             case "[Char]": return "String";
             case "Char": return "Char";
@@ -475,6 +576,23 @@ public class HaskellTokensToScala extends HaskellBaseListener {
             case "putStr": return "print";
         }
         return baseErrorMessage + "FUNCTION NAME.";
+    }
+    
+    /**
+     * Since Haskell does not have objects in an object oriented way, all operations are done
+     * as functions.  In contrast, Scala supports objects so some of operations that in Haskell
+     * are functions are methods in Scala.  An example of this is "show" in Haskell which
+     * translates to "toString()" in Scala.
+     * 
+     * @param functionName Function name in Haskell
+     * 
+     * @return   Matching method name in Scala.
+     */
+    public String convertHaskellFunctionToScalaMethod(String functionName){
+    	switch(functionName){
+    	case "show": return "toString";
+    	}
+    	return baseErrorMessage + "FUNCTION NAME.";
     }
     
     

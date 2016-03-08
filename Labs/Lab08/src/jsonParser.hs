@@ -12,7 +12,7 @@ data JValue = JString String
 
 jsonFile :: GenParser Char st JValue
 jsonFile = do
-  result <- jsonArr
+  result <- jsonElem
   spaces
   eof
   return result
@@ -24,7 +24,8 @@ jsonElem = do
   spaces
   return result
 
-jsonElem' = jsonArr
+jsonElem' = jsonObject
+        <|> jsonArr
         <|> jsonString
         <|> jsonBool
         <|> jsonNull
@@ -67,6 +68,17 @@ jsonArr = do
   char ']'
   return $ JArray arr
 
+
+jsonObject = do
+  char '{'
+  arr <- jsonTuple `sepBy` (char ',')
+  char '}'
+  return $ JObject arr
+  
+jsonTuple = do
+  name <- many $ noneOf ":"
+  elem <- jsonElem
+  return (name, elem)
 
 
 parseJSON :: String -> Either ParseError JValue

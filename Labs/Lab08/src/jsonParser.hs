@@ -76,7 +76,9 @@ jsonObject = do
   return $ JObject arr
   
 jsonTuple = do
-  name <- many $ noneOf ":"
+  spaces
+  name <- many1 $ noneOf ":"
+  char ':'
   elem <- jsonElem
   return (name, elem)
 

@@ -30,7 +30,7 @@ mainFunction : mainPrototype NEWLINE mainHeader NEWLINE (mainStatement)+ NEWLINE
 // Define the main block.
 mainPrototype : MAIN_FUNCTION ARG_TYPE_SEPARATOR IO unitType;
 mainHeader : MAIN_FUNCTION EQUAL_SIGN DO;
-mainStatement: (mainWords)+ NEWLINE;
+mainStatement: (patternMatchingTerm)+ NEWLINE;
 // Main words can take many forms so allow for different levels of handling.
 mainWords : haskellFunctionName  
           | parenMainWord
@@ -76,12 +76,30 @@ patternMatchParentheses : LEFT_PAREN (patternMatchingArgument)+ RIGHT_PAREN;
 
 // Currently only integer expressions.
 patternMatchingExpression : patternMatchingTerm+;
-patternMatchingTerm : haskellFunctionName | generalPatternMatchingTerm
-                    | patternMatchArray | patternMatchParen;
+patternMatchingTerm : dollarSignTerm
+                    | generalFunctionCall
+                    | functionToMethod
+                    | haskellFunctionName 
+                    | generalPatternMatchingTerm
+                    | patternMatchArray 
+                    | patternMatchParen;
 // Handle an array in the expression
+dollarSignTerm : RIGHT_ASSOC_DOLLAR_SIGN patternMatchingExpression;
+functionToMethod : functionToMethodDollarSign
+                 | functionToMethodParen
+                 | functionToMethodTerm;
+// Some Haskell Functions are actually methods in Scala.
+// These are different cases where this may occur.  This is handled
+// by the parser.
+haskellFunctionToScalaMethodName : HASKELL_FUNCTIONS_METHODS_IN_SCALA;
+functionToMethodDollarSign : haskellFunctionToScalaMethodName dollarSignTerm;
+functionToMethodParen : haskellFunctionToScalaMethodName patternMatchParen;
+functionToMethodTerm : haskellFunctionToScalaMethodName generalPatternMatchingTerm;
+
 patternMatchArray : LEFT_SQUARE_BRACKET patternMatchingExpression RIGHT_SQUARE_BRACKET;
 patternMatchParen : LEFT_PAREN patternMatchingExpression RIGHT_PAREN;
 generalPatternMatchingTerm : INT_VAL | INT_OP  | NAME;
+generalFunctionCall : FUNC_ARGS_OPEN_PAREN patternMatchingExpression FUNC_ARGS_CLOSE_PAREN;
 
 // Format of function as a type.
 typeFunction: '(' typeSignature ')';
@@ -99,10 +117,19 @@ LEFT_SQUARE_BRACKET : '[';
 RIGHT_SQUARE_BRACKET : '[';
 HEADER_COMMENT_OPEN : '{-';
 HEADER_COMMENT_CLOSE : '-}';
+
+// For embedded function calls in Haskell, use this to make the
+// input parameters comma separated.
+FUNC_ARGS_OPEN_PAREN : '((';
+FUNC_ARGS_CLOSE_PAREN : '))';
+
+HASKELL_FUNCTIONS_METHODS_IN_SCALA : 'show';
+
 LEFT_PAREN : '(';
 RIGHT_PAREN : ')';
 INLINE_COMMENT_SYMBOL : '--';
 EQUAL_SIGN : '=';
+RIGHT_ASSOC_DOLLAR_SIGN : '$';
 IO : 'IO';
 DO : 'do';
 LET : 'let';

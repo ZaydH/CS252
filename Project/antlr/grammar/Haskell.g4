@@ -88,9 +88,13 @@ dollarSignTerm : RIGHT_ASSOC_DOLLAR_SIGN patternMatchingExpression;
 functionToMethod : functionToMethodDollarSign
                  | functionToMethodParen
                  | functionToMethodTerm;
-functionToMethodDollarSign : HASKELL_FUNCTIONS_METHODS_IN_SCALA dollarSignTerm;
-functionToMethodParen : HASKELL_FUNCTIONS_METHODS_IN_SCALA patternMatchParen;
-functionToMethodTerm : HASKELL_FUNCTIONS_METHODS_IN_SCALA generalPatternMatchingTerm;
+// Some Haskell Functions are actually methods in Scala.
+// These are different cases where this may occur.  This is handled
+// by the parser.
+haskellFunctionToScalaMethodName : HASKELL_FUNCTIONS_METHODS_IN_SCALA;
+functionToMethodDollarSign : haskellFunctionToScalaMethodName dollarSignTerm;
+functionToMethodParen : haskellFunctionToScalaMethodName patternMatchParen;
+functionToMethodTerm : haskellFunctionToScalaMethodName generalPatternMatchingTerm;
 
 patternMatchArray : LEFT_SQUARE_BRACKET patternMatchingExpression RIGHT_SQUARE_BRACKET;
 patternMatchParen : LEFT_PAREN patternMatchingExpression RIGHT_PAREN;

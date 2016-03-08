@@ -78,12 +78,20 @@ patternMatchParentheses : LEFT_PAREN (patternMatchingArgument)+ RIGHT_PAREN;
 patternMatchingExpression : patternMatchingTerm+;
 patternMatchingTerm : dollarSignTerm
                     | generalFunctionCall
+                    | functionToMethod
                     | haskellFunctionName 
                     | generalPatternMatchingTerm
                     | patternMatchArray 
                     | patternMatchParen;
 // Handle an array in the expression
 dollarSignTerm : RIGHT_ASSOC_DOLLAR_SIGN patternMatchingExpression;
+functionToMethod : functionToMethodDollarSign
+                 | functionToMethodParen
+                 | functionToMethodTerm;
+functionToMethodDollarSign : HASKELL_FUNCTIONS_METHODS_IN_SCALA dollarSignTerm;
+functionToMethodParen : HASKELL_FUNCTIONS_METHODS_IN_SCALA patternMatchParen;
+functionToMethodTerm : HASKELL_FUNCTIONS_METHODS_IN_SCALA generalPatternMatchingTerm;
+
 patternMatchArray : LEFT_SQUARE_BRACKET patternMatchingExpression RIGHT_SQUARE_BRACKET;
 patternMatchParen : LEFT_PAREN patternMatchingExpression RIGHT_PAREN;
 generalPatternMatchingTerm : INT_VAL | INT_OP  | NAME;
@@ -110,6 +118,8 @@ HEADER_COMMENT_CLOSE : '-}';
 // input parameters comma separated.
 FUNC_ARGS_OPEN_PAREN : '((';
 FUNC_ARGS_CLOSE_PAREN : '))';
+
+HASKELL_FUNCTIONS_METHODS_IN_SCALA : 'show';
 
 LEFT_PAREN : '(';
 RIGHT_PAREN : ')';

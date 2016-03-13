@@ -89,11 +89,30 @@ jTuple = do
 parseJSON :: String -> Either ParseError JValue
 parseJSON input = parse jsonFile "(unknown)" input
 
+
+printJSON :: JValue -> String
+printJSON (JObject xs) = "{\n" ++ (printJObject xs) ++ "\n}"
+printJSON (JNull) = "null"
+printJSON (JString str) = "\"" ++ str ++ "\""
+printJSON (JNumber numb) = show numb
+printJSON (JBool bool) = show bool
+printJSON (JArray x) = "[\n" ++ printJArray x ++ "\n]"
+
+printJObject :: [(String,JValue)] -> String
+printJObject [] = ""
+printJObject [(str, jval)] = str ++ ": " ++ printJSON jval
+printJObject (x:xs) = printJObject [x] ++ ",\n" ++ printJObject xs
+
+printJArray :: [JValue] -> String
+printJArray [] = ""
+printJArray [x] = printJSON x
+printJArray (x:xs) = printJSON x ++ ",\n" ++ printJArray xs
+
 main = do
   args <- getArgs
   p <- parseFromFile jsonFile (head args)
   case p of
     Left err  -> print err
-    Right json -> print json
+    Right json -> putStrLn $ printJSON json
 
 

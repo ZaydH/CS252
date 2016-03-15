@@ -1,3 +1,0 @@
-# List of error messages.
-# Consolidating in a single file for better traceability and modification.
-undefined|error: not found: value 

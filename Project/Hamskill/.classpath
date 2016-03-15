@@ -17,5 +17,19 @@
 	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/lib/scala-reflect.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/lib/scala-swing_2.11-1.0.2.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/lib/scala-xml_2.11-1.0.4.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/api/jars/akka-actor_2.11-2.3.10-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/api/jars/config-1.2.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/api/jars/jline-2.12.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/api/jars/scala-actors-2.11.0-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/api/jars/scala-actors-migration_2.11-1.1.0-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/api/jars/scala-compiler-2.11.7-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/api/jars/scala-continuations-library_2.11-1.0.2-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/api/jars/scala-continuations-plugin_2.11.7-1.0.2-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/api/jars/scala-library-2.11.7-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/api/jars/scalap-2.11.7-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/api/jars/scala-parser-combinators_2.11-1.0.4-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/api/jars/scala-reflect-2.11.7-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/api/jars/scala-swing_2.11-1.0.2-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/api/jars/scala-xml_2.11-1.0.4-javadoc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

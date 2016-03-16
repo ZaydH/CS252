@@ -14,20 +14,29 @@ codeBlock : func | lineComment;
 
 // Placeholder for handling a header comment.
 headerComment : HEADER_COMMENT_OPEN (NAME)* HEADER_COMMENT_CLOSE;
-// Handle a function
-func    :  funcPrototype funcbody NEWLINE*
-        |  mainFunction NEWLINE* ; // This is for the main() Function
 // Line comment is a comment that takes a whole line.
 lineComment : generalComment NEWLINE;
-
 // General comment is any comment after the header.
 generalComment : INLINE_COMMENT_SYMBOL (commentWord)*;
 commentWord : NAME;
 
-mainFunction : mainPrototype NEWLINE mainHeader NEWLINE (mainStatement)+ NEWLINE; 
+// Define a "module" block in Haskell.
+moduleDefinition : moduleOpen moduleName moduleFunctionList moduleClose ;
+moduleOpen : MODULE_STRING NEWLINE*;
+moduleFunctionList : LEFT_PAREN moduleFunctionName 
+                     (COMMA_STRING moduleFunctionName)* RIGHT_PAREN ;
+moduleClose :  NEWLINE* WHERE_STRING;
+moduleName : NAME;
+moduleFunctionName : NEWLINE* NAME NEWLINE*;
+
+
+// Handle a function
+func    :  funcPrototype funcbody NEWLINE*
+        |  mainFunction NEWLINE* ; // This is for the main() Function
 
 
 // Define the main block.
+mainFunction : mainPrototype NEWLINE mainHeader NEWLINE (mainStatement)+ NEWLINE; 
 mainPrototype : MAIN_FUNCTION ARG_TYPE_SEPARATOR IO unitType;
 mainHeader : MAIN_FUNCTION EQUAL_SIGN DO;
 mainStatement: (patternMatchingTerm)+ NEWLINE;
@@ -117,6 +126,11 @@ LEFT_SQUARE_BRACKET : '[';
 RIGHT_SQUARE_BRACKET : '[';
 HEADER_COMMENT_OPEN : '{-';
 HEADER_COMMENT_CLOSE : '-}';
+
+// Tokens for a "module" block.
+MODULE_STRING : 'module' ;
+WHERE_STRING : 'where' ;
+COMMA_STRING : ',';
 
 // For embedded function calls in Haskell, use this to make the
 // input parameters comma separated.

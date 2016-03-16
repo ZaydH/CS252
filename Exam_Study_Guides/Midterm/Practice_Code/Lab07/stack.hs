@@ -16,10 +16,10 @@ stackManip stack = let
 
 
 pop' :: State Stack Int
-pop' = State $ \(x:xs) -> (x,xs)
+pop' = state $ \(x:xs) -> (x,xs)
 
 push' :: Int -> State Stack ()
-push' a = State $ \xs -> ((),a:xs)
+push' a = state $ \xs -> ((),a:xs)
 
 stackManip' :: State Stack Int
 stackManip' = do

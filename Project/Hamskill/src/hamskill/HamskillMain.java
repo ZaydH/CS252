@@ -1,9 +1,13 @@
 package hamskill;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 //Import ANTLR's libraries
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringReader;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -50,6 +54,10 @@ public class HamskillMain {
      */
     private String hamskillStandardFunctionName;
     /**
+     * Stores the output file name for the scala file.
+     */
+    public String objectName;
+    /**
      * Stores the code converted from Haskell to Scala.
      */
     private HaskellTokensToScala scalaCode;
@@ -75,6 +83,8 @@ public class HamskillMain {
         // If this a Hamskill Standard object, then run it. 
         if(hamskill.isHamskillStandard)
             hamskill.runScala();
+        else
+            hamskill.exportScalaToFile();
         
     }
     
@@ -104,15 +114,15 @@ public class HamskillMain {
         
         // Get the Haskell file name
         int periodIndex = this.haskellFileName.lastIndexOf(".");
-        String objectName = this.haskellFileName;
+        this.objectName = this.haskellFileName;
         if(periodIndex >= 0)
-            objectName = objectName.substring(0, periodIndex);
+            this.objectName = this.objectName.substring(0, periodIndex);
         // Get any preceding slashes
-        int slashIndex = Math.max(objectName.lastIndexOf("\\"), haskellFileName.lastIndexOf("/"));
+        int slashIndex = Math.max(this.objectName.lastIndexOf("\\"), haskellFileName.lastIndexOf("/"));
         // Extract the Haskell file's folder path.
         if(slashIndex >= 0){
-            this.haskellFolderPath = objectName.substring(0, slashIndex);
-            objectName = objectName.substring(slashIndex + 1, haskellFileName.length());
+            this.haskellFolderPath = objectName.substring(0, slashIndex+1);
+            this.objectName = this.objectName.substring(slashIndex + 1, haskellFileName.length());
         }
         else{
             this.haskellFolderPath = "";
@@ -140,7 +150,6 @@ public class HamskillMain {
         System.out.println(this.scalaCode);
         System.out.println(); // print a \n after translation
     }
-    
     /**
      * For HamSkill standard, this allows the Haskell code to be compiled and run entirelly within
      */
@@ -150,7 +159,37 @@ public class HamskillMain {
         
         // Compile run and output the Scala results.
         final Eval eval = new Eval();
-        final Object result = eval.apply(this.scalaCode.toString(),true);
+        eval.apply(this.scalaCode.toString(),true);
+    }
+    /**
+     * Export the Scala code to a file.
+     */
+    public void exportScalaToFile() throws IOException {
+        if(this.isHamskillStandard)
+            throw new UnsupportedOperationException("The \"exportScalaToFile\" method is only supported for HamSkill+ objects.");
+        
+        // Define the output filemae based off the original filename.
+        String outputFileName = this.haskellFolderPath + this.objectName + ".scala";
+        
+        // Try writing the file
+        try{
+            // Use a StringReader and BufferedReader to properly handle newlines.
+            StringReader strReader = new StringReader(this.scalaCode.toString());
+            BufferedReader bufReader = new BufferedReader(strReader);
+            
+            // Write to the file.
+            FileWriter fileWriter = new FileWriter(outputFileName);
+            BufferedWriter bufWriter = new BufferedWriter(fileWriter);
+            for(String line = bufReader.readLine(); line != null; line = bufReader.readLine()) {
+                bufWriter.write(line);
+                bufWriter.newLine();
+            }
+            bufReader.close();
+            bufWriter.close();
+        }
+        catch(Exception e){
+            System.out.println("Unable to write to the file: " + outputFileName);
+        }
     }
 
     

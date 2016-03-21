@@ -19,7 +19,6 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     private String hamskillStandardFunctionArgs;
     
     private boolean firstPatternMatchingArgument;
-    private boolean firstParenPatternMatchingArgument;
     
     /**
      * Base error message used for printing when something when wrong.

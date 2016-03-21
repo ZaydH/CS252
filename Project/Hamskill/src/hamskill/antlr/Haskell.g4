@@ -108,7 +108,9 @@ functionToMethodTerm : haskellFunctionToScalaMethodName generalPatternMatchingTe
 patternMatchArray : LEFT_SQUARE_BRACKET patternMatchingExpression RIGHT_SQUARE_BRACKET;
 patternMatchParen : LEFT_PAREN patternMatchingExpression RIGHT_PAREN;
 generalPatternMatchingTerm : INT_VAL | INT_OP  | NAME;
-generalFunctionCall : FUNC_ARGS_OPEN_PAREN patternMatchingExpression FUNC_ARGS_CLOSE_PAREN;
+generalFunctionCall : FUNC_ARGS_OPEN_PAREN functionCallFunctionName
+                      patternMatchingExpression FUNC_ARGS_CLOSE_PAREN;
+functionCallFunctionName : NAME;
 
 // Format of function as a type.
 typeFunction: '(' typeSignature ')';

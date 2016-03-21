@@ -211,14 +211,14 @@ applyOp _  _           (BoolVal _) = Left "Boolean values not allowed with opera
 evaluate :: Expression -> Store -> Either ErrorMsg (Value, Store)
 evaluate (Op o e1 e2) s
         | (o == Times) || (o == Divide) = do 
-                                          (v2, o2, e3) <- return $ evaluateOpBackTrack e2 s
+                                          (v2, o2, e3) <- evaluateOpBackTrack e2 s
                                           (v12', s') <- evaluateOp o e1 (Val (IntVal v2)) s 
                                           evaluate (Op o2 (Val v12') e3) s'
         | (o == Plus) = do
                         (v2, s') <- evaluate e2 s 
                         evaluateOp o e1 (Val v2) s'
         | (o == Minus) = do
-                         (v2, o2, e3, s') <- return $ evalUntilNotMultDiv e2 s
+                         (v2, o2, e3, s') <- evalUntilNotMultDiv e2 s
                          (v12, s'') <- evaluateOp o e1 (Val (IntVal v2)) s'
                          evaluate (Op o2 (Val v12) e3) s''
         | otherwise = evaluateOp o e1 e2 s
@@ -242,21 +242,21 @@ evaluate (Sequence e1 e2) s = do
 --evaluate _ _ = error "TBD_NoEvaluate"
 
 
-evalUntilNotMultDiv :: Expression -> Store -> (Int, Binop, Expression, Store)
-evalUntilNotMultDiv (Val  (IntVal x)) s = (x, Plus, (Val (IntVal 0)), s)
-evalUntilNotMultDiv (Var y) s = (yVal, Plus, (Val (IntVal 0)), s)
-                              where
-                              Right ((IntVal yVal), _) = evaluate (Var y) s
-evalUntilNotMultDiv (Op o e1 e2) s =  if o == Times || o == Divide then
-                                            (e12Val, o2, e3, s''')
+evalUntilNotMultDiv :: Expression -> Store -> Either ErrorMsg (Int, Binop, Expression, Store)
+evalUntilNotMultDiv (Val  (IntVal x)) s = return (x, Plus, (Val (IntVal 0)), s)
+evalUntilNotMultDiv (Var y) s =do
+                               ((IntVal yVal), _) <- evaluate (Var y) s
+                               return (yVal, Plus, (Val (IntVal 0)), s)
+evalUntilNotMultDiv (Op o e1 e2) s =  do
+                                      ((IntVal e1Val), s') <- evaluate e1 s
+                                      (e2Val, o2, e3, s'') <- evalUntilNotMultDiv e2 s
+                                      ((IntVal e12Val), s''') <- evaluate (Op o e1 (Val (IntVal e2Val))) s''
+                                      if o == Times || o == Divide then
+                                            return (e12Val, o2, e3, s''')
                                       else
-                                            (e1Val, o, e2, s') 
-                                      where
-                                      Right ((IntVal e1Val), s') = evaluate e1 s
-                                      (e2Val, o2, e3, s'') = evalUntilNotMultDiv e2 s
-                                      Right ((IntVal e12Val), s''') = evaluate (Op o e1 (Val (IntVal e2Val))) s''
-
-
+                                            return (e1Val, o, e2, s')
+                                            
+-- evaluateOp is used to prevent infinite recursion.
 evaluateOp :: Binop -> Expression -> Expression -> Store -> Either ErrorMsg (Value, Store)
 evaluateOp o e1 e2 s = do
                           (v1,s1) <- evaluate e1 s
@@ -264,16 +264,16 @@ evaluateOp o e1 e2 s = do
                           v <- applyOp o v1 v2
                           return (v, s')
 
-
-evaluateOpBackTrack :: Expression -> Store -> (Int, Binop, Expression)
-evaluateOpBackTrack (Val  (IntVal x)) _ = (x, Plus, (Val (IntVal 0)))
-evaluateOpBackTrack (Var y) s = (yVal, Plus, (Val (IntVal 0)))
-                              where
-                              Right ((IntVal yVal), _) = evaluate (Var y) s
-evaluateOpBackTrack (Op o (Val (IntVal x)) e2) _ = (x, o, e2)
-evaluateOpBackTrack (Op o (Var x) e2) s = (xVal, o, e2)
-                                        where 
-                                        Right ((IntVal xVal), _) = evaluate (Var x) s
+-- Use Backtracking for multiply and divide operations.
+evaluateOpBackTrack :: Expression -> Store -> Either ErrorMsg (Int, Binop, Expression)
+evaluateOpBackTrack (Val  (IntVal x)) _ = return (x, Plus, (Val (IntVal 0)))
+evaluateOpBackTrack (Var y) s = do
+                                ((IntVal yVal), _) <- evaluate (Var y) s
+                                return (yVal, Plus, (Val (IntVal 0)))
+evaluateOpBackTrack (Op o (Val (IntVal x)) e2) _ = return (x, o, e2)
+evaluateOpBackTrack (Op o (Var x) e2) s = do
+                                          ((IntVal xVal), _) <- evaluate (Var x) s
+                                          return (xVal, o, e2)
 
 -- Evaluates a program with an initially empty state
 run :: Expression -> Either ErrorMsg (Value, Store)

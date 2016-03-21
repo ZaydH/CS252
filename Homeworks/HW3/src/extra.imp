@@ -4,4 +4,4 @@ Z := 360 / 12 / 3;
 Q := 2;
 Q := Q - 1 + 10;
 zayd := 3 / 1 * 8 + 21;
-combined := Z * zayd / 5 + X - 15 * 2 
+combined := Z * zayd / 5 + X - 15 * 2

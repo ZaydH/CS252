@@ -1,9 +1,9 @@
 {-
   Name: Zayd Hammoudeh
   Class: CS 252
-  Assigment: HW3
+  Assignment: HW3
   Date: March 24, 2016
-  Description: Imperative Language Interpretter
+  Description: Imperative Language Interpreter
 -}
 
 

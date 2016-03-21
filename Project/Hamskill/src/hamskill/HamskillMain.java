@@ -10,28 +10,84 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import com.twitter.util.Eval;
+
 // Import the antlr generated classes
 import hamskill.antlr.HaskellLexer;
 import hamskill.antlr.HaskellParser;
 import hamskill.antlr.HaskellTokensToScala;
 
-
-import com.twitter.util.Eval;
-
 /**
  * 
- * @author Zayd
+ * @author Zayd Hammoudeh (zayd.hammoudeh@sjsu.edu)
  *
- * 
+ * Sole Driver for Hamskill Standard.
+ * Also serves as the parser for Hamskill+. 
  *
  */
 public class HamskillMain {
     
-    public static void main(String args[]) throws IOException {
+    // Parameters defining the input parameters for the Hamskill input arguments
+    private static final int HAMSKILL_FILENAME_INDEX = 0;
+    private static final int HAMSKILL_FUNCTION_NAME_INDEX = 1;
+    private static final int MINIMUM_NUMBER_OF_ARGUMENTS = 1;
+    private static final int MAXIMUM_NUMBER_OF_ARGUMENTS = 2;
+    
+    /**
+     * Stores whether this is Hamskell standard (using the Twitter library) or uses external Scala.
+     */
+    private boolean isHamskillStandard;
+    /**
+     * Name of the Haskell Filename
+     */
+    private String haskellFileName;
+    /**
+     * Haskell Folder Path.  The Scala file will be outputted to the same path.
+     */
+    private String haskellFolderPath;
+    /**
+     * Name of the function to run from the command line.
+     */
+    private String hamskillStandardFunctionName;
+    /**
+     * Stores the code converted from Haskell to Scala.
+     */
+    private HaskellTokensToScala scalaCode;
+    
+    
+    /**
+     * 
+     * @param args      
+     * @throws IOException
+     */
+    public static void main(String args[]) throws IOException, IllegalArgumentException {
         
+        // Validate the input arguments
+        if(args.length > MAXIMUM_NUMBER_OF_ARGUMENTS)
+            throw new IllegalArgumentException("Error: A maximum two arguments is allowed for Hamskill");
+        else if(args.length < MINIMUM_NUMBER_OF_ARGUMENTS)
+            throw new IllegalArgumentException("Error: No arguments passed.  One argument is required for standard Hamskill.\n"
+                                               + "Two arguments are required for Hamskill+.");
+        
+        // Create the Hamskill Object
+        HamskillMain hamskill = new HamskillMain(args);
+        
+        // If this a Hamskill Standard object, then run it. 
+        if(hamskill.isHamskillStandard)
+            hamskill.runScala();
+        
+    }
+    
+    /**
+     * Standard Hamskill and Hamskill+ Object Constructor
+     * 
+     * @param args Command line input parameters.
+     */
+    public HamskillMain(String args[]) throws IOException{
+          
         // Read the Input from a specified file.
-        String fileName = args[0];
-        ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(new File(fileName)));
+        this.haskellFileName = args[HamskillMain.HAMSKILL_FILENAME_INDEX];
+        ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(new File(this.haskellFileName)));
         
         // Create a lexer that feeds off of input CharStream
         HaskellLexer lexer = new HaskellLexer(input);
@@ -47,45 +103,54 @@ public class HamskillMain {
         ParseTreeWalker walker = new ParseTreeWalker();
         
         // Get the Haskell file name
-        int periodIndex = fileName.lastIndexOf(".");
-        String haskellFileName = fileName;
+        int periodIndex = this.haskellFileName.lastIndexOf(".");
+        String objectName = this.haskellFileName;
         if(periodIndex >= 0)
-            haskellFileName = haskellFileName.substring(0, periodIndex);
+            objectName = objectName.substring(0, periodIndex);
         // Get any preceding slashes
-        int slashIndex = Math.max(haskellFileName.lastIndexOf("\\"), haskellFileName.lastIndexOf("/"));
-        if(slashIndex >= 0)
-            haskellFileName = haskellFileName.substring(slashIndex + 1, haskellFileName.length());
+        int slashIndex = Math.max(objectName.lastIndexOf("\\"), haskellFileName.lastIndexOf("/"));
+        // Extract the Haskell file's folder path.
+        if(slashIndex >= 0){
+            this.haskellFolderPath = objectName.substring(0, slashIndex);
+            objectName = objectName.substring(slashIndex + 1, haskellFileName.length());
+        }
+        else{
+            this.haskellFolderPath = "";
+        }
         
         // Walk the tree created during the parse, trigger callbacks
-        HaskellTokensToScala scalaCode = new HaskellTokensToScala(haskellFileName);
-        walker.walk(scalaCode, tree);
+        if(args.length < HAMSKILL_FUNCTION_NAME_INDEX + 1){
+            this.isHamskillStandard = false;
+        
+            // Run as Haskell+.
+            this.scalaCode = new HaskellTokensToScala(objectName);
+        }
+        else{
+            this.hamskillStandardFunctionName = args[HAMSKILL_FUNCTION_NAME_INDEX];
+            this.isHamskillStandard = true;
+            
+            // Run as Haskell Standard.
+            this.scalaCode = new HaskellTokensToScala(objectName, this.hamskillStandardFunctionName );
+        }
+        
+        // Walk the AST
+        walker.walk(this.scalaCode, tree);
         
         //Print out the scala code for debug purposes.
-        System.out.println(scalaCode);
+        System.out.println(this.scalaCode);
         System.out.println(); // print a \n after translation
+    }
+    
+    /**
+     * For HamSkill standard, this allows the Haskell code to be compiled and run entirelly within
+     */
+    public void runScala() throws UnsupportedOperationException {
+        if(!this.isHamskillStandard)
+            throw new UnsupportedOperationException("The \"runScala\" method is only supported for HamSkill standard objects.");
         
+        // Compile run and output the Scala results.
         final Eval eval = new Eval();
-        //final String result = eval.apply(scalaCode.toString(),true);
-        //System.out.println(result);
-        eval.compile(scalaCode.toString());
-        Object result = eval.apply("\n object obj { \n def fun() = { \n println(\"fun\"); \n } \n } \n obj.fun()", true);
-        
-        System.out.println("Seems like compile finished");
-
-        //// Compile the Scala Code.
-        //Runtime rt = Runtime.getRuntime();
-        //Process pr = rt.exec("java -cp scala-library.jar;. Hello");
-//        try {
-//            pr.wait();
-//        } catch (InterruptedException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//        //System.out.println(haskell_code.main(String args[]));
-//        String x = pr.toString();
-//        System.out.println(x);
-//        x = "herew";
-        
+        final Object result = eval.apply(this.scalaCode.toString(),true);
     }
 
     

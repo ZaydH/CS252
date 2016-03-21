@@ -193,12 +193,17 @@ applyOp :: Binop -> Value -> Value -> Either ErrorMsg Value
 applyOp Plus (IntVal i) (IntVal j) = Right $ IntVal $ i + j
 applyOp Minus (IntVal i) (IntVal j) = Right $ IntVal $ i - j
 applyOp Times (IntVal i) (IntVal j) = Right $ IntVal $ i * j
-applyOp Divide (IntVal i) (IntVal j) = Right $ IntVal $ i `div` j
+applyOp Divide (IntVal i) (IntVal j) = if j == 0 then
+                                            Left "Divide by zero"
+                                       else
+                                            Right $ IntVal $ i `div` j
 applyOp Ge (IntVal i) (IntVal j) = Right $ BoolVal $ i >= j
 applyOp Gt (IntVal i) (IntVal j) = Right $ BoolVal $ i > j
 applyOp Le (IntVal i) (IntVal j) = Right $ BoolVal $ i <= j
 applyOp Lt (IntVal i) (IntVal j) = Right $ BoolVal $ i < j
-applyOp _ _ _ = error "Invalid Operator."
+applyOp _  (BoolVal _)  _          = Left "Boolean values not allowed with operators."
+applyOp _  _           (BoolVal _) = Left "Boolean values not allowed with operators."
+--applyOp _ _ _ = error "Invalid Operator."
 
 -- As with the applyOp method, the semantics for this function
 -- should return Either values.  Left <error msg> indicates an error,
@@ -227,11 +232,11 @@ evaluate (If e eTrue eFalse) s = do
                                  (val, s') <- (evaluate e s) 
                                  case val of
                                       (BoolVal cond) -> if cond then (evaluate eTrue s') else (evaluate eFalse s')
-                                      (IntVal x) -> error $ "Non-boolean value '" ++ (show x) ++ "' used as a conditional"
+                                      (IntVal x) -> Left $ "Non-boolean value '" ++ (show x) ++ "' used as a conditional"
 evaluate (Val x) s = do return (x, s)
 evaluate (Var x) s = do case (Map.lookup x s) of
                               Just i -> return (i, s)
-                              _      -> error "Key is not in the map"
+                              _      -> Left "Key is not in the map"
 evaluate (While e1 e2) s = do
                            evaluate (If e1 (Sequence e2 (While e1 e2)) (Val $ BoolVal False)) s
 evaluate (Assign a e) s = do

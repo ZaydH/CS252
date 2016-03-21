@@ -11,7 +11,7 @@ fi
 
 # Pass all input arguments to the JAR file
 # -jar means use the class path in the JAR manifest
-java -cp hamskill.jar hamskill.HamskillMain "$@"
+java -jar hamskill.jar "$@"
 
 # Run the code in scala for HamSkill+
 if [ "$#" -eq 1 ]; then

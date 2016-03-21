@@ -198,7 +198,7 @@ applyOp Ge (IntVal i) (IntVal j) = Right $ BoolVal $ i >= j
 applyOp Gt (IntVal i) (IntVal j) = Right $ BoolVal $ i > j
 applyOp Le (IntVal i) (IntVal j) = Right $ BoolVal $ i <= j
 applyOp Lt (IntVal i) (IntVal j) = Right $ BoolVal $ i < j
-applyOp _ _ _ = error "TBD_BadOp"
+applyOp _ _ _ = error "Invalid Operator."
 
 -- As with the applyOp method, the semantics for this function
 -- should return Either values.  Left <error msg> indicates an error,
@@ -206,12 +206,22 @@ applyOp _ _ _ = error "TBD_BadOp"
 evaluate :: Expression -> Store -> Either ErrorMsg (Value, Store)
 evaluate (Op o e1 e2) s
         | (o == Times) || (o == Divide) = do 
-                                        (v2, o2, e3) <- return $ evaluateOpBackTrack e2 s
-                                        (v12', s') <- evaluateOp o e1 (Val (IntVal v2)) s 
-                                        evaluate (Op o2 (Val v12') e3) s'
-        | (o == Plus) || (o == Minus) = do
-                                        (v2, s') <- evaluate e2 s 
-                                        evaluateOp o e1 (Val v2) s'
+                                          (v2, o2, e3) <- return $ evaluateOpBackTrack e2 s
+                                          (v12', s') <- evaluateOp o e1 (Val (IntVal v2)) s 
+                                          evaluate (Op o2 (Val v12') e3) s'
+        | (o == Plus) = do
+                        (v2, s') <- evaluate e2 s 
+                        evaluateOp o e1 (Val v2) s'
+        | (o == Minus) = do
+                         (v2, o2, e3) <- return $ evaluateOpBackTrack e2 s
+                         -- If it is not a multiply or divide, then prioritize the subtraction
+                         if (o2 /= Times) && (o2 /= Divide) then do
+                            (v12', s') <- evaluateOp o e1 (Val (IntVal v2)) s 
+                            evaluate (Op o2 (Val v12') e3) s'
+                         -- If it is a multiply or divide
+                         else do
+                            (v23, s') <- evaluate (Op o2 (Val (IntVal v2)) e3) s
+                            evaluate (Op o e1 (Val v23)) s'
         | otherwise = evaluateOp o e1 e2 s
 evaluate (If e eTrue eFalse) s = do 
                                  (val, s') <- (evaluate e s) 

@@ -2,7 +2,7 @@
 "fromList [(\"X\",IntVal 3),(\"Z\",BoolVal False)]"
 
 ***Testing extra.imp
-"fromList [(\"Q\",IntVal 11),(\"X\",IntVal 39),(\"Y\",IntVal 17),(\"Z\",IntVal 10),(\"combined\",IntVal 99),(\"zayd\",IntVal 45)]"
+"fromList [(\"Q\",IntVal 11),(\"W\",IntVal (-612)),(\"X\",IntVal 39),(\"Y\",IntVal 17),(\"Z\",IntVal 10),(\"combined\",IntVal 99),(\"zayd\",IntVal 45)]"
 
 ***Testing fact.imp
 "fromList [(\"F\",IntVal 2),(\"N\",IntVal 0),(\"X\",IntVal 1),(\"Z\",IntVal 2)]"

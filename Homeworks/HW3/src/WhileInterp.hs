@@ -75,7 +75,7 @@ exprP = do
 -- parsing.  Note that binary operators **DO NOT** follow the expected
 -- precedence rules.
 --
--- ***FOR 5pts EXTRA CREDIT (hard, no partial credit)***
+-- ***FOR 2pts EXTRA CREDIT (hard, no partial credit)***
 -- Correct the precedence of the binary operators.
 exprP' = do
   spaces
@@ -243,6 +243,9 @@ evaluateOp o e1 e2 s = do
 
 evaluateOpBackTrack :: Expression -> Store -> (Int, Binop, Expression)
 evaluateOpBackTrack (Val  (IntVal x)) _ = (x, Plus, (Val (IntVal 0)))
+evaluateOpBackTrack (Var y) s = (yVal, Plus, (Val (IntVal 0)))
+                              where
+                              Right ((IntVal yVal), _) = evaluate (Var y) s
 evaluateOpBackTrack (Op o (Val (IntVal x)) e2) _ = (x, o, e2)
 evaluateOpBackTrack (Op o (Var x) e2) s = (xVal, o, e2)
                                         where 

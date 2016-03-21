@@ -5,7 +5,7 @@ while N > 0 do
   Z := F;
   while X > 1 do
     F := Z + F;
-    X := X - 1
+    X := X - 1 + F - F
   endwhile; 
   N := N - 1
 endwhile

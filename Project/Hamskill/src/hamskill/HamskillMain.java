@@ -38,6 +38,11 @@ public class HamskillMain {
     private static final int MAXIMUM_NUMBER_OF_ARGUMENTS = 2;
     
     /**
+     * If true, debug messages are print to the command line.
+     */
+    private static final boolean DEBUG_PRINT = false;
+    
+    /**
      * Stores whether this is Hamskill standard (using the Twitter library) or uses external Scala.
      */
     private boolean isHamskillStandard;
@@ -146,9 +151,11 @@ public class HamskillMain {
         // Walk the AST
         walker.walk(this.scalaCode, tree);
         
-        //Print out the scala code for debug purposes.
-        System.out.println(this.scalaCode);
-        System.out.println(); // print a \n after translation
+        // In debug mode, print the scala code.
+        if(HamskillMain.DEBUG_PRINT){
+            //Print out the scala code for debug purposes.
+            System.out.println(this.scalaCode);
+        }
     }
     /**
      * For HamSkill standard, this allows the Haskell code to be compiled and run entirelly within

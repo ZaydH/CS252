@@ -18,11 +18,12 @@ if [ "$#" -eq 1 ]; then
 	haskellSrcFile=$1
 
 	# Get the file name and path
-	scalaFilenameAndPath=$(echo $scalaSrcFile | rev | cut -d "." -f2 | rev)
+	scalaFilenameAndPath=$(echo $haskellSrcFile | rev | cut -d "." -f2 | rev)
 	scalaFileExtension=".scala"
 
 	# Concatenate the file extension onto the scala filename
-	$scalaSrcFileOB = $scalaFilenameAndPath$scalaFileExtension
+	scalaSrcFile="${scalaFilenameAndPath}${scalaFileExtension}"
+	#echo $scalaSrcFile
 
 	# Compile the scala code	
 	scalac $scalaSrcFile

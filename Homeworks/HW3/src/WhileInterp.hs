@@ -218,15 +218,9 @@ evaluate (Op o e1 e2) s
                         (v2, s') <- evaluate e2 s 
                         evaluateOp o e1 (Val v2) s'
         | (o == Minus) = do
-                         (v2, o2, e3) <- return $ evaluateOpBackTrack e2 s
-                         -- If it is not a multiply or divide, then prioritize the subtraction
-                         if (o2 /= Times) && (o2 /= Divide) then do
-                            (v12', s') <- evaluateOp o e1 (Val (IntVal v2)) s 
-                            evaluate (Op o2 (Val v12') e3) s'
-                         -- If it is a multiply or divide
-                         else do
-                            (v23, s') <- evaluate (Op o2 (Val (IntVal v2)) e3) s
-                            evaluate (Op o e1 (Val v23)) s'
+                         (v2, o2, e3, s') <- return $ evalUntilNotMultDiv e2 s
+                         (v12, s'') <- evaluateOp o e1 (Val (IntVal v2)) s'
+                         evaluate (Op o2 (Val v12) e3) s''
         | otherwise = evaluateOp o e1 e2 s
 evaluate (If e eTrue eFalse) s = do 
                                  (val, s') <- (evaluate e s) 
@@ -246,6 +240,21 @@ evaluate (Sequence e1 e2) s = do
                               (_, s') <- evaluate e1 s
                               evaluate e2 s'
 --evaluate _ _ = error "TBD_NoEvaluate"
+
+
+evalUntilNotMultDiv :: Expression -> Store -> (Int, Binop, Expression, Store)
+evalUntilNotMultDiv (Val  (IntVal x)) s = (x, Plus, (Val (IntVal 0)), s)
+evalUntilNotMultDiv (Var y) s = (yVal, Plus, (Val (IntVal 0)), s)
+                              where
+                              Right ((IntVal yVal), _) = evaluate (Var y) s
+evalUntilNotMultDiv (Op o e1 e2) s =  if o == Times || o == Divide then
+                                            (e12Val, o2, e3, s''')
+                                      else
+                                            (e1Val, o, e2, s') 
+                                      where
+                                      Right ((IntVal e1Val), s') = evaluate e1 s
+                                      (e2Val, o2, e3, s'') = evalUntilNotMultDiv e2 s
+                                      Right ((IntVal e12Val), s''') = evaluate (Op o e1 (Val (IntVal e2Val))) s''
 
 
 evaluateOp :: Binop -> Expression -> Expression -> Store -> Either ErrorMsg (Value, Store)

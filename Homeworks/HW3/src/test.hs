@@ -15,4 +15,4 @@ main = do
   test "times.imp"
   test "test.imp"
   test "error.imp"
-
+  test "divide0.imp"

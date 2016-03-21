@@ -1,5 +1,5 @@
 ***Testing abs.imp
-"fromList [(\"X\",IntVal 3)]"
+"fromList [(\"X\",IntVal 3),(\"Z\",BoolVal False)]"
 
 ***Testing extra.imp
 "fromList [(\"Q\",IntVal 11),(\"X\",IntVal 39),(\"Y\",IntVal 17),(\"Z\",IntVal 10),(\"combined\",IntVal 99),(\"zayd\",IntVal 45)]"
@@ -14,4 +14,8 @@
 "fromList [(\"X\",IntVal 0),(\"Y\",IntVal 10)]"
 
 ***Testing error.imp
-test.hs: Non-boolean value '10' used as a conditional
+"Non-boolean value '10' used as a conditional"
+
+***Testing divide0.imp
+"Divide by zero"
+

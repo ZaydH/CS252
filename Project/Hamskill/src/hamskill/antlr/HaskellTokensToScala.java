@@ -374,10 +374,18 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * Used for a function call inside a Haskell program.  Opens the call for scala.
      */
     @Override public void enterGeneralFunctionCall(HaskellParser.GeneralFunctionCallContext ctx) { 
+        //fileContents.append("(");
+        commaSeparateTerms.push(Boolean.TRUE);
+        firstCommaTerm.push(Boolean.TRUE);
+    }
+    @Override public void enterFunctionCallFunctionName(HaskellParser.FunctionCallFunctionNameContext ctx) { 
+        fileContents.append(ctx.getText());
+    }
+    /**
+     * Prints an open parenthesis before the function call.
+     */
+    @Override public void exitFunctionCallFunctionName(HaskellParser.FunctionCallFunctionNameContext ctx){
         fileContents.append("(");
-        
-         commaSeparateTerms.push(Boolean.TRUE);
-         firstCommaTerm.push(Boolean.TRUE);
     }
     /**
      * Used for a function call inside a Haskell Program.  Closes the call in Scala.

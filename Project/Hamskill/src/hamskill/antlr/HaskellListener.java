@@ -458,6 +458,16 @@ public interface HaskellListener extends ParseTreeListener {
 	 */
 	void exitGeneralFunctionCall(HaskellParser.GeneralFunctionCallContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HaskellParser#functionCallFunctionName}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionCallFunctionName(HaskellParser.FunctionCallFunctionNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#functionCallFunctionName}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionCallFunctionName(HaskellParser.FunctionCallFunctionNameContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HaskellParser#typeFunction}.
 	 * @param ctx the parse tree
 	 */

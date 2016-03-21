@@ -3,7 +3,7 @@
   Class: CS 252
   Assigment: HW3
   Date: March 24, 2016
-  Description: <Describe the program and what it does>
+  Description: Imperative Language Interpretter
 -}
 
 

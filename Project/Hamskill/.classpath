@@ -2,21 +2,10 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/JavaLib/antlr-4.5.2-complete.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/lib/scala-library.jar"/>
-	<classpathentry kind="lib" path="C:/JavaLib/util-eval_2.11-6.33.0.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/lib/akka-actor_2.11-2.3.10.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/lib/config-1.2.1.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/lib/jline-2.12.1.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/lib/scala-actors-2.11.0.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/lib/scala-actors-migration_2.11-1.1.0.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/lib/scala-compiler.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/lib/scala-continuations-library_2.11-1.0.2.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/lib/scala-continuations-plugin_2.11.7-1.0.2.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/lib/scalap-2.11.7.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/lib/scala-parser-combinators_2.11-1.0.4.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/lib/scala-reflect.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/lib/scala-swing_2.11-1.0.2.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/scala/lib/scala-xml_2.11-1.0.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Zayd/Desktop/Courses/CS252/Project/Hamskill/antlr-4.5.2-complete.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Zayd/Desktop/Courses/CS252/Project/Hamskill/scala-library.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Zayd/Desktop/Courses/CS252/Project/Hamskill/util-eval_2.11-6.33.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Zayd/Desktop/Courses/CS252/Project/Hamskill/scala-reflect.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Zayd/Desktop/Courses/CS252/Project/Hamskill/scala-compiler.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -34,7 +34,7 @@ public class HamskillMain {
     private static final int MAXIMUM_NUMBER_OF_ARGUMENTS = 2;
     
     /**
-     * Stores whether this is Hamskell standard (using the Twitter library) or uses external Scala.
+     * Stores whether this is Hamskill standard (using the Twitter library) or uses external Scala.
      */
     private boolean isHamskillStandard;
     /**

@@ -91,7 +91,15 @@ patternMatchingTerm : dollarSignTerm
                     | haskellFunctionName 
                     | generalPatternMatchingTerm
                     | patternMatchArray 
-                    | patternMatchParen;
+                    | patternMatchParen
+                    | ifStatementPattern;
+// Handle an if then else statement
+ifStatementPattern : ifTerm patternMatchParen+
+                     thenTerm patternMatchParen
+                     elseTerm patternMatchParen;
+ifTerm : IF;
+thenTerm : THEN;
+elseTerm : ELSE;
 // Handle an array in the expression
 dollarSignTerm : RIGHT_ASSOC_DOLLAR_SIGN patternMatchingExpression;
 functionToMethod : functionToMethodDollarSign
@@ -104,6 +112,8 @@ haskellFunctionToScalaMethodName : HASKELL_FUNCTIONS_METHODS_IN_SCALA;
 functionToMethodDollarSign : haskellFunctionToScalaMethodName dollarSignTerm;
 functionToMethodParen : haskellFunctionToScalaMethodName patternMatchParen;
 functionToMethodTerm : haskellFunctionToScalaMethodName generalPatternMatchingTerm;
+
+
 
 patternMatchArray : LEFT_SQUARE_BRACKET patternMatchingExpression RIGHT_SQUARE_BRACKET;
 patternMatchParen : LEFT_PAREN patternMatchingExpression RIGHT_PAREN;
@@ -149,6 +159,9 @@ RIGHT_ASSOC_DOLLAR_SIGN : '$';
 IO : 'IO';
 DO : 'do';
 LET : 'let';
+IF : 'if';
+THEN : 'then';
+ELSE : 'else';
 ARG_TYPE_SEPARATOR : '::';
 TYPE_SEPARATOR : '->';  // Separates type in the function definition
 MAIN_FUNCTION : 'main';

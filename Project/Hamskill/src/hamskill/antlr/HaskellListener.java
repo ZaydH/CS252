@@ -358,6 +358,46 @@ public interface HaskellListener extends ParseTreeListener {
 	 */
 	void exitPatternMatchingTerm(HaskellParser.PatternMatchingTermContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HaskellParser#ifStatementPattern}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfStatementPattern(HaskellParser.IfStatementPatternContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#ifStatementPattern}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfStatementPattern(HaskellParser.IfStatementPatternContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#ifTerm}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfTerm(HaskellParser.IfTermContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#ifTerm}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfTerm(HaskellParser.IfTermContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#thenTerm}.
+	 * @param ctx the parse tree
+	 */
+	void enterThenTerm(HaskellParser.ThenTermContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#thenTerm}.
+	 * @param ctx the parse tree
+	 */
+	void exitThenTerm(HaskellParser.ThenTermContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#elseTerm}.
+	 * @param ctx the parse tree
+	 */
+	void enterElseTerm(HaskellParser.ElseTermContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#elseTerm}.
+	 * @param ctx the parse tree
+	 */
+	void exitElseTerm(HaskellParser.ElseTermContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HaskellParser#dollarSignTerm}.
 	 * @param ctx the parse tree
 	 */

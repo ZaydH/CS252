@@ -32,27 +32,30 @@ function hamskill_test {
 		return -1
 	fi
 	# Extract the inputs
-	input_haskell_file="${1}"
+	input_haskell_file="$HASKELL_CODE_DIR/${1}"
 	#echo $input_haskell_file
-	output_haskell_file="${2}"
-	hamskill_output_file="${3}"
+	output_haskell_file="$OUT_DIR/${2}"
+	hamskill_output_file="$OUT_DIR/${3}"
+	#echo $hamskill_output_file
 
 	# Run Haskell
-	runhaskell $input_haskell_file > "$OUT_DIR/$output_haskell_file"
+	runhaskell $input_haskell_file > $output_haskell_file
 	
 	# Run either Hamskill+ or Hamskill Standard
 	if [ "$#" == $HAMSKILL_STANDARD_ARGS_COUNT ]; then
 		hamskill_function_name="${4}"
 		hamskill_type_name="Hamskill Standard"
 
-		bash run_hamskill.sh $input_haskell_file main > "$OUT_DIR/$hamskill_output_file"
+		#echo $input_haskell_file
+		#echo $hamskill_function_name
+		bash run_hamskill.sh $input_haskell_file $hamskill_function_name > $hamskill_output_file
 	else
 		hamskill_type_name="Hamskill+"
-		bash run_hamskill.sh $input_haskell_file main > "$OUT_DIR/$hamskill_output_file"
+		bash run_hamskill.sh $input_haskell_file > $hamskill_output_file
 	fi
 
 	# Check whether the test passed.
-	if cmp -s "$OUT_DIR/$output_haskell_file" "$OUT_DIR/$hamskill_output_file"
+	if cmp -s $output_haskell_file $hamskill_output_file
 	then
 		printf "Passed: ${hamskill_type_name} for Haskell file: \"${input_haskell_file}\""
 		let "numb_passing_tests+=1"
@@ -69,16 +72,16 @@ mkdir $OUT_DIR
 
 
 # Test "haskell_code" using Hamskill Standard
-test_file="haskell_code.hs"
+test_file="simple_function_call.hs"
 haskell_output="haskellOut_haskell_code.txt"
 hamskill_output="hamskillStd_haskell_code.txt"
 hamskill_function="main" #Only main currently supported.
 hamskill_test $test_file $haskell_output $hamskill_output $hamskill_function
 
 #Test "haskell_code" using Hamskill+
-test_file="haskell_code.hs"
+test_file="simple_function_call.hs"
 haskell_output="haskellOut_haskell_code.txt"
-hamskill_output="hamskillStd_haskell_code.txt"
+hamskill_output="hamskill+_haskell_code.txt"
 hamskill_test $test_file $haskell_output $hamskill_output
 
 # This should be the last line in the testbench.  It checks the final results

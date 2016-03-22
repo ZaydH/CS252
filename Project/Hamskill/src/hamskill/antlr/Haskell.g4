@@ -7,7 +7,7 @@
 grammar Haskell;
 
 // May have exactly one header comment block.
-program : headerComment? (NEWLINE* codeBlock)* NEWLINE*;
+program : headerComment? moduleDefinition+ (NEWLINE* codeBlock)* NEWLINE*;
 
 // A code block is a set of contiguous code.
 codeBlock : func | lineComment;
@@ -21,12 +21,14 @@ generalComment : INLINE_COMMENT_SYMBOL (commentWord)*;
 commentWord : NAME;
 
 // Define a "module" block in Haskell.
-moduleDefinition : moduleOpen moduleName moduleFunctionList moduleClose ;
+moduleDefinition : moduleOpen moduleName
+                   moduleFunctionList moduleClose ;
 moduleOpen : MODULE_STRING NEWLINE*;
-moduleFunctionList : LEFT_PAREN moduleFunctionName 
-                     (COMMA_STRING moduleFunctionName)* RIGHT_PAREN ;
+moduleFunctionList : NEWLINE* LEFT_PAREN
+                     moduleFunctionName
+                     (COMMA_STRING moduleFunctionName )* RIGHT_PAREN NEWLINE*;
 moduleClose :  NEWLINE* WHERE_STRING;
-moduleName : NAME;
+moduleName : NAME NEWLINE*;
 moduleFunctionName : NEWLINE* NAME NEWLINE*;
 
 
@@ -174,6 +176,6 @@ UNIT_TYPE : '()';
 
 NEWLINE : '\r'? '\n' ;  // return newlines to parser (is end-statement signal)
 
-NAME : ['a-zA-Z0-9.]+;  // Name of Something
+NAME : ['a-zA-Z0-9._]+;  // Name of Something
 
 WS : [ \t]+ -> skip ;   // toss out whitespace

@@ -1,4 +1,7 @@
-
+module Simple_Function_Call (
+   myFunc2,
+   myFunc
+) where
 
 -- Here's a comment.
 myFunc :: [Int] -> Int -> Int

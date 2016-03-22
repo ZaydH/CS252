@@ -40,7 +40,7 @@ public class HamskillMain {
     /**
      * If true, debug messages are print to the command line.
      */
-    private static final boolean DEBUG_PRINT = false;
+    private static final boolean DEBUG_PRINT = true;
     
     /**
      * Stores whether this is Hamskill standard (using the Twitter library) or uses external Scala.

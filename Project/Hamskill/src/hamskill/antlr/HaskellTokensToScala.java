@@ -1,5 +1,6 @@
 package hamskill.antlr;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class HaskellTokensToScala extends HaskellBaseListener {
@@ -17,6 +18,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     private boolean isHamskillStandard = false;
     private String hamskillStandardFunctionName;
     private String hamskillStandardFunctionArgs;
+    private ArrayList<String> publicFunctionList = new ArrayList<String>();
     
     private boolean firstPatternMatchingArgument;
     
@@ -237,6 +239,15 @@ public class HaskellTokensToScala extends HaskellBaseListener {
         fileContents.append(getInputParameterName());
         fileContents.append(" ").append(SCALAR_INPUT_PARAMETER_CALL_BY_TYPE);
         fileContents.append(" ").append(convertHaskellTypeNameToScala(ctx.getText()));
+    }
+    /**
+     * Used to store the list of public functions from the Haskell "module" statement.
+     *
+     * @param ctx The ANTLR Context
+     */
+    @Override public void enterModuleFunctionName(HaskellParser.ModuleFunctionNameContext ctx) {
+        String text = ctx.getText().replace("\n", "").replace("\r", "");
+        publicFunctionList.add(text);
     }
     /**
      * Performs any cleanup required at the end of a part.

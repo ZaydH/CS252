@@ -455,7 +455,46 @@ public class HaskellTokensToScala extends HaskellBaseListener {
         String haskellFuncName = haskellFunctionToScalaMethodName.pop();
         fileContents.append(".").append(convertHaskellFunctionToScalaMethod(haskellFuncName)).append("()");
     }
-    
+    /**
+     * Used to handle an "if" statement.  Prints "if" and an open parentheses.
+     */
+    @Override public void enterIfTerm(HaskellParser.IfTermContext ctx) { 
+        fileContents.append("if(");
+    }
+    /**
+     * Closes the "if" parenthesis.
+     */
+    @Override public void exitIfTerm(HaskellParser.IfTermContext ctx) {
+    }
+    /**
+     * There is no "then" in Scala so just use curly brackets.
+     */
+    @Override public void enterThenTerm(HaskellParser.ThenTermContext ctx) {
+        fileContents.append(")\n");
+        printIndent();
+        fileContents.append("{");
+        incrementIndentLevel(false);
+    }
+
+    /**
+     * Else requires an explicit keyword and curly bracket.
+     */
+    @Override public void enterElseTerm(HaskellParser.ElseTermContext ctx) {
+        fileContents.append("\n");
+        decrementIndentLevel(true);
+        fileContents.append("}\n");
+        printIndent();
+        fileContents.append("else{");
+        incrementIndentLevel(false);
+    }
+    /**
+     * Close the else with a curly bracket,
+     */
+    @Override public void exitIfStatementPattern(HaskellParser.IfStatementPatternContext ctx) {
+        fileContents.append("\n");
+        decrementIndentLevel(true);
+        fileContents.append("}\n");
+    }
     
     
     

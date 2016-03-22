@@ -127,7 +127,7 @@ public class HamskillMain {
         // Extract the Haskell file's folder path.
         if(slashIndex >= 0){
             this.haskellFolderPath = objectName.substring(0, slashIndex+1);
-            this.objectName = this.objectName.substring(slashIndex + 1, haskellFileName.length());
+            this.objectName = this.objectName.substring(slashIndex + 1, objectName.length());
         }
         else{
             this.haskellFolderPath = "";

@@ -52,6 +52,11 @@ function hamskill_test {
 	else
 		hamskill_type_name="Hamskill+"
 		bash run_hamskill.sh $input_haskell_file > $hamskill_output_file
+
+		# Delete the scala code
+		cd $HASKELL_CODE_DIR
+		rm *.scala
+		cd ..
 	fi
 
 	# Check whether the test passed.
@@ -83,6 +88,21 @@ test_file="simple_function_call.hs"
 haskell_output="haskellOut_haskell_code.txt"
 hamskill_output="hamskill+_haskell_code.txt"
 hamskill_test $test_file $haskell_output $hamskill_output
+
+
+# Test "main_print_string" using Hamskill Standard
+test_file="main_print_string.hs"
+haskell_output="haskellOut_main_print_string.txt"
+hamskill_output="hamskillStd_main_print_string.txt"
+hamskill_function="main" #Only main currently supported.
+hamskill_test $test_file $haskell_output $hamskill_output $hamskill_function
+
+#Testt "main_print_string" using Hamskill+
+test_file="main_print_string.hs"
+haskell_output="haskellOut_main_print_string.txt"
+hamskill_output="hamskill+_main_print_string.txt"
+hamskill_test $test_file $haskell_output $hamskill_output
+
 
 # This should be the last line in the testbench.  It checks the final results
 print_final_results

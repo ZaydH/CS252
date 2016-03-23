@@ -7,7 +7,7 @@
 grammar Haskell;
 
 // May have exactly one header comment block.
-program : headerComment? moduleDefinition+ (NEWLINE* codeBlock)* NEWLINE*;
+program : headerComment? moduleDefinition* (NEWLINE* codeBlock)* NEWLINE*;
 
 // A code block is a set of contiguous code.
 codeBlock : func | lineComment;
@@ -40,14 +40,17 @@ func    :  funcPrototype funcbody NEWLINE*
 // Define the main block.
 mainFunction : mainPrototype NEWLINE mainHeader NEWLINE (mainStatement)+ NEWLINE; 
 mainPrototype : MAIN_FUNCTION ARG_TYPE_SEPARATOR IO unitType;
-mainHeader : MAIN_FUNCTION EQUAL_SIGN DO;
-mainStatement: (patternMatchingTerm)+ NEWLINE;
+mainHeader : MAIN_FUNCTION EQUAL_SIGN DO*;
+mainStatement: monadExpression+ NEWLINE | patternMatchingTerm+ NEWLINE;
 // Main words can take many forms so allow for different levels of handling.
 mainWords : haskellFunctionName  
           | parenMainWord
           | generalMainWord;
 parenMainWord : LEFT_PAREN (mainWords)+ RIGHT_PAREN;
 generalMainWord : NAME | INT_VAL;
+// Monad expressions have a specific format.  This is handled here.
+monadExpression : immutableValueName MONAD_ARROW patternMatchingExpression ;
+immutableValueName : NAME;
 
 // Basic Function (excluding main)
 funcPrototype : functionName ARG_TYPE_SEPARATOR typeSignature returnType NEWLINE ;
@@ -83,8 +86,6 @@ generalMatchingArgument : NAME;
 //Handle case here paremter is in parentheses.
 patternMatchParentheses : LEFT_PAREN (patternMatchingArgument)+ RIGHT_PAREN;
 
-
-
 // Currently only integer expressions.
 patternMatchingExpression : patternMatchingTerm+;
 patternMatchingTerm : dollarSignTerm
@@ -94,11 +95,14 @@ patternMatchingTerm : dollarSignTerm
                     | generalPatternMatchingTerm
                     | patternMatchArray 
                     | patternMatchParen
-                    | ifStatementPattern;
+                    | ifStatementPattern
+                    | recursiveMain
+                    | returnUnitType;
 // Handle an if then else statement
-ifStatementPattern : ifTerm patternMatchParen+
-                     thenTerm patternMatchParen
-                     elseTerm patternMatchParen;
+ifStatementPattern : ifTerm  ifStatementExpression
+                     thenTerm ifStatementExpression
+                     elseTerm ifStatementExpression;
+ifStatementExpression : NEWLINE* LEFT_PAREN NEWLINE* patternMatchingExpression NEWLINE* RIGHT_PAREN NEWLINE*;
 ifTerm : IF;
 thenTerm : THEN;
 elseTerm : ELSE;
@@ -114,6 +118,8 @@ haskellFunctionToScalaMethodName : HASKELL_FUNCTIONS_METHODS_IN_SCALA;
 functionToMethodDollarSign : haskellFunctionToScalaMethodName dollarSignTerm;
 functionToMethodParen : haskellFunctionToScalaMethodName patternMatchParen;
 functionToMethodTerm : haskellFunctionToScalaMethodName generalPatternMatchingTerm;
+recursiveMain : RECURSIVE_MAIN;
+returnUnitType : RETURN UNIT_TYPE;
 
 
 
@@ -122,7 +128,7 @@ patternMatchParen : LEFT_PAREN patternMatchingExpression RIGHT_PAREN;
 generalPatternMatchingTerm : INT_VAL | INT_OP  | NAME;
 generalFunctionCall : FUNC_ARGS_OPEN_PAREN functionCallFunctionName
                       patternMatchingExpression FUNC_ARGS_CLOSE_PAREN;
-functionCallFunctionName : NAME;
+functionCallFunctionName : NAME | HASKELL_FUNCTION_NAME;
 
 // Format of function as a type.
 typeFunction: '(' typeSignature ')';
@@ -151,7 +157,7 @@ COMMA_STRING : ',';
 FUNC_ARGS_OPEN_PAREN : '((';
 FUNC_ARGS_CLOSE_PAREN : '))';
 
-HASKELL_FUNCTIONS_METHODS_IN_SCALA : 'show';
+HASKELL_FUNCTIONS_METHODS_IN_SCALA : 'show' | 'length' ;
 
 LEFT_PAREN : '(';
 RIGHT_PAREN : ')';
@@ -164,14 +170,17 @@ LET : 'let';
 IF : 'if';
 THEN : 'then';
 ELSE : 'else';
+RETURN : 'return';
 ARG_TYPE_SEPARATOR : '::';
+MONAD_ARROW : '<-';
 TYPE_SEPARATOR : '->';  // Separates type in the function definition
+RECURSIVE_MAIN : '((main))';
 MAIN_FUNCTION : 'main';
 INT_VAL : [-]?[0-9]+;       // Integer values
 INT_OP : '+' | '-' | '*' | '==' | '/=' | '>' | '<' | '<=' | '>=' ;
 TYPE_NAME : '[Int]' | 'Int' | '[Char]' | 'Char' | 'Bool';
 
-HASKELL_FUNCTION_NAME : 'putStrLn' | 'putStr';
+HASKELL_FUNCTION_NAME : 'putStrLn' | 'putStr' | 'getLine';
 UNIT_TYPE : '()';
 
 NEWLINE : '\r'? '\n' ;  // return newlines to parser (is end-statement signal)

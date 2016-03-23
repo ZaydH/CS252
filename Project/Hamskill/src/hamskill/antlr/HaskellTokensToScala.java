@@ -264,7 +264,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * @param ctx The ANTLR Context
      */
     @Override public void enterReturnType(HaskellParser.ReturnTypeContext ctx) {
-        fileContents.append(": " + convertHaskellTypeNameToScala(ctx.getText()) + " = ");
+        fileContents.append(": " + convertHaskellTypeNameToScala(ctx.getText()) + " =");
         fileContents.append("(");
         
         // List all parameters for the function.
@@ -483,8 +483,8 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     @Override public void enterThenTerm(HaskellParser.ThenTermContext ctx) {
         fileContents.append(")\n");
         printIndent();
-        fileContents.append("{");
-        incrementIndentLevel(false);
+        fileContents.append("{\n");
+        incrementIndentLevel(true);
     }
 
     /**
@@ -495,8 +495,8 @@ public class HaskellTokensToScala extends HaskellBaseListener {
         decrementIndentLevel(true);
         fileContents.append("}\n");
         printIndent();
-        fileContents.append("else{");
-        incrementIndentLevel(false);
+        fileContents.append("else{\n");
+        incrementIndentLevel(true);
     }
     /**
      * Close the else with a curly bracket,
@@ -562,9 +562,49 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     @Override public void enterGeneralMainWord(HaskellParser.GeneralMainWordContext ctx) { 
         //fileContents.append(" ").append(ctx.getText());
     }
-    
-    
-    
+    /**
+     * Handle Monad expressions specifically.  This is the entrance to a monad.
+     */
+    @Override public void enterMonadExpression(HaskellParser.MonadExpressionContext ctx) { 
+        
+    }
+    /**
+     *Add a semicolon at the end of a monad.
+     */
+    @Override public void exitMonadExpression(HaskellParser.MonadExpressionContext ctx) {
+        fileContents.append(";");
+    }
+    /**
+     * Creates the variable name (as immutable) and adds the equal sign.
+     */
+    @Override public void enterImmutableValueName(HaskellParser.ImmutableValueNameContext ctx) {
+        fileContents.append("lazy val ").append(ctx.getText()).append(" =");
+    }
+    /**
+     * Called at the end of an immutable value name.  Currently a no-op.
+     */
+    @Override public void exitImmutableValueName(HaskellParser.ImmutableValueNameContext ctx) { }
+    /**
+     * If main is recursive to itself, then need to pass its arguments.
+     * Changes recursive main function call to include args.
+     */
+    @Override public void enterRecursiveMain(HaskellParser.RecursiveMainContext ctx) { 
+        fileContents.append("main(args)");
+    }
+    /**
+     * Handles a recursive call to main.  No-op currently. 
+     */
+    @Override public void exitRecursiveMain(HaskellParser.RecursiveMainContext ctx) { }
+    /**
+     * Handle the return of the unit type.  
+     */
+    @Override public void enterReturnUnitType(HaskellParser.ReturnUnitTypeContext ctx) { 
+        fileContents.append("return;");
+    }
+    /**
+     * Handle the return of the unit type.  Closing currently does nothing.
+     */
+    @Override public void exitReturnUnitType(HaskellParser.ReturnUnitTypeContext ctx) { }
     
     
     
@@ -666,6 +706,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
         switch(functionName){
             case "putStrLn": return "println";
             case "putStr": return "print";
+            case "getLine" : return "scala.io.StdIn.readLine()";
         }
         return baseErrorMessage + "FUNCTION NAME.";
     }
@@ -682,7 +723,8 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      */
     public String convertHaskellFunctionToScalaMethod(String functionName){
         switch(functionName){
-        case "show": return "toString";
+            case "show": return "toString";
+            case "length": return "length";
         }
         return baseErrorMessage + "FUNCTION NAME.";
     }

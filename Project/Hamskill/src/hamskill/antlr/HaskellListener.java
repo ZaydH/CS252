@@ -208,6 +208,26 @@ public interface HaskellListener extends ParseTreeListener {
 	 */
 	void exitGeneralMainWord(HaskellParser.GeneralMainWordContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HaskellParser#monadExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterMonadExpression(HaskellParser.MonadExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#monadExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitMonadExpression(HaskellParser.MonadExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#immutableValueName}.
+	 * @param ctx the parse tree
+	 */
+	void enterImmutableValueName(HaskellParser.ImmutableValueNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#immutableValueName}.
+	 * @param ctx the parse tree
+	 */
+	void exitImmutableValueName(HaskellParser.ImmutableValueNameContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HaskellParser#funcPrototype}.
 	 * @param ctx the parse tree
 	 */
@@ -368,6 +388,16 @@ public interface HaskellListener extends ParseTreeListener {
 	 */
 	void exitIfStatementPattern(HaskellParser.IfStatementPatternContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HaskellParser#ifStatementExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfStatementExpression(HaskellParser.IfStatementExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#ifStatementExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfStatementExpression(HaskellParser.IfStatementExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HaskellParser#ifTerm}.
 	 * @param ctx the parse tree
 	 */
@@ -457,6 +487,26 @@ public interface HaskellListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFunctionToMethodTerm(HaskellParser.FunctionToMethodTermContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#recursiveMain}.
+	 * @param ctx the parse tree
+	 */
+	void enterRecursiveMain(HaskellParser.RecursiveMainContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#recursiveMain}.
+	 * @param ctx the parse tree
+	 */
+	void exitRecursiveMain(HaskellParser.RecursiveMainContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#returnUnitType}.
+	 * @param ctx the parse tree
+	 */
+	void enterReturnUnitType(HaskellParser.ReturnUnitTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#returnUnitType}.
+	 * @param ctx the parse tree
+	 */
+	void exitReturnUnitType(HaskellParser.ReturnUnitTypeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HaskellParser#patternMatchArray}.
 	 * @param ctx the parse tree

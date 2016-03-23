@@ -5,6 +5,7 @@ OUT_DIR="output"
 HASKELL_CODE_DIR="test_cases"
 HAMSKILL_STANDARD_ARGS_COUNT=4
 HAMSKILL_PLUS_ARGS_COUNT=3
+stdin_input_file="" # Default not used.
 
 # Keep information on the passing and failing tests
 numb_tests=0
@@ -39,19 +40,34 @@ function hamskill_test {
 	#echo $hamskill_output_file
 
 	# Run Haskell
-	runhaskell $input_haskell_file > $output_haskell_file
+	if [ -z $stdin_input_file ]; then
+		runhaskell $input_haskell_file > $output_haskell_file
+	else
+		runhaskell $input_haskell_file < $stdin_input_file > $output_haskell_file
+	fi
 	
 	# Run either Hamskill+ or Hamskill Standard
 	if [ "$#" == $HAMSKILL_STANDARD_ARGS_COUNT ]; then
 		hamskill_function_name="${4}"
 		hamskill_type_name="Hamskill Standard"
 
+		# As error checking, make sure Hamskill Standard is not passed a text file.
+		if ! [ -z $stdin_input_file ]; then
+			printf "\n\nError: Cannot pass a text file input to HamSkill standard."
+			return -1
+		fi
+
 		#echo $input_haskell_file
 		#echo $hamskill_function_name
 		bash run_hamskill.sh $input_haskell_file $hamskill_function_name > $hamskill_output_file
 	else
 		hamskill_type_name="Hamskill+"
-		bash run_hamskill.sh $input_haskell_file > $hamskill_output_file
+		if [ -z $stdin_input_file ]; then
+			bash run_hamskill.sh $input_haskell_file > $hamskill_output_file
+		else
+			bash run_hamskill.sh $input_haskell_file < $stdin_input_file > $hamskill_output_file
+		fi
+		stdin_input_file="" # Clear the stdin_input_file
 
 		# Delete the scala code
 		cd $HASKELL_CODE_DIR
@@ -97,10 +113,19 @@ hamskill_output="hamskillStd_main_print_string.txt"
 hamskill_function="main" #Only main currently supported.
 hamskill_test $test_file $haskell_output $hamskill_output $hamskill_function
 
-#Testt "main_print_string" using Hamskill+
+#Test "main_print_string" using Hamskill+
 test_file="main_print_string.hs"
 haskell_output="haskellOut_main_print_string.txt"
 hamskill_output="hamskill+_main_print_string.txt"
+hamskill_test $test_file $haskell_output $hamskill_output
+
+#Test "get_test.hs" using Hamskill+
+#This takes standard input text so pass it to the function.
+#Just using any function as the input.
+test_file="get_text.hs"
+haskell_output="haskellOut_get_text.txt"
+hamskill_output="hamskill+_get_text.txt"
+stdin_input_file="test.txt"
 hamskill_test $test_file $haskell_output $hamskill_output
 
 

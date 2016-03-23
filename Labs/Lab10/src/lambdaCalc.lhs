@@ -59,14 +59,20 @@ Why does this work?  Here are a couple of tests to consider.
 
 Define the 'nott' and 'orr' operators below without using andd.
 
-> nott = error "TBD"
+> nott = \x -> x fls tru
 
-> orr = error "TBD"
+> orr = \b -> \c -> b tru c
 
 Here are some test cases:
 
 > testOps1 = transBool $ orr fls (nott fls)
 > testOps2 = transBool $ nott (orr fls tru)
+> testOps3 = transBool $ nott fls
+> testOps4 = transBool $ nott tru
+> testOps5 = transBool $ orr fls fls
+> testOps6 = transBool $ orr fls tru
+> testOps7 = transBool $ orr tru fls
+> testOps8 = transBool $ orr tru tru
 
 
 

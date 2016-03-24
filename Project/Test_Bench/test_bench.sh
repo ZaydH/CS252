@@ -125,8 +125,22 @@ hamskill_test $test_file $haskell_output $hamskill_output
 test_file="get_text.hs"
 haskell_output="haskellOut_get_text.txt"
 hamskill_output="hamskill+_get_text.txt"
-stdin_input_file="test.txt"
+stdin_input_file="$HASKELL_CODE_DIR/test.txt"
 hamskill_test $test_file $haskell_output $hamskill_output
+
+#Test "factorial.hs" using Hamskill Standard
+test_file="factorial.hs"
+haskell_output="haskellOut_factorial.txt"
+hamskill_output="hamskillStd_factorial.txt"
+hamskill_function="main" # Only main is currently supported
+hamskill_test $test_file $haskell_output $hamskill_output $hamskill_function
+
+#Test "factorial.hs" using Hamskill+
+test_file="factorial.hs"
+haskell_output="haskellOut_factorial.txt"
+hamskill_output="hamskill+_factorial.txt"
+hamskill_test $test_file $haskell_output $hamskill_output
+
 
 
 # This should be the last line in the testbench.  It checks the final results

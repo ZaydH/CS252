@@ -99,7 +99,12 @@ The following lines produce "true" and "false" respectively.
 Again, everything to the right of the $ is lambda calculus.
 
 > testPairFst = transBool $ first myPair
+
+"true"
+
 > testPairSnd = transBool $ second myPair
+
+"false"
 
 From pairs, we can begin to build other data structures such as lists.
 
@@ -180,8 +185,9 @@ Alternately, we could define plus with our scc function:
 
 Define multiplication in a similar manner:
 
-> multiply = error "TBD"
+> multiply = \n -> \m -> n (plus m) zero
 
+> mult3And2 = transChurchNums $ multiply (church 3) (church 2)
 
 For ease of use, you may use the following function to convert a Haskell integer to a Church numeral.
 
@@ -203,6 +209,9 @@ Haskell will not accept the above combinator.
 Evaluate this function by hand yourself.
 After one step, what do you get?
 
+After one step, you get the same thing as plugged into "x" is (\x -> x x).
+
+omega = (\x -> x x) (\x -> x x)
 
 The omega function is not terribly useful, though it is interesting.
 We can cause a lambda calculus program to go into an infinite loop.
@@ -235,4 +244,22 @@ Using g and the fix function, we can define factorial.
 factorial = fix g
 
 To understand how this works, write out the evaluation steps for `factorial 3`.
+
+Based off my outside reading:
+
+fix (g x) = g ((fix g) x)
+
+factorial 3 = fix g 3
+ = g ( (fix g) 3) [ Fix Combinator ]
+ ->  (test (isZero (prd 3)) one (multiply 3 ((fix g) (prd 3)))) [Substitution]
+ ->* (multiply 3 ((fix g) (prd 3)))) [Resolving test]
+ ->* (multiply 3 (g (fix g) (2)))) [Fix Combinator and pred]
+ ->  (multiply 3 (test (isZero (prd 2)) one (multiply 2 ((fix g) (prd 2)))) Substitution]
+ ->* (multiply 3 (multiply 2 ((fix g) (prd 2))) [Resolving test and pred]
+ ->* (multiply 3 (multiply 2 (g (fix g) (1))) [Fix Combinator and pred]
+ ->  (multiply 3 (multiply 2 (test (isZero (prd 1)) one (multiply 1 ((fix g) (prd 1)))) [Substitution]
+ ->* (multiply 3 (multiply 2 (one)) [Resolving test]
+ ->* (multiply 3 2) [Resolving multiply]
+ ->* (6) [Resolving multiply]
+ 
 

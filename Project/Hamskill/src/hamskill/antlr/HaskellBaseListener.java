@@ -316,6 +316,30 @@ public class HaskellBaseListener implements HaskellListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterTypeFunction(HaskellParser.TypeFunctionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTypeFunction(HaskellParser.TypeFunctionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTypeFunctionSeparator(HaskellParser.TypeFunctionSeparatorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTypeFunctionSeparator(HaskellParser.TypeFunctionSeparatorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterInputType(HaskellParser.InputTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -347,6 +371,18 @@ public class HaskellBaseListener implements HaskellListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitType(HaskellParser.TypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPrimitiveTypeName(HaskellParser.PrimitiveTypeNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPrimitiveTypeName(HaskellParser.PrimitiveTypeNameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -436,6 +472,18 @@ public class HaskellBaseListener implements HaskellListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterUnderScoreArgument(HaskellParser.UnderScoreArgumentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnderScoreArgument(HaskellParser.UnderScoreArgumentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterPatternMatchingExpression(HaskellParser.PatternMatchingExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -520,6 +568,18 @@ public class HaskellBaseListener implements HaskellListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterPrependTerm(HaskellParser.PrependTermContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPrependTerm(HaskellParser.PrependTermContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterConcatenatedList(HaskellParser.ConcatenatedListContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -551,6 +611,18 @@ public class HaskellBaseListener implements HaskellListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitColonTerm(HaskellParser.ColonTermContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterUnderScoreTerm(HaskellParser.UnderScoreTermContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnderScoreTerm(HaskellParser.UnderScoreTermContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -767,18 +839,6 @@ public class HaskellBaseListener implements HaskellListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFunctionCallFunctionName(HaskellParser.FunctionCallFunctionNameContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTypeFunction(HaskellParser.TypeFunctionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTypeFunction(HaskellParser.TypeFunctionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

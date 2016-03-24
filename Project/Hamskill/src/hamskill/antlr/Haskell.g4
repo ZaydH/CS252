@@ -53,21 +53,23 @@ monadExpression : immutableValueName MONAD_ARROW patternMatchingExpression ;
 immutableValueName : NAME;
 
 // Basic Function (excluding main)
-funcPrototype : functionName ARG_TYPE_SEPARATOR typeSignature returnType NEWLINE ;
+funcPrototype : functionName ARG_TYPE_SEPARATOR typeSignature returnType NEWLINE* ;
 // A standard function just has a name.
 functionName : NAME;
 // A Haskell function definition takes a set of argument.
 // This object represents the different haskell types.
 typeSignature: (inputType TYPE_SEPARATOR)* ;
-
-// Last type is the return type which every haskell function has.
-inputType: type;
-
+// Format of function as a type.
+typeFunction: '(' (type typeFunctionSeparator)*  type ')';
+typeFunctionSeparator : TYPE_SEPARATOR;
+// Parse the input types
+inputType: type ;
 // Last type is the return type which every haskell function has.
 returnType: type;
 
 // A parameter type can either be a type name or a function.
-type: TYPE_NAME | typeFunction | unitType;
+type: primitiveTypeName | typeFunction | unitType;
+primitiveTypeName : TYPE_NAME;
 // Make unitType a lexer so I can put a listener on it.
 unitType : UNIT_TYPE;
 
@@ -81,12 +83,14 @@ patternMatchingArguments : patternMatchingArgument*;
 
 // Arguments passed to the function if any.
 patternMatchingArgument : patternMatchParentheses 
-                        | generalMatchingArgument
                         | concatenatedList 
-                        | emptyList ; 
+                        | emptyList 
+                        | underScoreTerm
+                        | generalMatchingArgument;  // Most general so should be last
 generalMatchingArgument : NAME;
 //Handle case here paremter is in parentheses.
 patternMatchParentheses : LEFT_PAREN (patternMatchingArgument)+ RIGHT_PAREN;
+underScoreArgument : underScoreTerm;
 
 // Currently only integer expressions.
 patternMatchingExpression : patternMatchingTerm+;
@@ -94,6 +98,7 @@ patternMatchingTerm : dollarSignTerm
                     | generalFunctionCall
                     | functionToMethod
                     | haskellFunctionName 
+                    | prependTerm
                     | generalPatternMatchingTerm
                     | patternMatchArray 
                     | patternMatchParen
@@ -103,7 +108,7 @@ patternMatchingTerm : dollarSignTerm
                     | concatenatedList 
                     | emptyList 
                     | populatedList
-                    | NAME ; //Name should always be last since it the most general.
+                    | NAME ; //Name should always berun last since it the most general.
 // Handle an if then else statement
 ifStatementPattern : ifTerm  ifStatementExpression
                      thenTerm ifStatementExpression
@@ -112,10 +117,12 @@ ifStatementExpression : NEWLINE* LEFT_PAREN NEWLINE* patternMatchingExpression N
 ifTerm : IF;
 thenTerm : THEN;
 elseTerm : ELSE;
+prependTerm : patternMatchParen colonTerm patternMatchParen;
 // Define lists for pattern matching.
 concatenatedList : LEFT_PAREN headList colonTerm tailList RIGHT_PAREN;
 headList : patternMatchingTerm;
 colonTerm : COLON;
+underScoreTerm : UNDERSCORE;
 tailList : patternMatchingTerm;
 emptyList : LEFT_SQUARE_BRACKET RIGHT_SQUARE_BRACKET;
 populatedList : LEFT_SQUARE_BRACKET (listElement COMMA)* listElement RIGHT_SQUARE_BRACKET;
@@ -144,9 +151,6 @@ generalFunctionCall : FUNC_ARGS_OPEN_PAREN functionCallFunctionName
                       functionArgument* FUNC_ARGS_CLOSE_PAREN;
 functionArgument : patternMatchingTerm ;
 functionCallFunctionName : NAME | HASKELL_FUNCTION_NAME;
-
-// Format of function as a type.
-typeFunction: '(' typeSignature ')';
 
 // Create a lexer for the Haskell function so I can attach a listener to it.
 haskellFunctionName : HASKELL_FUNCTION_NAME;
@@ -180,6 +184,7 @@ COLON : ':';
 INLINE_COMMENT_SYMBOL : '--';
 EQUAL_SIGN : '=';
 RIGHT_ASSOC_DOLLAR_SIGN : '$';
+UNDERSCORE : '_';
 IO : 'IO';
 DO : 'do';
 LET : 'let';

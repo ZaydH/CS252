@@ -44,7 +44,11 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     /**
      * Select type of call by parameter.  Right now using lazy parameters.
      */
-    private String SCALAR_INPUT_PARAMETER_CALL_BY_TYPE = ": =>";
+    private String SCALA_INPUT_PARAMETER_CALL_BY_TYPE = ":";
+    /**
+     * When passing a function as a parameter, this separates the types.
+     */
+    private String SCALA_FUNCTION_TYPE_SEPARATOR = " => ";
     /**
      * Used to invoke the pattern matching syntax.
      */
@@ -65,6 +69,10 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * Scala's prepend operator (equivalent of ":" in Haskell).
      */
     private String SCALA_PREPEND_OPERATOR = "::";
+    /**
+     * Scala argument to ignore an input parameter.
+     */
+    private String SCALA_IGNORE_INPUT_ARGUMENT = "_";
     
 
     /**
@@ -268,8 +276,25 @@ public class HaskellTokensToScala extends HaskellBaseListener {
         
         // Add the parameter name and type.
         fileContents.append(getInputParameterName());
-        fileContents.append(" ").append(SCALAR_INPUT_PARAMETER_CALL_BY_TYPE);
+        fileContents.append(" ").append(SCALA_INPUT_PARAMETER_CALL_BY_TYPE);
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Print the primitive type name (e.g. "Int", "Bool", etc.)  This function converts
+     * any Haskell specific names to those compatible with Scala.</p>
+     */
+    @Override public void enterPrimitiveTypeName(HaskellParser.PrimitiveTypeNameContext ctx) { 
         fileContents.append(" ").append(convertHaskellTypeNameToScala(ctx.getText()));
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Need to special handle a function passed to the input function.  This
+     * writes the Scala type separator.</p>
+     */
+    @Override public void enterTypeFunctionSeparator(HaskellParser.TypeFunctionSeparatorContext ctx) {
+        fileContents.append(SCALA_FUNCTION_TYPE_SEPARATOR);
     }
     /**
      * Used to store the list of public functions from the Haskell "module" statement.
@@ -351,6 +376,15 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     /**
      * {@inheritDoc}
      *
+     * <p>In Haskell, you can ignore an input argument by using the underscore ("_").  This
+     * handles that case.</p>
+     */
+    @Override public void enterUnderScoreArgument(HaskellParser.UnderScoreArgumentContext ctx) { 
+        fileContents.append(SCALA_IGNORE_INPUT_ARGUMENT);
+    }
+    /**
+     * {@inheritDoc}
+     *
      * <p>The default implementation does nothing.</p>
      */
     @Override public void enterGeneralMatchingArgument(HaskellParser.GeneralMatchingArgumentContext ctx) { 
@@ -384,12 +418,13 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * parentheses at the beginning of the expression.
      */
     @Override public void enterPatternMatchingExpression(HaskellParser.PatternMatchingExpressionContext ctx) { 
-        //fileContents.append(" ");
+        fileContents.append(" ");
     }
     /**
      * Prints a pattern matching term.  Currently this does nothing.
      */
-    @Override public void enterPatternMatchingTerm(HaskellParser.PatternMatchingTermContext ctx) { 
+    @Override public void enterPatternMatchingTerm(HaskellParser.PatternMatchingTermContext ctx) {
+        fileContents.append(" ");
     }
     /**
      * Opens a parenthesis for the pattern matching term.
@@ -937,7 +972,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
             }       
         }
         else{
-            //fileContents.append(" ");
+            fileContents.append(" ");
         }
     }
     

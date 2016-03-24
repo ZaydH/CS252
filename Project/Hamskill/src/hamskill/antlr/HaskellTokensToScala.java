@@ -320,7 +320,15 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * @param ctx The ANTLR Context
      */
     @Override public void enterReturnType(HaskellParser.ReturnTypeContext ctx) {
-        fileContents.append(": " + convertHaskellTypeNameToScala(ctx.getText()) + " =");
+        fileContents.append(": ");
+    }
+    /**
+     * At the end of a type signature, close the function definition
+     * 
+     * @param ctx The ANTLR Context
+     */
+    @Override public void exitReturnType(HaskellParser.ReturnTypeContext ctx) {
+        fileContents.append(" =");
         fileContents.append("(");
         
         // List all parameters for the function.
@@ -332,6 +340,15 @@ public class HaskellTokensToScala extends HaskellBaseListener {
             fileContents.append(getInputParameterName(i));
         }
         fileContents.append(") ").append(SCALA_USE_HASKELL_PATTERN_MATCHING_STYLE);
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Handles the underscore.  Currently primarily used for pattern matching when
+     * Haskell says it does not care about an argument.</p>
+     */
+    @Override public void enterUnderScoreTerm(HaskellParser.UnderScoreTermContext ctx) { 
+        fileContents.append("_");
     }
     /**
      * Handles the entry to a single function/pattern ing statement.

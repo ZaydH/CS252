@@ -428,6 +428,76 @@ public interface HaskellListener extends ParseTreeListener {
 	 */
 	void exitElseTerm(HaskellParser.ElseTermContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HaskellParser#concatenatedList}.
+	 * @param ctx the parse tree
+	 */
+	void enterConcatenatedList(HaskellParser.ConcatenatedListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#concatenatedList}.
+	 * @param ctx the parse tree
+	 */
+	void exitConcatenatedList(HaskellParser.ConcatenatedListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#headList}.
+	 * @param ctx the parse tree
+	 */
+	void enterHeadList(HaskellParser.HeadListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#headList}.
+	 * @param ctx the parse tree
+	 */
+	void exitHeadList(HaskellParser.HeadListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#colonTerm}.
+	 * @param ctx the parse tree
+	 */
+	void enterColonTerm(HaskellParser.ColonTermContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#colonTerm}.
+	 * @param ctx the parse tree
+	 */
+	void exitColonTerm(HaskellParser.ColonTermContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#tailList}.
+	 * @param ctx the parse tree
+	 */
+	void enterTailList(HaskellParser.TailListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#tailList}.
+	 * @param ctx the parse tree
+	 */
+	void exitTailList(HaskellParser.TailListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#emptyList}.
+	 * @param ctx the parse tree
+	 */
+	void enterEmptyList(HaskellParser.EmptyListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#emptyList}.
+	 * @param ctx the parse tree
+	 */
+	void exitEmptyList(HaskellParser.EmptyListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#populatedList}.
+	 * @param ctx the parse tree
+	 */
+	void enterPopulatedList(HaskellParser.PopulatedListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#populatedList}.
+	 * @param ctx the parse tree
+	 */
+	void exitPopulatedList(HaskellParser.PopulatedListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#listElement}.
+	 * @param ctx the parse tree
+	 */
+	void enterListElement(HaskellParser.ListElementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#listElement}.
+	 * @param ctx the parse tree
+	 */
+	void exitListElement(HaskellParser.ListElementContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HaskellParser#dollarSignTerm}.
 	 * @param ctx the parse tree
 	 */
@@ -547,6 +617,16 @@ public interface HaskellListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitGeneralFunctionCall(HaskellParser.GeneralFunctionCallContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#functionArgument}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionArgument(HaskellParser.FunctionArgumentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#functionArgument}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionArgument(HaskellParser.FunctionArgumentContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HaskellParser#functionCallFunctionName}.
 	 * @param ctx the parse tree

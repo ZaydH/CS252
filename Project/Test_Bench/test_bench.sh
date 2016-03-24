@@ -141,6 +141,18 @@ haskell_output="haskellOut_factorial.txt"
 hamskill_output="hamskill+_factorial.txt"
 hamskill_test $test_file $haskell_output $hamskill_output
 
+# Test "add_list.hs" using Hamskill Standard
+test_file="add_list.hs"
+haskell_output="haskellOut_add_list.txt"
+hamskill_output="hamskillStd_add_list.txt"
+hamskill_function="main" #Only main currently supported.
+hamskill_test $test_file $haskell_output $hamskill_output $hamskill_function
+
+#Test "add_list.hs" using Hamskill+
+test_file="add_list.hs"
+haskell_output="haskellOut_add_list.txt"
+hamskill_output="hamskill+_add_list.txt"
+hamskill_test $test_file $haskell_output $hamskill_output
 
 
 # This should be the last line in the testbench.  It checks the final results

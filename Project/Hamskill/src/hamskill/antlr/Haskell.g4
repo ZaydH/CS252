@@ -7,7 +7,7 @@
 grammar Haskell;
 
 // May have exactly one header comment block.
-program : headerComment? moduleDefinition* (NEWLINE* codeBlock)* NEWLINE*;
+program : headerComment? moduleDefinition? (NEWLINE* codeBlock)* NEWLINE*;
 
 // A code block is a set of contiguous code.
 codeBlock : func | lineComment;
@@ -26,7 +26,7 @@ moduleDefinition : moduleOpen moduleName
 moduleOpen : MODULE_STRING NEWLINE*;
 moduleFunctionList : NEWLINE* LEFT_PAREN
                      moduleFunctionName
-                     (COMMA_STRING moduleFunctionName )* RIGHT_PAREN NEWLINE*;
+                     (COMMA moduleFunctionName )* RIGHT_PAREN NEWLINE*;
 moduleClose :  NEWLINE* WHERE_STRING;
 moduleName : NAME NEWLINE*;
 moduleFunctionName : NEWLINE* NAME NEWLINE*;
@@ -38,9 +38,9 @@ func    :  funcPrototype funcbody NEWLINE*
 
 
 // Define the main block.
-mainFunction : mainPrototype NEWLINE mainHeader NEWLINE (mainStatement)+ NEWLINE; 
+mainFunction : mainPrototype NEWLINE? mainHeader NEWLINE? (mainStatement)+ NEWLINE?; 
 mainPrototype : MAIN_FUNCTION ARG_TYPE_SEPARATOR IO unitType;
-mainHeader : MAIN_FUNCTION EQUAL_SIGN DO*;
+mainHeader : MAIN_FUNCTION EQUAL_SIGN DO?;
 mainStatement: monadExpression+ NEWLINE | patternMatchingTerm+ NEWLINE;
 // Main words can take many forms so allow for different levels of handling.
 mainWords : haskellFunctionName  
@@ -81,7 +81,9 @@ patternMatchingArguments : patternMatchingArgument*;
 
 // Arguments passed to the function if any.
 patternMatchingArgument : patternMatchParentheses 
-                        | generalMatchingArgument; 
+                        | generalMatchingArgument
+                        | concatenatedList 
+                        | emptyList ; 
 generalMatchingArgument : NAME;
 //Handle case here paremter is in parentheses.
 patternMatchParentheses : LEFT_PAREN (patternMatchingArgument)+ RIGHT_PAREN;
@@ -97,7 +99,11 @@ patternMatchingTerm : dollarSignTerm
                     | patternMatchParen
                     | ifStatementPattern
                     | recursiveMain
-                    | returnUnitType;
+                    | returnUnitType
+                    | concatenatedList 
+                    | emptyList 
+                    | populatedList
+                    | NAME ; //Name should always be last since it the most general.
 // Handle an if then else statement
 ifStatementPattern : ifTerm  ifStatementExpression
                      thenTerm ifStatementExpression
@@ -106,6 +112,14 @@ ifStatementExpression : NEWLINE* LEFT_PAREN NEWLINE* patternMatchingExpression N
 ifTerm : IF;
 thenTerm : THEN;
 elseTerm : ELSE;
+// Define lists for pattern matching.
+concatenatedList : LEFT_PAREN headList colonTerm tailList RIGHT_PAREN;
+headList : patternMatchingTerm;
+colonTerm : COLON;
+tailList : patternMatchingTerm;
+emptyList : LEFT_SQUARE_BRACKET RIGHT_SQUARE_BRACKET;
+populatedList : LEFT_SQUARE_BRACKET (listElement COMMA)* listElement RIGHT_SQUARE_BRACKET;
+listElement : patternMatchingTerm;
 // Handle an array in the expression
 dollarSignTerm : RIGHT_ASSOC_DOLLAR_SIGN patternMatchingExpression;
 functionToMethod : functionToMethodDollarSign
@@ -127,7 +141,8 @@ patternMatchArray : LEFT_SQUARE_BRACKET patternMatchingExpression RIGHT_SQUARE_B
 patternMatchParen : LEFT_PAREN patternMatchingExpression RIGHT_PAREN;
 generalPatternMatchingTerm : INT_VAL | INT_OP  | NAME;
 generalFunctionCall : FUNC_ARGS_OPEN_PAREN functionCallFunctionName
-                      patternMatchingExpression FUNC_ARGS_CLOSE_PAREN;
+                      functionArgument* FUNC_ARGS_CLOSE_PAREN;
+functionArgument : patternMatchingTerm ;
 functionCallFunctionName : NAME | HASKELL_FUNCTION_NAME;
 
 // Format of function as a type.
@@ -143,14 +158,14 @@ haskellFunctionName : HASKELL_FUNCTION_NAME;
 
 // Integer operations
 LEFT_SQUARE_BRACKET : '[';
-RIGHT_SQUARE_BRACKET : '[';
+RIGHT_SQUARE_BRACKET : ']';
 HEADER_COMMENT_OPEN : '{-';
 HEADER_COMMENT_CLOSE : '-}';
 
 // Tokens for a "module" block.
 MODULE_STRING : 'module' ;
 WHERE_STRING : 'where' ;
-COMMA_STRING : ',';
+COMMA : ',';
 
 // For embedded function calls in Haskell, use this to make the
 // input parameters comma separated.
@@ -161,6 +176,7 @@ HASKELL_FUNCTIONS_METHODS_IN_SCALA : 'show' | 'length' ;
 
 LEFT_PAREN : '(';
 RIGHT_PAREN : ')';
+COLON : ':';
 INLINE_COMMENT_SYMBOL : '--';
 EQUAL_SIGN : '=';
 RIGHT_ASSOC_DOLLAR_SIGN : '$';

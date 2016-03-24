@@ -19,6 +19,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     private String hamskillStandardFunctionName;
     private String hamskillStandardFunctionArgs;
     private ArrayList<String> publicFunctionList = new ArrayList<String>();
+   
     
     private boolean firstPatternMatchingArgument;
     
@@ -30,7 +31,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * Operator separating the "case" statement and any pattern matching parameters and
      * the expression.
      */
-    private final String PATTERN_MATCHING_OPERATOR = " =>";
+    private final String PATTERN_MATCHING_OPERATOR = " => ";
     /**
      * Used to represent a tab/indent.  Using spaces.
      */
@@ -48,6 +49,23 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * Used to invoke the pattern matching syntax.
      */
     private String SCALA_USE_HASKELL_PATTERN_MATCHING_STYLE = "match ";
+    /**
+     * Used in Scala to denote private versus public functions.
+     */
+    private String SCALA_PRIVATE_FUNCTION_DESIGNATOR = "private ";
+    /**
+     * Define a Scala empty list.
+     */
+    private String SCALA_EMPTY_LIST = "Nil";
+    /**
+     * Denotes a list in Scala.
+     */
+    private String SCALA_LIST_DESIGNATOR = "List";
+    /**
+     * Scala's prepend operator (equivalent of ":" in Haskell).
+     */
+    private String SCALA_PREPEND_OPERATOR = "::";
+    
 
     /**
      * Haskell Tokenized Analyzer's Constructor for HamSkill+.
@@ -165,6 +183,18 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     @Override public void enterFunc(HaskellParser.FuncContext ctx) { 
         // Puts the file header.
         printIndent();
+        
+        // Determine whether the function is private or public.
+        HaskellParser.FuncPrototypeContext functProto = ctx.funcPrototype();
+        // If not a standard function (e.g. main), then always public.
+        if(functProto != null){
+            String funcName = functProto.functionName().getText();
+            // Any function not in the module statement is marked as private.
+            if(!publicFunctionList.contains(funcName))
+                fileContents.append(SCALA_PRIVATE_FUNCTION_DESIGNATOR);
+        }
+        
+        // Designate as a function.
         fileContents.append("def ");
         
         // Reset the parameter number
@@ -186,8 +216,9 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * @param ctx ANTLR Context
      */
     @Override public void enterFuncPrototype(HaskellParser.FuncPrototypeContext ctx) { 
+        String functionName = ctx.functionName().getText();
         // Puts the file name
-        fileContents.append(ctx.functionName().getText());
+        fileContents.append(functionName);
     }
     /**
      * Closes the function prototype.
@@ -316,9 +347,34 @@ public class HaskellTokensToScala extends HaskellBaseListener {
         if(!firstPatternMatchingArgument)
             fileContents.append(", ");
         firstPatternMatchingArgument = false;
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void enterGeneralMatchingArgument(HaskellParser.GeneralMatchingArgumentContext ctx) { 
         // Print the parameter information.
         fileContents.append(ctx.getText());
     }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void enterPatternMatchParentheses(HaskellParser.PatternMatchParenthesesContext ctx) {
+        // Print the parameter information.
+        ctx.getText();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitPatternMatchParentheses(HaskellParser.PatternMatchParenthesesContext ctx) { }
+    
+    
+    
     /**
      * End of a pattern matching argument.  Currently a no-op
      */
@@ -363,22 +419,6 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * Opens a parenthesis for the pattern matching term.
      */
     @Override public void enterGeneralPatternMatchingTerm(HaskellParser.GeneralPatternMatchingTermContext ctx) { 
-        
-        if(!commaSeparateTerms.isEmpty()){
-            // For the first term, just skip and do not put a comma,
-            if(firstCommaTerm.peek() == Boolean.TRUE){
-                firstCommaTerm.pop();
-                firstCommaTerm.push(Boolean.FALSE);
-            }
-            // For everything after the first term, 
-            else{
-                // For multiple terms, 
-                fileContents.append(", ");
-            }       
-        }
-        else{
-            fileContents.append(" ");
-        }
         fileContents.append(ctx.getText());
     }
     /**
@@ -386,8 +426,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      */
     @Override public void enterGeneralFunctionCall(HaskellParser.GeneralFunctionCallContext ctx) { 
         //fileContents.append("(");
-        commaSeparateTerms.push(Boolean.TRUE);
-        firstCommaTerm.push(Boolean.TRUE);
+        this.pushCommaSeparatorOntoStack();
     }
     @Override public void enterFunctionCallFunctionName(HaskellParser.FunctionCallFunctionNameContext ctx) { 
         fileContents.append(ctx.getText());
@@ -399,13 +438,26 @@ public class HaskellTokensToScala extends HaskellBaseListener {
         fileContents.append("(");
     }
     /**
+     * {@inheritDoc}
+     *
+     * <p>This function is used to comma separate function arguments.</p>
+     */
+    @Override public void enterFunctionArgument(HaskellParser.FunctionArgumentContext ctx) { 
+        this.addCommaSeparatorAsAppropriate();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitFunctionArgument(HaskellParser.FunctionArgumentContext ctx) { }
+    /**
      * Used for a function call inside a Haskell Program.  Closes the call in Scala.
      */
     @Override public void exitGeneralFunctionCall(HaskellParser.GeneralFunctionCallContext ctx) { 
         fileContents.append(")");
         // Clear any nested functions.
-        commaSeparateTerms.pop();
-        firstCommaTerm.pop();
+        this.popCommaSeparatorOffStack();
     }
     /**
      * Handles the dollar sign operator in Haskell.  Surrounds the items by an open parenthesis.
@@ -506,7 +558,107 @@ public class HaskellTokensToScala extends HaskellBaseListener {
         decrementIndentLevel(true);
         fileContents.append("}\n");
     }
-    
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Handles an empty list (i.e. "[]" in Haskell).</p>
+     */
+    @Override public void enterEmptyList(HaskellParser.EmptyListContext ctx) { 
+        fileContents.append(SCALA_EMPTY_LIST);
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Opens the handling of a Haskell concatenated list for pattern checking.
+     * Just puts a left parenthesis "(".</p>
+     */
+    @Override public void enterConcatenatedList(HaskellParser.ConcatenatedListContext ctx) { 
+        fileContents.append("(");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>For the head of a concatenated list, just use parentheses to 
+     * make to the code more robust.  For entering, it puts a left 
+     * parentheses "(".</p>
+     */
+    @Override public void enterHeadList(HaskellParser.HeadListContext ctx) {
+        fileContents.append("(");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>For the head of a concatenated list, just use parentheses to 
+     * make to the code more robust.  For exiting the head list, it puts a left 
+     * parentheses ")".</p>
+     */
+    @Override public void exitHeadList(HaskellParser.HeadListContext ctx) { 
+        fileContents.append(")");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Converts the Haskell prepend operator (:) to the Scala
+     * prepend operator.</p>
+     */
+    @Override public void enterColonTerm(HaskellParser.ColonTermContext ctx) {
+        fileContents.append(SCALA_PREPEND_OPERATOR);
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>For the tail of a concatenated list, just use parentheses to 
+     * make to the code more robust.  For entering the tail list, it puts a left 
+     * parentheses "(".</p>
+     */
+    @Override public void enterTailList(HaskellParser.TailListContext ctx) {
+        fileContents.append("(");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>For the tail of a concatenated list, just use parentheses to 
+     * make to the code more robust.  For exiting the tail list, it puts a right 
+     * parentheses ")".</p>
+     */
+    @Override public void exitTailList(HaskellParser.TailListContext ctx) {
+        fileContents.append(")");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Opens the handling of a Haskell concatenated list for pattern checking.
+     * Just puts a right parenthesis ")"</p>
+     */
+    @Override public void exitConcatenatedList(HaskellParser.ConcatenatedListContext ctx) { 
+        fileContents.append(")");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>On entry to a list, marks it as a Scala List</p>
+     */
+    @Override public void enterPopulatedList(HaskellParser.PopulatedListContext ctx) {
+        fileContents.append(SCALA_LIST_DESIGNATOR).append("(");
+        this.pushCommaSeparatorOntoStack();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Closes a Scala List with a parentheses. </p>
+     */
+    @Override public void exitPopulatedList(HaskellParser.PopulatedListContext ctx) { 
+        this.popCommaSeparatorOffStack();
+        fileContents.append(")");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>ListElement handles comma separating terms.</p>
+     */
+    @Override public void enterListElement(HaskellParser.ListElementContext ctx) {
+        this.addCommaSeparatorAsAppropriate();
+    }
     
     
     
@@ -518,6 +670,12 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * Starts a main function.  Currently a no-op.
      */
     @Override public void enterMainFunction(HaskellParser.MainFunctionContext ctx) { }
+    /**
+     * Ends the main function.  Used to decrement the indent.
+     */
+    @Override public void exitMainFunction(HaskellParser.MainFunctionContext ctx) {
+        decrementIndentLevel(false);
+    }
     /**
      * Defines the main function prototype
      */
@@ -738,6 +896,49 @@ public class HaskellTokensToScala extends HaskellBaseListener {
         fileContents.append(scalaModuleName).append(".");
         fileContents.append(this.hamskillStandardFunctionName).append(this.hamskillStandardFunctionArgs);
         fileContents.append(";\n\n");
+    }
+    
+    /**
+     * Some terms in Scala need to be comma separated.  This is a generic structure to support
+     * managing when commas are needed.  Relies on a stack.  
+     * 
+     * This denotes a new nested comma required location.
+     */
+    public void pushCommaSeparatorOntoStack(){
+        commaSeparateTerms.push(Boolean.TRUE);
+        firstCommaTerm.push(Boolean.TRUE);
+    }
+    /**
+     * Some terms in Scala need to be comma separated.  This is a generic structure to support
+     * managing when commas are needed.  Relies on a stack.  
+     * 
+     * This denotes a new nested comma required location.
+     */
+    public void popCommaSeparatorOffStack(){
+        // Clear any nested functions.
+        commaSeparateTerms.pop();
+        firstCommaTerm.pop();
+    }
+    /**
+     * When handling comma separated lists from Haskell to Scala, this function will
+     * add commas to the text as needed.  If it is the first element in the list it does nothing.
+     */
+    public void addCommaSeparatorAsAppropriate(){
+        if(!commaSeparateTerms.isEmpty()){
+            // For the first term, just skip and do not put a comma,
+            if(firstCommaTerm.peek() == Boolean.TRUE){
+                firstCommaTerm.pop();
+                firstCommaTerm.push(Boolean.FALSE);
+            }
+            // For everything after the first term, 
+            else{
+                // For multiple terms, 
+                fileContents.append(", ");
+            }       
+        }
+        else{
+            //fileContents.append(" ");
+        }
     }
     
     

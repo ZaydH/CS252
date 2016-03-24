@@ -258,6 +258,26 @@ public interface HaskellListener extends ParseTreeListener {
 	 */
 	void exitTypeSignature(HaskellParser.TypeSignatureContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HaskellParser#typeFunction}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypeFunction(HaskellParser.TypeFunctionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#typeFunction}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypeFunction(HaskellParser.TypeFunctionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#typeFunctionSeparator}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypeFunctionSeparator(HaskellParser.TypeFunctionSeparatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#typeFunctionSeparator}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypeFunctionSeparator(HaskellParser.TypeFunctionSeparatorContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HaskellParser#inputType}.
 	 * @param ctx the parse tree
 	 */
@@ -287,6 +307,16 @@ public interface HaskellListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitType(HaskellParser.TypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#primitiveTypeName}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrimitiveTypeName(HaskellParser.PrimitiveTypeNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#primitiveTypeName}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrimitiveTypeName(HaskellParser.PrimitiveTypeNameContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HaskellParser#unitType}.
 	 * @param ctx the parse tree
@@ -358,6 +388,16 @@ public interface HaskellListener extends ParseTreeListener {
 	 */
 	void exitPatternMatchParentheses(HaskellParser.PatternMatchParenthesesContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HaskellParser#underScoreArgument}.
+	 * @param ctx the parse tree
+	 */
+	void enterUnderScoreArgument(HaskellParser.UnderScoreArgumentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#underScoreArgument}.
+	 * @param ctx the parse tree
+	 */
+	void exitUnderScoreArgument(HaskellParser.UnderScoreArgumentContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HaskellParser#patternMatchingExpression}.
 	 * @param ctx the parse tree
 	 */
@@ -428,6 +468,16 @@ public interface HaskellListener extends ParseTreeListener {
 	 */
 	void exitElseTerm(HaskellParser.ElseTermContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HaskellParser#prependTerm}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrependTerm(HaskellParser.PrependTermContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#prependTerm}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrependTerm(HaskellParser.PrependTermContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HaskellParser#concatenatedList}.
 	 * @param ctx the parse tree
 	 */
@@ -457,6 +507,16 @@ public interface HaskellListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitColonTerm(HaskellParser.ColonTermContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#underScoreTerm}.
+	 * @param ctx the parse tree
+	 */
+	void enterUnderScoreTerm(HaskellParser.UnderScoreTermContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#underScoreTerm}.
+	 * @param ctx the parse tree
+	 */
+	void exitUnderScoreTerm(HaskellParser.UnderScoreTermContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HaskellParser#tailList}.
 	 * @param ctx the parse tree
@@ -637,16 +697,6 @@ public interface HaskellListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFunctionCallFunctionName(HaskellParser.FunctionCallFunctionNameContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link HaskellParser#typeFunction}.
-	 * @param ctx the parse tree
-	 */
-	void enterTypeFunction(HaskellParser.TypeFunctionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HaskellParser#typeFunction}.
-	 * @param ctx the parse tree
-	 */
-	void exitTypeFunction(HaskellParser.TypeFunctionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HaskellParser#haskellFunctionName}.
 	 * @param ctx the parse tree

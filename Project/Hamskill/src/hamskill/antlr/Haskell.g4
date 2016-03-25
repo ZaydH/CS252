@@ -174,7 +174,8 @@ generalPatternMatchingTerm : INT_VAL | INT_OP  | NAME;
 generalFunctionCall : FUNC_ARGS_OPEN_PAREN functionCallFunctionName
                       functionArgument* FUNC_ARGS_CLOSE_PAREN;
 functionArgument : patternMatchingTerm ;
-functionCallFunctionName : HASKELL_FUNCTION_NAME | NAME;
+functionCallFunctionName : haskellFunctionName | nonHaskellReservedFunctionName;
+nonHaskellReservedFunctionName : NAME;
 
 // Create a lexer for the Haskell function so I can attach a listener to it.
 haskellFunctionName : HASKELL_FUNCTION_NAME;
@@ -232,7 +233,7 @@ INT_VAL : [-]?[0-9]+;       // Integer values
 INT_OP : '+' | '-' | '*' | '==' | '/=' | '>' | '<' | '<=' | '>=' ;
 TYPE_NAME : '[Int]' | 'Int' | '[Char]' | 'Char' | 'Bool';
 
-HASKELL_FUNCTION_NAME : 'putStrLn' | 'putStr' | 'getLine' | 'error';
+HASKELL_FUNCTION_NAME : 'putStrLn' | 'error' | 'putStr' | 'getLine' ;
 UNIT_TYPE : '()';
 
 NEWLINE : '\r'? '\n' ;  // return newlines to parser (is end-statement signal)

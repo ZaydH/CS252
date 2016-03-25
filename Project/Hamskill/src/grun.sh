@@ -1,2 +1,2 @@
-bash grun_gui.sh hamskill.antlr.Haskell program -tokens map_example.hs
+bash grun_gui.sh hamskill.antlr.Haskell program -tokens case_example.hs
 

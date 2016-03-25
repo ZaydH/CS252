@@ -109,6 +109,8 @@ patternMatchingTerm : dollarSignTerm
                     | emptyList 
                     | populatedList
                     | lambdaFunction
+                    | caseTerm
+                    | stringTerm
                     | NAME ; //Name should always berun last since it the most general.
 // Handle an if then else statement
 ifStatementPattern : ifTerm  ifStatementExpression
@@ -139,6 +141,18 @@ tailList : patternMatchingTerm;
 emptyList : LEFT_SQUARE_BRACKET RIGHT_SQUARE_BRACKET;
 populatedList : LEFT_SQUARE_BRACKET (listElement COMMA)* listElement RIGHT_SQUARE_BRACKET;
 listElement : patternMatchingTerm;
+// Handles a "case term".
+caseTerm : caseStatementAndVariable caseConditions;
+caseStatementAndVariable : caseStatement LEFT_PAREN caseVariable RIGHT_PAREN OF NEWLINE;
+caseStatement : CASE;
+caseVariable : patternMatchingExpression;
+caseConditions : (caseGeneralStatement)* caseOtherwiseStatement;
+caseGeneralStatement : caseValueCompare caseValueImplementationSeparator caseImplementation;
+caseValueCompare : patternMatchingExpression;
+caseOtherwiseStatement : otherwiseTerm caseValueImplementationSeparator caseImplementation;
+caseImplementation : patternMatchingExpression NEWLINE;
+caseValueImplementationSeparator : TYPE_SEPARATOR;
+otherwiseTerm : OTHERWISE;
 // Handle an array in the expression
 dollarSignTerm : RIGHT_ASSOC_DOLLAR_SIGN patternMatchingExpression;
 functionToMethod : functionToMethodDollarSign
@@ -160,11 +174,13 @@ generalPatternMatchingTerm : INT_VAL | INT_OP  | NAME;
 generalFunctionCall : FUNC_ARGS_OPEN_PAREN functionCallFunctionName
                       functionArgument* FUNC_ARGS_CLOSE_PAREN;
 functionArgument : patternMatchingTerm ;
-functionCallFunctionName : NAME | HASKELL_FUNCTION_NAME;
+functionCallFunctionName : HASKELL_FUNCTION_NAME | NAME;
 
 // Create a lexer for the Haskell function so I can attach a listener to it.
 haskellFunctionName : HASKELL_FUNCTION_NAME;
-
+stringTerm : QUOTATION_MARK word* QUOTATION_MARK;
+word : NAME;
+//stringWords : NAME;
 
 //----------------------------------------------------------------------//
 //                      Definition of Tokens                            //
@@ -188,6 +204,7 @@ FUNC_ARGS_CLOSE_PAREN : '))';
 
 HASKELL_FUNCTIONS_METHODS_IN_SCALA : 'show' | 'length' ;
 
+QUOTATION_MARK : '"';
 LEFT_PAREN : '(';
 RIGHT_PAREN : ')';
 COLON : ':';
@@ -199,10 +216,13 @@ BACKSLASH : '\\';
 IO : 'IO';
 DO : 'do';
 LET : 'let';
+CASE : 'case';
+OF : 'of';
 IF : 'if';
 THEN : 'then';
 ELSE : 'else';
 RETURN : 'return';
+OTHERWISE : 'otherwise';
 ARG_TYPE_SEPARATOR : '::';
 MONAD_ARROW : '<-';
 TYPE_SEPARATOR : '->';  // Separates type in the function definition
@@ -212,11 +232,12 @@ INT_VAL : [-]?[0-9]+;       // Integer values
 INT_OP : '+' | '-' | '*' | '==' | '/=' | '>' | '<' | '<=' | '>=' ;
 TYPE_NAME : '[Int]' | 'Int' | '[Char]' | 'Char' | 'Bool';
 
-HASKELL_FUNCTION_NAME : 'putStrLn' | 'putStr' | 'getLine';
+HASKELL_FUNCTION_NAME : 'putStrLn' | 'putStr' | 'getLine' | 'error';
 UNIT_TYPE : '()';
 
 NEWLINE : '\r'? '\n' ;  // return newlines to parser (is end-statement signal)
 
 NAME : ['a-zA-Z0-9._]+;  // Name of Something
+//ANY_CHAR : ['a-zA-Z0-9._-0-9?*=><+:{}()|!@#$%^&*]+;
 
 WS : [ \t]+ -> skip ;   // toss out whitespace

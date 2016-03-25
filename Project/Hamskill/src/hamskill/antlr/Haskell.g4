@@ -108,16 +108,28 @@ patternMatchingTerm : dollarSignTerm
                     | concatenatedList 
                     | emptyList 
                     | populatedList
+                    | lambdaFunction
                     | NAME ; //Name should always berun last since it the most general.
 // Handle an if then else statement
 ifStatementPattern : ifTerm  ifStatementExpression
                      thenTerm ifStatementExpression
                      elseTerm ifStatementExpression;
+// Handle if-else in Scala
 ifStatementExpression : NEWLINE* LEFT_PAREN NEWLINE* patternMatchingExpression NEWLINE* RIGHT_PAREN NEWLINE*;
 ifTerm : IF;
 thenTerm : THEN;
 elseTerm : ELSE;
+//Handle Prepend
 prependTerm : patternMatchParen colonTerm patternMatchParen;
+// Anonymous Function
+lambdaFunction : LEFT_PAREN BACKSLASH allLambdaArguments
+                 lamdaArgumentsBodySeparator patternMatchingExpression RIGHT_PAREN;
+allLambdaArguments : (singleLamdaArgument)+;
+singleLamdaArgument : underscoreLambdaArgument | typedLamdaArgument;
+underscoreLambdaArgument : underScoreTerm;
+lamdaArgumentsBodySeparator : TYPE_SEPARATOR;
+typedLamdaArgument : NAME;
+lambdaBody : patternMatchingExpression;
 // Define lists for pattern matching.
 concatenatedList : LEFT_PAREN headList colonTerm tailList RIGHT_PAREN;
 headList : patternMatchingTerm;
@@ -141,8 +153,6 @@ functionToMethodParen : haskellFunctionToScalaMethodName patternMatchParen;
 functionToMethodTerm : haskellFunctionToScalaMethodName generalPatternMatchingTerm;
 recursiveMain : RECURSIVE_MAIN;
 returnUnitType : RETURN UNIT_TYPE;
-
-
 
 patternMatchArray : LEFT_SQUARE_BRACKET patternMatchingExpression RIGHT_SQUARE_BRACKET;
 patternMatchParen : LEFT_PAREN patternMatchingExpression RIGHT_PAREN;
@@ -185,6 +195,7 @@ INLINE_COMMENT_SYMBOL : '--';
 EQUAL_SIGN : '=';
 RIGHT_ASSOC_DOLLAR_SIGN : '$';
 UNDERSCORE : '_';
+BACKSLASH : '\\';
 IO : 'IO';
 DO : 'do';
 LET : 'let';

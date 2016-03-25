@@ -478,6 +478,76 @@ public interface HaskellListener extends ParseTreeListener {
 	 */
 	void exitPrependTerm(HaskellParser.PrependTermContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HaskellParser#lambdaFunction}.
+	 * @param ctx the parse tree
+	 */
+	void enterLambdaFunction(HaskellParser.LambdaFunctionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#lambdaFunction}.
+	 * @param ctx the parse tree
+	 */
+	void exitLambdaFunction(HaskellParser.LambdaFunctionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#allLambdaArguments}.
+	 * @param ctx the parse tree
+	 */
+	void enterAllLambdaArguments(HaskellParser.AllLambdaArgumentsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#allLambdaArguments}.
+	 * @param ctx the parse tree
+	 */
+	void exitAllLambdaArguments(HaskellParser.AllLambdaArgumentsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#singleLamdaArgument}.
+	 * @param ctx the parse tree
+	 */
+	void enterSingleLamdaArgument(HaskellParser.SingleLamdaArgumentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#singleLamdaArgument}.
+	 * @param ctx the parse tree
+	 */
+	void exitSingleLamdaArgument(HaskellParser.SingleLamdaArgumentContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#underscoreLambdaArgument}.
+	 * @param ctx the parse tree
+	 */
+	void enterUnderscoreLambdaArgument(HaskellParser.UnderscoreLambdaArgumentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#underscoreLambdaArgument}.
+	 * @param ctx the parse tree
+	 */
+	void exitUnderscoreLambdaArgument(HaskellParser.UnderscoreLambdaArgumentContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#lamdaArgumentsBodySeparator}.
+	 * @param ctx the parse tree
+	 */
+	void enterLamdaArgumentsBodySeparator(HaskellParser.LamdaArgumentsBodySeparatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#lamdaArgumentsBodySeparator}.
+	 * @param ctx the parse tree
+	 */
+	void exitLamdaArgumentsBodySeparator(HaskellParser.LamdaArgumentsBodySeparatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#typedLamdaArgument}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypedLamdaArgument(HaskellParser.TypedLamdaArgumentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#typedLamdaArgument}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypedLamdaArgument(HaskellParser.TypedLamdaArgumentContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#lambdaBody}.
+	 * @param ctx the parse tree
+	 */
+	void enterLambdaBody(HaskellParser.LambdaBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#lambdaBody}.
+	 * @param ctx the parse tree
+	 */
+	void exitLambdaBody(HaskellParser.LambdaBodyContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HaskellParser#concatenatedList}.
 	 * @param ctx the parse tree
 	 */

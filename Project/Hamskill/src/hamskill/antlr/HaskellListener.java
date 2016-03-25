@@ -878,6 +878,16 @@ public interface HaskellListener extends ParseTreeListener {
 	 */
 	void exitFunctionCallFunctionName(HaskellParser.FunctionCallFunctionNameContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HaskellParser#nonHaskellReservedFunctionName}.
+	 * @param ctx the parse tree
+	 */
+	void enterNonHaskellReservedFunctionName(HaskellParser.NonHaskellReservedFunctionNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#nonHaskellReservedFunctionName}.
+	 * @param ctx the parse tree
+	 */
+	void exitNonHaskellReservedFunctionName(HaskellParser.NonHaskellReservedFunctionNameContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HaskellParser#haskellFunctionName}.
 	 * @param ctx the parse tree
 	 */

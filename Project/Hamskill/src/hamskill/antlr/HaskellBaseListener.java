@@ -1060,6 +1060,18 @@ public class HaskellBaseListener implements HaskellListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNonHaskellReservedFunctionName(HaskellParser.NonHaskellReservedFunctionNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNonHaskellReservedFunctionName(HaskellParser.NonHaskellReservedFunctionNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterHaskellFunctionName(HaskellParser.HaskellFunctionNameContext ctx) { }
 	/**
 	 * {@inheritDoc}

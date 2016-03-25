@@ -29,6 +29,28 @@ function print_final_results {
 }
 
 
+function perform_hamskillStd_and_hamskillPlus_test {
+
+	base_filename="${1}"
+	test_file="${base_filename}.hs"
+	haskell_output="haskellOut_${base_filename}.txt"
+	hamskill_output="hamskillStd_${base_filename}.txt"
+	hamskill_function="main" #Only main currently supported.
+	if [ "$#" -eq 2 ]; then
+		expected_output_file="expected_${base_filename}.txt"
+	fi
+	hamskill_test $test_file $haskell_output $hamskill_output $hamskill_function
+
+	#Test "filter_example.hs" using Hamskill+
+	hamskill_output="hamskill+_${base_filename}.txt"
+	if [ "$#" -eq 2 ]; then
+		expected_output_file="expected_${base_filename}.txt"
+	fi 
+	hamskill_test $test_file $haskell_output $hamskill_output
+
+}
+
+
 # This function is used to test scripts using the HamSkill Application. #
 function hamskill_test {
 	
@@ -207,6 +229,11 @@ expected_output_file="expected_${base_filename}.txt"
 hamskill_test $test_file $haskell_output $hamskill_output
 
 
+
+
+# Perform the case test with strings.
+base_filename="case_example"
+perform_hamskillStd_and_hamskillPlus_test $base_filename
 
 
 

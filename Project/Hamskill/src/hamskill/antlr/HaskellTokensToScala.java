@@ -521,7 +521,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
         this.popCommaSeparatorOffStack();
     }
     @Override public void enterFunctionCallFunctionName(HaskellParser.FunctionCallFunctionNameContext ctx) { 
-        fileContents.append(ctx.getText());
+        //fileContents.append(ctx.getText());
     }
     /**
      * Prints an open parenthesis before the function call.
@@ -561,6 +561,14 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      */
     @Override public void enterHaskellFunctionToScalaMethodName(HaskellParser.HaskellFunctionToScalaMethodNameContext ctx) { 
         haskellFunctionToScalaMethodName.push(ctx.getText());
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Prints the name of a generic method that is not Haskell specific.</p>
+     */
+    @Override public void enterNonHaskellReservedFunctionName(HaskellParser.NonHaskellReservedFunctionNameContext ctx) { 
+        fileContents.append(ctx.getText());
     }
     /**
      * Called when converting a Haskell function (followed by a dollar sign) to a Scala object method. Currently a no-op.
@@ -1055,6 +1063,20 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override public void exitWord(HaskellParser.WordContext ctx) { }
+//    /**
+//     * {@inheritDoc}
+//     *
+//     * <p>Handles the Haskell "error" function.</p>
+//     */
+//    @Override public void enterErrorTerm(HaskellParser.ErrorTermContext ctx) { 
+//        fileContents.append(this.SCALA_ERROR_FUNCTION);
+//    }
+//    /**
+//     * {@inheritDoc}
+//     *
+//     * <p>The default implementation does nothing.</p>
+//     */
+//    @Override public void exitErrorTerm(HaskellParser.ErrorTermContext ctx) { }
     
     
     
@@ -1093,7 +1115,8 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     /**
      * Used to convert a haskell Function name to a Scala function name.
      */
-    @Override public void enterHaskellFunctionName(HaskellParser.HaskellFunctionNameContext ctx) { 
+    @Override public void enterHaskellFunctionName(HaskellParser.HaskellFunctionNameContext ctx) {
+        String funcName = ctx.getText();
         fileContents.append(convertHaskellFunctionNameToScala(ctx.getText()));
     }
     /**

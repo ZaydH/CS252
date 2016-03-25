@@ -14,6 +14,8 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     // Stacks are used when data may need to be stored across nesting.
     private Stack<Boolean> commaSeparateTerms = new Stack<Boolean>();
     private Stack<Boolean> firstCommaTerm = new Stack<Boolean>();
+    private Stack<Boolean> commaSpaceTerms = new Stack<Boolean>();
+    private Stack<Boolean> firstSpaceTerm = new Stack<Boolean>();
     private Stack<String> haskellFunctionToScalaMethodName = new Stack<String>();
     private boolean isHamskillStandard = false;
     private String hamskillStandardFunctionName;
@@ -52,11 +54,11 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     /**
      * Used to invoke the pattern matching syntax.
      */
-    private String SCALA_USE_HASKELL_PATTERN_MATCHING_STYLE = "match ";
+    private String SCALA_USE_HASKELL_PATTERN_MATCHING_STYLE = "match";
     /**
      * Used in Scala to denote private versus public functions.
      */
-    private String SCALA_PRIVATE_FUNCTION_DESIGNATOR = "private ";
+    private String SCALA_PRIVATE_FUNCTION_DESIGNATOR = "private";
     /**
      * Define a Scala empty list.
      */
@@ -79,6 +81,15 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      */
     private String SCALA_ANONYMOUS_FUNCTION_ARGUMENTS_BODY_SEPARATOR = "=>";
     /**
+     * Scala equivalent of Haskell's otherwise.
+     */
+    private String SCALA_OTHERWISE_RESERVED_KEYWORD = "whatever";
+    /**
+     * Scala's equivalent of Haskell's "error" function.
+     */
+    private String SCALA_ERROR_FUNCTION = "sys.error";
+    private String SCALA_CASE_VALUE_IMPLEMENTATION_SEPARATOR = "=>";
+    /**
      * Define the type name for the parameters.
      */
     private final static String SCALA_TYPE_NAME_BOOL = "Boolean";
@@ -88,6 +99,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     private final static String ARG_TYPE_SUFFIX_BOOL = "BOOL";
     private final static String ARG_TYPE_SUFFIX_INT = "INT";
     private final static String ARG_TYPE_SUFFIX_LIST_INT = "LstINT";
+
     
 
     /**
@@ -214,7 +226,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
             String funcName = functProto.functionName().getText();
             // Any function not in the module statement is marked as private.
             if(!publicFunctionList.contains(funcName))
-                fileContents.append(SCALA_PRIVATE_FUNCTION_DESIGNATOR);
+                fileContents.append(SCALA_PRIVATE_FUNCTION_DESIGNATOR).append(" ");
         }
         
         // Designate as a function.
@@ -273,7 +285,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * @param ctx The ANTLR Context
      */
     @Override public void enterTypeSignature(HaskellParser.TypeSignatureContext ctx) { 
-        fileContents.append("(");
+        this.addLeftParenthesis();
     }
     /**
      * At the end of a type signature, close the function definition
@@ -282,6 +294,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      */
     @Override public void exitTypeSignature(HaskellParser.TypeSignatureContext ctx) { 
         fileContents.append(") ");
+        this.popSpaceSeparatorOffStack();
     }
     /**
      * Performs the handling of the type in function prototype.
@@ -344,7 +357,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      */
     @Override public void exitReturnType(HaskellParser.ReturnTypeContext ctx) {
         fileContents.append(" =");
-        fileContents.append("(");
+        this.addLeftParenthesis();
         
         // List all parameters for the function.
         for(int i = BASE_PARAM_NUMBER; i < nextParamNumber; i++){
@@ -354,7 +367,8 @@ public class HaskellTokensToScala extends HaskellBaseListener {
             // Put the parameter name
             fileContents.append(getInputParameterName(i));
         }
-        fileContents.append(") ").append(SCALA_USE_HASKELL_PATTERN_MATCHING_STYLE);
+        this.addRightParenthesis();
+        fileContents.append(" ").append(SCALA_USE_HASKELL_PATTERN_MATCHING_STYLE).append(" ");
     }
     /**
      * {@inheritDoc}
@@ -366,7 +380,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
         fileContents.append("_");
     }
     /**
-     * Handles the entry to a single function/pattern ing statement.
+     * Handles the entry to a single function/pattern matchinging statement.
      */
     @Override public void enterFuncStatement(HaskellParser.FuncStatementContext ctx) {
         // Increment the indent and print them.
@@ -385,7 +399,8 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * End of a ALL pattern matching arguments.  This puts a pattern matching Scala symbol into the string.
      */
     @Override public void enterPatternMatchingArguments(HaskellParser.PatternMatchingArgumentsContext ctx) { 
-        fileContents.append(" (");
+        fileContents.append(" ");
+        this.addLeftParenthesis();
         firstPatternMatchingArgument = true;
         
     }
@@ -393,7 +408,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * End of a ALL pattern matching arguments.  This puts a pattern matching Scala symbol into the string.
      */
     @Override public void exitPatternMatchingArguments(HaskellParser.PatternMatchingArgumentsContext ctx) {         
-        fileContents.append(")");
+        this.addRightParenthesis();
         fileContents.append(PATTERN_MATCHING_OPERATOR);
     }
     /**
@@ -426,28 +441,32 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     /**
      * {@inheritDoc}
      *
-     * <p>The default implementation does nothing.</p>
+     * <p>Manages spacing within the parentheses by pushing the space tracker onto the stack.</p>
      */
     @Override public void enterPatternMatchParentheses(HaskellParser.PatternMatchParenthesesContext ctx) {
         //// Print the parameter information.
         //ctx.getText();
+        this.pushSpaceSeparatorOntoStack();
     }
     /**
      * {@inheritDoc}
      *
-     * <p>The default implementation does nothing.</p>
+     * <p>Manages spacing within the parentheses by pop the space tracker onto the stack
+     * since now the end of the parentheses.</p>
      */
-    @Override public void exitPatternMatchParentheses(HaskellParser.PatternMatchParenthesesContext ctx) { }
+    @Override public void exitPatternMatchParentheses(HaskellParser.PatternMatchParenthesesContext ctx) {
+        this.popSpaceSeparatorOffStack();
+    }
     /**
      * End of a pattern matching argument.  Currently a no-op
      */
     @Override public void exitPatternMatchingArgument(HaskellParser.PatternMatchingArgumentContext ctx) { }
     /**
-     * Opens an expression. For robustness, everything is put in parentheses so this puts a left "(" 
-     * parentheses at the beginning of the expression.
+     * Opens an expression. 
      */
     @Override public void enterPatternMatchingExpression(HaskellParser.PatternMatchingExpressionContext ctx) { 
-        fileContents.append(" ");
+        //fileContents.append(" ");
+        this.addSpaceSeparatorAsAppropriate();
     }
     /**
      * Prints a pattern matching term.  Currently this does nothing.
@@ -458,14 +477,14 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     /**
      * Opens a parenthesis for the pattern matching term.
      */
-    @Override public void enterPatternMatchParen(HaskellParser.PatternMatchParenContext ctx) { 
-        fileContents.append("(");
+    @Override public void enterPatternMatchParen(HaskellParser.PatternMatchParenContext ctx) {
+        this.addLeftParenthesis();
     }
     /**
      * Opens a parenthesis for the pattern matching term.
      */
     @Override public void exitPatternMatchParen(HaskellParser.PatternMatchParenContext ctx) { 
-        fileContents.append(")");
+        this.addRightParenthesis();
     }
     /**
      * Opens a parenthesis for the pattern matching term.
@@ -477,7 +496,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * Opens a parenthesis for the pattern matching term.
      */
     @Override public void exitPatternMatchArray(HaskellParser.PatternMatchArrayContext ctx) { 
-        fileContents.append(")");
+        this.addRightParenthesis();
     }
     /**
      * Opens a parenthesis for the pattern matching term.
@@ -490,16 +509,25 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      */
     @Override public void enterGeneralFunctionCall(HaskellParser.GeneralFunctionCallContext ctx) { 
         //fileContents.append("(");
+        this.pushSpaceSeparatorOntoStack();
         this.pushCommaSeparatorOntoStack();
     }
+    /**
+     * Used for a function call inside a Haskell Program.  Closes the call in Scala.
+     */
+    @Override public void exitGeneralFunctionCall(HaskellParser.GeneralFunctionCallContext ctx) { 
+        this.addRightParenthesis();
+        // Clear any nested functions.
+        this.popCommaSeparatorOffStack();
+    }
     @Override public void enterFunctionCallFunctionName(HaskellParser.FunctionCallFunctionNameContext ctx) { 
-        fileContents.append(ctx.getText());
+        //fileContents.append(ctx.getText());
     }
     /**
      * Prints an open parenthesis before the function call.
      */
     @Override public void exitFunctionCallFunctionName(HaskellParser.FunctionCallFunctionNameContext ctx){
-        fileContents.append("(");
+        this.addLeftParenthesis();
     }
     /**
      * {@inheritDoc}
@@ -516,24 +544,16 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      */
     @Override public void exitFunctionArgument(HaskellParser.FunctionArgumentContext ctx) { }
     /**
-     * Used for a function call inside a Haskell Program.  Closes the call in Scala.
-     */
-    @Override public void exitGeneralFunctionCall(HaskellParser.GeneralFunctionCallContext ctx) { 
-        fileContents.append(")");
-        // Clear any nested functions.
-        this.popCommaSeparatorOffStack();
-    }
-    /**
      * Handles the dollar sign operator in Haskell.  Surrounds the items by an open parenthesis.
      */
     @Override public void enterDollarSignTerm(HaskellParser.DollarSignTermContext ctx) { 
-        fileContents.append("(");
+        this.addLeftParenthesis();
     }
     /**
      * Handles the dollar sign operator in Haskell.  Surrounds the items by an close parenthesis.
      */
     @Override public void exitDollarSignTerm(HaskellParser.DollarSignTermContext ctx) { 
-        fileContents.append(")");
+        this.addRightParenthesis();
     }   
     /**
      * Whenever a Haskell function that needs to be converted to a Scala method is found, this pushes that method
@@ -541,6 +561,14 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      */
     @Override public void enterHaskellFunctionToScalaMethodName(HaskellParser.HaskellFunctionToScalaMethodNameContext ctx) { 
         haskellFunctionToScalaMethodName.push(ctx.getText());
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Prints the name of a generic method that is not Haskell specific.</p>
+     */
+    @Override public void enterNonHaskellReservedFunctionName(HaskellParser.NonHaskellReservedFunctionNameContext ctx) { 
+        fileContents.append(ctx.getText());
     }
     /**
      * Called when converting a Haskell function (followed by a dollar sign) to a Scala object method. Currently a no-op.
@@ -562,13 +590,13 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * To simplify support in Scala, we need to surrunound in parentheses.
      */
     @Override public void enterFunctionToMethodTerm(HaskellParser.FunctionToMethodTermContext ctx) { 
-        fileContents.append("(");
+        this.addLeftParenthesis();
     }
     /**
      * When just a simple term, need to surround in parenthesis.
      */
     @Override public void exitFunctionToMethodTerm(HaskellParser.FunctionToMethodTermContext ctx) { 
-        fileContents.append(")");
+        this.addRightParenthesis();
     }
     /**
      * Some functions in Haskell are converted to methods in Scala.  This is called at the beginning of that.
@@ -637,7 +665,16 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * Just puts a left parenthesis "(".</p>
      */
     @Override public void enterConcatenatedList(HaskellParser.ConcatenatedListContext ctx) { 
-        fileContents.append("(");
+        this.addLeftParenthesis();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Opens the handling of a Haskell concatenated list for pattern checking.
+     * Just puts a right parenthesis ")"</p>
+     */
+    @Override public void exitConcatenatedList(HaskellParser.ConcatenatedListContext ctx) { 
+        this.addRightParenthesis();
     }
     /**
      * {@inheritDoc}
@@ -647,7 +684,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * parentheses "(".</p>
      */
     @Override public void enterHeadList(HaskellParser.HeadListContext ctx) {
-        fileContents.append("(");
+        this.addLeftParenthesis();
     }
     /**
      * {@inheritDoc}
@@ -657,7 +694,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * parentheses ")".</p>
      */
     @Override public void exitHeadList(HaskellParser.HeadListContext ctx) { 
-        fileContents.append(")");
+        this.addRightParenthesis();
     }
     /**
      * {@inheritDoc}
@@ -676,7 +713,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * parentheses "(".</p>
      */
     @Override public void enterTailList(HaskellParser.TailListContext ctx) {
-        fileContents.append("(");
+        this.addLeftParenthesis();
     }
     /**
      * {@inheritDoc}
@@ -686,16 +723,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * parentheses ")".</p>
      */
     @Override public void exitTailList(HaskellParser.TailListContext ctx) {
-        fileContents.append(")");
-    }
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Opens the handling of a Haskell concatenated list for pattern checking.
-     * Just puts a right parenthesis ")"</p>
-     */
-    @Override public void exitConcatenatedList(HaskellParser.ConcatenatedListContext ctx) { 
-        fileContents.append(")");
+        this.addRightParenthesis();
     }
     /**
      * {@inheritDoc}
@@ -703,8 +731,9 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * <p>On entry to a list, marks it as a Scala List</p>
      */
     @Override public void enterPopulatedList(HaskellParser.PopulatedListContext ctx) {
-        fileContents.append(SCALA_LIST_DESIGNATOR).append("(");
+        this.pushSpaceSeparatorOntoStack();
         this.pushCommaSeparatorOntoStack();
+        fileContents.append(SCALA_LIST_DESIGNATOR).append("(");
     }
     /**
      * {@inheritDoc}
@@ -712,8 +741,8 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * <p>Closes a Scala List with a parentheses. </p>
      */
     @Override public void exitPopulatedList(HaskellParser.PopulatedListContext ctx) { 
+        this.addRightParenthesis();
         this.popCommaSeparatorOffStack();
-        fileContents.append(")");
     }
     /**
      * {@inheritDoc}
@@ -730,7 +759,8 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * parenthesis.</p>
      */
     @Override public void enterLambdaFunction(HaskellParser.LambdaFunctionContext ctx) { 
-        fileContents.append("(");
+        this.addLeftParenthesis();
+        //fileContents.append(" ");
     }
     /**
      * {@inheritDoc}
@@ -739,7 +769,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * parenthesis.</p>
      */
     @Override public void exitLambdaFunction(HaskellParser.LambdaFunctionContext ctx) { 
-        fileContents.append(")");
+        this.addRightParenthesis();
     }
     /**
      * {@inheritDoc}
@@ -748,8 +778,8 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * This function places the left (open) parenthesis.</p>
      */
     @Override public void enterAllLambdaArguments(HaskellParser.AllLambdaArgumentsContext ctx) { 
-        fileContents.append("(");
         this.pushCommaSeparatorOntoStack();
+        this.addLeftParenthesis();
     }
     /**
      * {@inheritDoc}
@@ -758,7 +788,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * This function places the right (close) parenthesis.</p>
      */
     @Override public void exitAllLambdaArguments(HaskellParser.AllLambdaArgumentsContext ctx) {
-        fileContents.append(")");
+        this.addRightParenthesis();
         this.popCommaSeparatorOffStack();
     }
     /**
@@ -813,7 +843,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * parentheses.  This function places the <b>left</b> (<i>open</i>) parenthesis.</p>
      */
     @Override public void enterLambdaBody(HaskellParser.LambdaBodyContext ctx) {
-        fileContents.append("(");
+        this.addLeftParenthesis();
     }
     /**
      * {@inheritDoc}
@@ -822,7 +852,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * parentheses.  This function places the <b>right</b> (<i>open</i>) parenthesis.</p>
      */
     @Override public void exitLambdaBody(HaskellParser.LambdaBodyContext ctx) {
-        fileContents.append(")");
+        this.addRightParenthesis();
     }
     /**
      * {@inheritDoc}
@@ -833,6 +863,220 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     @Override public void enterLamdaArgumentsBodySeparator(HaskellParser.LamdaArgumentsBodySeparatorContext ctx) { 
         fileContents.append(" ").append(SCALA_ANONYMOUS_FUNCTION_ARGUMENTS_BODY_SEPARATOR).append(" ");
     }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void enterCaseTerm(HaskellParser.CaseTermContext ctx) { }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitCaseTerm(HaskellParser.CaseTermContext ctx) { }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void enterCaseStatementAndVariable(HaskellParser.CaseStatementAndVariableContext ctx) { }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitCaseStatementAndVariable(HaskellParser.CaseStatementAndVariableContext ctx) { }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void enterCaseStatement(HaskellParser.CaseStatementContext ctx) { }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitCaseStatement(HaskellParser.CaseStatementContext ctx) { }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Case Variables are surrounded by parentheses for robustness.  This function
+     * adds the left (open) parenthesis.</p>
+     */
+    @Override public void enterCaseVariable(HaskellParser.CaseVariableContext ctx) { 
+        this.addLeftParenthesis();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Case Variables are surrounded by parentheses for robustness.  This function
+     * adds the right (close) parenthesis.
+     * 
+     * It also adds the terms to indicate to Scala this is a case statement</p>
+     */
+    @Override public void exitCaseVariable(HaskellParser.CaseVariableContext ctx) {
+        fileContents.append(") " );
+        fileContents.append(SCALA_USE_HASKELL_PATTERN_MATCHING_STYLE).append(" ");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void enterCaseConditions(HaskellParser.CaseConditionsContext ctx) {
+        fileContents.append("{\n");
+        this.incrementIndentLevel(false);
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Case conditions are surrounded by curly brackets.  This function first decrements the 
+     * indent and adds the closing curly brackets then opens a new line.</p>
+     */
+    @Override public void exitCaseConditions(HaskellParser.CaseConditionsContext ctx) { 
+        this.decrementIndentLevel(true);
+        fileContents.append("}\n");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Prints idents and prints that this is a case statement</p>
+     */
+    @Override public void enterCaseGeneralStatement(HaskellParser.CaseGeneralStatementContext ctx) {
+        this.printIndent();
+        fileContents.append(PATTERN_MATCHING_HEADER).append(" ");
+        this.pushSpaceSeparatorOntoStack();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitCaseGeneralStatement(HaskellParser.CaseGeneralStatementContext ctx) {
+        this.popSpaceSeparatorOffStack();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>For added robustness, the case statement is surrounded by parentheses so 
+     * add the left (open) parentheses.</p>
+     */
+    @Override public void enterCaseValueCompare(HaskellParser.CaseValueCompareContext ctx) { 
+        this.addLeftParenthesis();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>For added robustness, the case statement is surrounded by parentheses so 
+     * add the right (close) parentheses.</p>
+     */
+    @Override public void exitCaseValueCompare(HaskellParser.CaseValueCompareContext ctx) {
+        this.addRightParenthesis();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void enterCaseOtherwiseStatement(HaskellParser.CaseOtherwiseStatementContext ctx) { 
+        this.printIndent();
+        fileContents.append(PATTERN_MATCHING_HEADER).append(" ");
+        this.pushSpaceSeparatorOntoStack();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitCaseOtherwiseStatement(HaskellParser.CaseOtherwiseStatementContext ctx) {
+        this.popSpaceSeparatorOffStack();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Surround the case implementation section in parentheses.  This function adds the 
+     * open (left) parenthesis.</p>
+     */
+    @Override public void enterCaseImplementation(HaskellParser.CaseImplementationContext ctx) {
+        this.addLeftParenthesis();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>At the end of a case implementation, add a new line. This function also closes the 
+     * parenthesis.</p>
+     */
+    @Override public void exitCaseImplementation(HaskellParser.CaseImplementationContext ctx) { 
+        fileContents.append(")\n");
+        this.popSpaceSeparatorOffStack();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>In Scala, the value of a case statement and its implementation have a separator between them.
+     * This listener adds that separator.</p>
+     */
+    @Override public void enterCaseValueImplementationSeparator(HaskellParser.CaseValueImplementationSeparatorContext ctx) {
+        fileContents.append(" ").append(this.SCALA_CASE_VALUE_IMPLEMENTATION_SEPARATOR).append(" ");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Converts the Haskell "otherwise" to the Scala equivalent.</p>
+     */
+    @Override public void enterOtherwiseTerm(HaskellParser.OtherwiseTermContext ctx) { 
+        fileContents.append(this.SCALA_OTHERWISE_RESERVED_KEYWORD);
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Strings are surrounded by quotation makes so put the left quotation mark.</p>
+     */
+    @Override public void enterStringTerm(HaskellParser.StringTermContext ctx) {        
+        this.pushSpaceSeparatorOntoStack();
+        fileContents.append("\"");
+        
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitStringTerm(HaskellParser.StringTermContext ctx) { 
+        fileContents.append("\"");
+        this.popCommaSeparatorOffStack();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Prints the word and optionally a space.</p>
+     */
+    @Override public void enterWord(HaskellParser.WordContext ctx) { 
+        this.addSpaceSeparatorAsAppropriate();
+        fileContents.append(ctx.getText());
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitWord(HaskellParser.WordContext ctx) { }
+//    /**
+//     * {@inheritDoc}
+//     *
+//     * <p>Handles the Haskell "error" function.</p>
+//     */
+//    @Override public void enterErrorTerm(HaskellParser.ErrorTermContext ctx) { 
+//        fileContents.append(this.SCALA_ERROR_FUNCTION);
+//    }
+//    /**
+//     * {@inheritDoc}
+//     *
+//     * <p>The default implementation does nothing.</p>
+//     */
+//    @Override public void exitErrorTerm(HaskellParser.ErrorTermContext ctx) { }
     
     
     
@@ -871,21 +1115,22 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     /**
      * Used to convert a haskell Function name to a Scala function name.
      */
-    @Override public void enterHaskellFunctionName(HaskellParser.HaskellFunctionNameContext ctx) { 
-        fileContents.append(" ").append(convertHaskellFunctionNameToScala(ctx.getText()));
+    @Override public void enterHaskellFunctionName(HaskellParser.HaskellFunctionNameContext ctx) {
+        String funcName = ctx.getText();
+        fileContents.append(convertHaskellFunctionNameToScala(ctx.getText()));
     }
     /**
      * Handle a LEFT parenthesis in the main method.  Just prints "("
      */
     @Override public void enterParenMainWord(HaskellParser.ParenMainWordContext ctx) { 
-        fileContents.append("(");
+        this.addLeftParenthesis();
     }
     /**
      * Handle a RIGHT parenthesis in the main method.  Just prints ")"
      */
     @Override public void exitParenMainWord(HaskellParser.ParenMainWordContext ctx) { 
         decrementIndentLevel(true);
-        fileContents.append(")");
+        this.addRightParenthesis();
     }
     /**
      * Handle a LEFT parenthesis in the main method.  Just prints "("
@@ -1038,6 +1283,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
             case "putStrLn": return "println";
             case "putStr": return "print";
             case "getLine" : return "scala.io.StdIn.readLine()";
+            case "error" : return SCALA_ERROR_FUNCTION;
         }
         return baseErrorMessage + "FUNCTION NAME.";
     }
@@ -1113,6 +1359,47 @@ public class HaskellTokensToScala extends HaskellBaseListener {
             //fileContents.append(" ");
         }
     }
+    /**
+     * Some terms in Scala need to be comma separated.  This is a generic structure to support
+     * managing when commas are needed.  Relies on a stack.  
+     * 
+     * This denotes a new nested comma required location.
+     */
+    private void pushSpaceSeparatorOntoStack(){
+        commaSeparateTerms.push(Boolean.TRUE);
+        firstCommaTerm.push(Boolean.TRUE);
+    }
+    /**
+     * Some terms in Scala need to be comma separated.  This is a generic structure to support
+     * managing when commas are needed.  Relies on a stack.  
+     * 
+     * This denotes a new nested comma required location.
+     */
+    private void popSpaceSeparatorOffStack(){
+        // Clear any nested functions.
+        commaSeparateTerms.pop();
+        firstCommaTerm.pop();
+    }
+    /**
+     * When handling comma separated lists from Haskell to Scala, this function will
+     * add commas to the text as needed.  If it is the first element in the list it does nothing.
+     */
+    private void addSpaceSeparatorAsAppropriate(){
+        if(!commaSeparateTerms.isEmpty()){
+            // For the first term, just skip and do not put a comma,
+            if(firstCommaTerm.peek() == Boolean.TRUE){
+                firstCommaTerm.pop();
+                firstCommaTerm.push(Boolean.FALSE);
+            }
+            // For everything after the first term, 
+            else{
+                // For multiple terms, 
+                fileContents.append(" ");
+            }       
+        }
+        else{
+        }
+    }
    
     /**
      * Given a parameter name (particular for Lambda functions), this
@@ -1155,6 +1442,21 @@ public class HaskellTokensToScala extends HaskellBaseListener {
             return true;
         else
             return false;
+    }
+    
+    /**
+     * Places an opening parenthesis and pushes a space (" ") manager onto the stack.
+     */
+    public void addLeftParenthesis(){
+        this.pushSpaceSeparatorOntoStack();
+        fileContents.append("(");
+    }
+    /**
+     * Places a closing (right) parenthesis and pops the space (" ") manager off the stack.
+     */
+    public void addRightParenthesis(){
+        fileContents.append(")");
+        this.popSpaceSeparatorOffStack();;
     }
     
     

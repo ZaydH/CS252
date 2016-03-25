@@ -73,6 +73,21 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * Scala argument to ignore an input parameter.
      */
     private String SCALA_IGNORE_INPUT_ARGUMENT = "_";
+    /**
+     * Symbol that separates the anonymous function argument(s) from the 
+     * actual function implementation.
+     */
+    private String SCALA_ANONYMOUS_FUNCTION_ARGUMENTS_BODY_SEPARATOR = "=>";
+    /**
+     * Define the type name for the parameters.
+     */
+    private final static String SCALA_TYPE_NAME_BOOL = "Boolean";
+    private final static String SCALA_TYPE_NAME_INT = "Int";
+    private final static String SCALA_TYPE_NAME_LIST_INT = "List[" + SCALA_TYPE_NAME_INT + "]";
+    
+    private final static String ARG_TYPE_SUFFIX_BOOL = "BOOL";
+    private final static String ARG_TYPE_SUFFIX_INT = "INT";
+    private final static String ARG_TYPE_SUFFIX_LIST_INT = "LstINT";
     
 
     /**
@@ -414,8 +429,8 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override public void enterPatternMatchParentheses(HaskellParser.PatternMatchParenthesesContext ctx) {
-        // Print the parameter information.
-        ctx.getText();
+        //// Print the parameter information.
+        //ctx.getText();
     }
     /**
      * {@inheritDoc}
@@ -423,9 +438,6 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override public void exitPatternMatchParentheses(HaskellParser.PatternMatchParenthesesContext ctx) { }
-    
-    
-    
     /**
      * End of a pattern matching argument.  Currently a no-op
      */
@@ -441,13 +453,13 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * Prints a pattern matching term.  Currently this does nothing.
      */
     @Override public void enterPatternMatchingTerm(HaskellParser.PatternMatchingTermContext ctx) {
-        fileContents.append(" ");
+        //fileContents.append(" ");
     }
     /**
      * Opens a parenthesis for the pattern matching term.
      */
     @Override public void enterPatternMatchParen(HaskellParser.PatternMatchParenContext ctx) { 
-        fileContents.append(" (");
+        fileContents.append("(");
     }
     /**
      * Opens a parenthesis for the pattern matching term.
@@ -711,7 +723,116 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     @Override public void enterListElement(HaskellParser.ListElementContext ctx) {
         this.addCommaSeparatorAsAppropriate();
     }
-    
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Surround a lambda function by parentheses.  This places the left
+     * parenthesis.</p>
+     */
+    @Override public void enterLambdaFunction(HaskellParser.LambdaFunctionContext ctx) { 
+        fileContents.append("(");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Surround a lambda function by parentheses.  This places the right
+     * parenthesis.</p>
+     */
+    @Override public void exitLambdaFunction(HaskellParser.LambdaFunctionContext ctx) { 
+        fileContents.append(")");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>In Scala, the lambda/anonymous function arguments are surrounded by parentheses.
+     * This function places the left (open) parenthesis.</p>
+     */
+    @Override public void enterAllLambdaArguments(HaskellParser.AllLambdaArgumentsContext ctx) { 
+        fileContents.append("(");
+        this.pushCommaSeparatorOntoStack();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>In Scala, the lambda/anonymous function arguments are surrounded by parentheses.
+     * This function places the right (close) parenthesis.</p>
+     */
+    @Override public void exitAllLambdaArguments(HaskellParser.AllLambdaArgumentsContext ctx) {
+        fileContents.append(")");
+        this.popCommaSeparatorOffStack();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void enterSingleLamdaArgument(HaskellParser.SingleLamdaArgumentContext ctx) { 
+        this.addCommaSeparatorAsAppropriate();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitSingleLamdaArgument(HaskellParser.SingleLamdaArgumentContext ctx) { }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void enterTypedLamdaArgument(HaskellParser.TypedLamdaArgumentContext ctx) { 
+        String argName = ctx.getText();
+        fileContents.append(argName);
+        fileContents.append(": ");
+        fileContents.append(this.getTypeFromArgumentName(argName));
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitTypedLamdaArgument(HaskellParser.TypedLamdaArgumentContext ctx) { }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void enterUnderscoreLambdaArgument(HaskellParser.UnderscoreLambdaArgumentContext ctx) { }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Underscore arguments are listed as "Any" type so add the Any type signature..</p>
+     */
+    @Override public void exitUnderscoreLambdaArgument(HaskellParser.UnderscoreLambdaArgumentContext ctx) { 
+        fileContents.append(": Any");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>For maximum code robustness, Hamskill surrounds the anonymous function body in 
+     * parentheses.  This function places the <b>left</b> (<i>open</i>) parenthesis.</p>
+     */
+    @Override public void enterLambdaBody(HaskellParser.LambdaBodyContext ctx) {
+        fileContents.append("(");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>For maximum code robustness, Hamskill surrounds the anonymous function body in 
+     * parentheses.  This function places the <b>right</b> (<i>open</i>) parenthesis.</p>
+     */
+    @Override public void exitLambdaBody(HaskellParser.LambdaBodyContext ctx) {
+        fileContents.append(")");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>In Haskell, a right arrow ("->") separates the anonymous arguments from the
+     * function implementation.  This adds the scala equivalent ("=>").</p>
+     */
+    @Override public void enterLamdaArgumentsBodySeparator(HaskellParser.LamdaArgumentsBodySeparatorContext ctx) { 
+        fileContents.append(" ").append(SCALA_ANONYMOUS_FUNCTION_ARGUMENTS_BODY_SEPARATOR).append(" ");
+    }
     
     
     
@@ -896,9 +1017,9 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     private String convertHaskellTypeNameToScala(String haskellType){
         // Handle the support Haskell types.
         switch(haskellType){
-            case "Int": return "Int";
-            case "[Int]": return "List[Int]";
-            case "Bool": return "Boolean";
+            case "Int": return SCALA_TYPE_NAME_INT;
+            case "[Int]": return SCALA_TYPE_NAME_LIST_INT;
+            case "Bool": return SCALA_TYPE_NAME_BOOL;
             case "[Char]": return "String";
             case "Char": return "Char";
             
@@ -956,7 +1077,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * 
      * This denotes a new nested comma required location.
      */
-    public void pushCommaSeparatorOntoStack(){
+    private void pushCommaSeparatorOntoStack(){
         commaSeparateTerms.push(Boolean.TRUE);
         firstCommaTerm.push(Boolean.TRUE);
     }
@@ -966,7 +1087,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * 
      * This denotes a new nested comma required location.
      */
-    public void popCommaSeparatorOffStack(){
+    private void popCommaSeparatorOffStack(){
         // Clear any nested functions.
         commaSeparateTerms.pop();
         firstCommaTerm.pop();
@@ -975,7 +1096,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * When handling comma separated lists from Haskell to Scala, this function will
      * add commas to the text as needed.  If it is the first element in the list it does nothing.
      */
-    public void addCommaSeparatorAsAppropriate(){
+    private void addCommaSeparatorAsAppropriate(){
         if(!commaSeparateTerms.isEmpty()){
             // For the first term, just skip and do not put a comma,
             if(firstCommaTerm.peek() == Boolean.TRUE){
@@ -989,10 +1110,52 @@ public class HaskellTokensToScala extends HaskellBaseListener {
             }       
         }
         else{
-            fileContents.append(" ");
+            //fileContents.append(" ");
         }
     }
-    
+   
+    /**
+     * Given a parameter name (particular for Lambda functions), this
+     * function can determine the appropriate type of the variable.
+     * 
+     * @param argName Name of the function argument.
+     * @return Type of the argument based off the argument name,
+     */
+    private String getTypeFromArgumentName(String argName){
+        
+        // Check if parameter is a bool
+        if(isArgumentSpecificType(argName, ARG_TYPE_SUFFIX_BOOL))
+            return SCALA_TYPE_NAME_BOOL;
+
+        // Check if parameter is a list of integers
+        if(isArgumentSpecificType(argName, ARG_TYPE_SUFFIX_LIST_INT))
+            return SCALA_TYPE_NAME_LIST_INT;
+        
+        // Check if parameter is a single integer
+        if(isArgumentSpecificType(argName, ARG_TYPE_SUFFIX_INT))
+            return SCALA_TYPE_NAME_INT;
+        
+        // Throw an error since cannot parse parameter name.
+        throw new IllegalArgumentException("Specified type name cannot be determined for parameter :\""
+                                           + argName + "\"");
+        
+    }
+    /**
+     * Checks whether a specific parameter is a specific type based off whether the end
+     * of the parameter name matches the specified type specific suffix.
+     * 
+     * @param argName Name of the function argument
+     * @param argTypeSuffix Type specific suffix for an argument name.
+     * @return "True" if the end of the parameter matches the suffix and "false" otherwise.
+     */
+    private boolean isArgumentSpecificType(String argName, String argTypeSuffix){
+        int argNameLen = argName.length();
+        int substrStart = argNameLen - argTypeSuffix.length();
+        if(substrStart > 0 && argName.substring(substrStart).equals(argTypeSuffix))
+            return true;
+        else
+            return false;
+    }
     
     
 }

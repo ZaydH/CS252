@@ -628,6 +628,116 @@ public interface HaskellListener extends ParseTreeListener {
 	 */
 	void exitListElement(HaskellParser.ListElementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HaskellParser#caseTerm}.
+	 * @param ctx the parse tree
+	 */
+	void enterCaseTerm(HaskellParser.CaseTermContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#caseTerm}.
+	 * @param ctx the parse tree
+	 */
+	void exitCaseTerm(HaskellParser.CaseTermContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#caseStatementAndVariable}.
+	 * @param ctx the parse tree
+	 */
+	void enterCaseStatementAndVariable(HaskellParser.CaseStatementAndVariableContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#caseStatementAndVariable}.
+	 * @param ctx the parse tree
+	 */
+	void exitCaseStatementAndVariable(HaskellParser.CaseStatementAndVariableContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#caseStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterCaseStatement(HaskellParser.CaseStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#caseStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitCaseStatement(HaskellParser.CaseStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#caseVariable}.
+	 * @param ctx the parse tree
+	 */
+	void enterCaseVariable(HaskellParser.CaseVariableContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#caseVariable}.
+	 * @param ctx the parse tree
+	 */
+	void exitCaseVariable(HaskellParser.CaseVariableContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#caseConditions}.
+	 * @param ctx the parse tree
+	 */
+	void enterCaseConditions(HaskellParser.CaseConditionsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#caseConditions}.
+	 * @param ctx the parse tree
+	 */
+	void exitCaseConditions(HaskellParser.CaseConditionsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#caseGeneralStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterCaseGeneralStatement(HaskellParser.CaseGeneralStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#caseGeneralStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitCaseGeneralStatement(HaskellParser.CaseGeneralStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#caseValueCompare}.
+	 * @param ctx the parse tree
+	 */
+	void enterCaseValueCompare(HaskellParser.CaseValueCompareContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#caseValueCompare}.
+	 * @param ctx the parse tree
+	 */
+	void exitCaseValueCompare(HaskellParser.CaseValueCompareContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#caseOtherwiseStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterCaseOtherwiseStatement(HaskellParser.CaseOtherwiseStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#caseOtherwiseStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitCaseOtherwiseStatement(HaskellParser.CaseOtherwiseStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#caseImplementation}.
+	 * @param ctx the parse tree
+	 */
+	void enterCaseImplementation(HaskellParser.CaseImplementationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#caseImplementation}.
+	 * @param ctx the parse tree
+	 */
+	void exitCaseImplementation(HaskellParser.CaseImplementationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#caseValueImplementationSeparator}.
+	 * @param ctx the parse tree
+	 */
+	void enterCaseValueImplementationSeparator(HaskellParser.CaseValueImplementationSeparatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#caseValueImplementationSeparator}.
+	 * @param ctx the parse tree
+	 */
+	void exitCaseValueImplementationSeparator(HaskellParser.CaseValueImplementationSeparatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#otherwiseTerm}.
+	 * @param ctx the parse tree
+	 */
+	void enterOtherwiseTerm(HaskellParser.OtherwiseTermContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#otherwiseTerm}.
+	 * @param ctx the parse tree
+	 */
+	void exitOtherwiseTerm(HaskellParser.OtherwiseTermContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HaskellParser#dollarSignTerm}.
 	 * @param ctx the parse tree
 	 */
@@ -777,4 +887,24 @@ public interface HaskellListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitHaskellFunctionName(HaskellParser.HaskellFunctionNameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#stringTerm}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringTerm(HaskellParser.StringTermContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#stringTerm}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringTerm(HaskellParser.StringTermContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#word}.
+	 * @param ctx the parse tree
+	 */
+	void enterWord(HaskellParser.WordContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#word}.
+	 * @param ctx the parse tree
+	 */
+	void exitWord(HaskellParser.WordContext ctx);
 }

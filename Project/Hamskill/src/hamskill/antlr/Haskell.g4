@@ -41,7 +41,7 @@ func    :  funcPrototype funcbody NEWLINE*
 mainFunction : mainPrototype NEWLINE? mainHeader NEWLINE? (mainStatement)+ NEWLINE?; 
 mainPrototype : MAIN_FUNCTION ARG_TYPE_SEPARATOR IO unitType;
 mainHeader : MAIN_FUNCTION EQUAL_SIGN DO?;
-mainStatement: monadExpression+ NEWLINE | patternMatchingTerm+ NEWLINE;
+mainStatement: monadExpression+ NEWLINE | patternMatchingExpression NEWLINE;
 // Main words can take many forms so allow for different levels of handling.
 mainWords : haskellFunctionName  
           | parenMainWord
@@ -95,20 +95,21 @@ underScoreArgument : underScoreTerm;
 // Currently only integer expressions.
 patternMatchingExpression : patternMatchingTerm+;
 patternMatchingTerm : dollarSignTerm
+                    | lambdaFunction
                     | generalFunctionCall
+                    | patternMatchParen
+                    | assignmentStatement
                     | functionToMethod
                     | haskellFunctionName 
                     | prependTerm
                     | generalPatternMatchingTerm
                     | patternMatchArray 
-                    | patternMatchParen
                     | ifStatementPattern
                     | recursiveMain
                     | returnUnitType
                     | concatenatedList 
                     | emptyList 
                     | populatedList
-                    | lambdaFunction
                     | caseTerm
                     | stringTerm
                     | NAME ; //Name should always berun last since it the most general.
@@ -121,6 +122,13 @@ ifStatementExpression : NEWLINE* LEFT_PAREN NEWLINE* patternMatchingExpression N
 ifTerm : IF;
 thenTerm : THEN;
 elseTerm : ELSE;
+// Handles an assignment expression.
+assignmentStatement : variableName assignmentOperator assignmentExpression;
+variableName : NAME ;
+assignmentOperator : EQUAL_SIGN;
+assignmentExpression : patternMatchingExpression;
+//Handle the partially applied function notation
+partiallyAppliedFunctionTerm : PARTIALLY_APPLIED_FUNCTION;
 //Handle Prepend
 prependTerm : patternMatchParen colonTerm patternMatchParen;
 // Anonymous Function
@@ -165,7 +173,7 @@ haskellFunctionToScalaMethodName : HASKELL_FUNCTIONS_METHODS_IN_SCALA;
 functionToMethodDollarSign : haskellFunctionToScalaMethodName dollarSignTerm;
 functionToMethodParen : haskellFunctionToScalaMethodName patternMatchParen;
 functionToMethodTerm : haskellFunctionToScalaMethodName generalPatternMatchingTerm;
-recursiveMain : RECURSIVE_MAIN;
+recursiveMain : FUNC_ARGS_OPEN_PAREN MAIN_FUNCTION FUNC_ARGS_CLOSE_PAREN;
 returnUnitType : RETURN UNIT_TYPE;
 
 patternMatchArray : LEFT_SQUARE_BRACKET patternMatchingExpression RIGHT_SQUARE_BRACKET;
@@ -200,8 +208,8 @@ COMMA : ',';
 
 // For embedded function calls in Haskell, use this to make the
 // input parameters comma separated.
-FUNC_ARGS_OPEN_PAREN : '((';
-FUNC_ARGS_CLOSE_PAREN : '))';
+FUNC_ARGS_OPEN_PAREN : '(((';
+FUNC_ARGS_CLOSE_PAREN : ')))';
 
 HASKELL_FUNCTIONS_METHODS_IN_SCALA : 'show' | 'length' ;
 
@@ -227,8 +235,9 @@ OTHERWISE : 'otherwise';
 ARG_TYPE_SEPARATOR : '::';
 MONAD_ARROW : '<-';
 TYPE_SEPARATOR : '->';  // Separates type in the function definition
-RECURSIVE_MAIN : '((main))';
+//RECURSIVE_MAIN : '((main))';
 MAIN_FUNCTION : 'main';
+PARTIALLY_APPLIED_FUNCTION : '((()))';
 INT_VAL : [-]?[0-9]+;       // Integer values
 INT_OP : '+' | '-' | '*' | '==' | '/=' | '>' | '<' | '<=' | '>=' ;
 TYPE_NAME : '[Int]' | 'Int' | '[Char]' | 'Char' | 'Bool';
@@ -238,6 +247,7 @@ UNIT_TYPE : '()';
 
 NEWLINE : '\r'? '\n' ;  // return newlines to parser (is end-statement signal)
 
+CAPITAL_LETTERS : ['A-Z]+;
 NAME : ['a-zA-Z0-9._]+;  // Name of Something
 //ANY_CHAR : ['a-zA-Z0-9._-0-9?*=><+:{}()|!@#$%^&*]+;
 

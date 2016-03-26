@@ -14,7 +14,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     // Stacks are used when data may need to be stored across nesting.
     private Stack<Boolean> commaSeparateTerms = new Stack<Boolean>();
     private Stack<Boolean> firstCommaTerm = new Stack<Boolean>();
-    private Stack<Boolean> commaSpaceTerms = new Stack<Boolean>();
+    private Stack<Boolean> spaceSeparateTerms = new Stack<Boolean>();
     private Stack<Boolean> firstSpaceTerm = new Stack<Boolean>();
     private Stack<String> haskellFunctionToScalaMethodName = new Stack<String>();
     private boolean isHamskillStandard = false;
@@ -285,7 +285,9 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * @param ctx The ANTLR Context
      */
     @Override public void enterTypeSignature(HaskellParser.TypeSignatureContext ctx) { 
-        this.addLeftParenthesis();
+        //this.addLeftParenthesis();
+        fileContents.append(" ");
+        this.pushSpaceSeparatorOntoStack();
     }
     /**
      * At the end of a type signature, close the function definition
@@ -293,19 +295,32 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * @param ctx The ANTLR Context
      */
     @Override public void exitTypeSignature(HaskellParser.TypeSignatureContext ctx) { 
-        fileContents.append(") ");
+        //fileContents.append(") ");
+        fileContents.append(" ");
         this.popSpaceSeparatorOffStack();
     }
     /**
      * Performs the handling of the type in function prototype.
      */
     @Override public void enterInputType(HaskellParser.InputTypeContext ctx) { 
-        if(!isFirstParameter()) fileContents.append(", ");
+        //if(!isFirstParameter()) fileContents.append(", ");
         
+        this.addSpaceSeparatorAsAppropriate();
+        this.addLeftParenthesis();
         // Add the parameter name and type.
         fileContents.append(getInputParameterName());
         fileContents.append(" ").append(SCALA_INPUT_PARAMETER_CALL_BY_TYPE);
     }
+    /**
+     * Performs any cleanup required at the end of a part.
+     * 
+     * @param ctx The ANTLR Context
+     */
+    @Override public void exitInputType(HaskellParser.InputTypeContext ctx) { 
+        // Go to the next parameter ID
+        incrementParameterId();
+        this.addRightParenthesis();
+    }  
     /**
      * {@inheritDoc}
      *
@@ -332,16 +347,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     @Override public void enterModuleFunctionName(HaskellParser.ModuleFunctionNameContext ctx) {
         String text = ctx.getText().replace("\n", "").replace("\r", "");
         publicFunctionList.add(text);
-    }
-    /**
-     * Performs any cleanup required at the end of a part.
-     * 
-     * @param ctx The ANTLR Context
-     */
-    @Override public void exitInputType(HaskellParser.InputTypeContext ctx) { 
-        // Go to the next parameter ID
-        incrementParameterId();
-    }    
+    }  
     /**
      * At the end of a type signature, close the function definition
      * 
@@ -614,7 +620,8 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * Used to handle an "if" statement.  Prints "if" and an open parentheses.
      */
     @Override public void enterIfTerm(HaskellParser.IfTermContext ctx) { 
-        fileContents.append("if(");
+        fileContents.append("if");
+        this.addLeftParenthesis();
     }
     /**
      * Closes the "if" parenthesis.
@@ -625,8 +632,9 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * There is no "then" in Scala so just use curly brackets.
      */
     @Override public void enterThenTerm(HaskellParser.ThenTermContext ctx) {
-        fileContents.append(")\n");
-        printIndent();
+        this.addRightParenthesis();
+        fileContents.append("\n");
+        this.incrementIndentLevel(true);
         fileContents.append("{\n");
         incrementIndentLevel(true);
     }
@@ -648,7 +656,8 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     @Override public void exitIfStatementPattern(HaskellParser.IfStatementPatternContext ctx) {
         fileContents.append("\n");
         decrementIndentLevel(true);
-        fileContents.append("}\n");
+        fileContents.append("}");
+        this.decrementIndentLevel(false);
     }
     /**
      * {@inheritDoc}
@@ -1046,7 +1055,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      */
     @Override public void exitStringTerm(HaskellParser.StringTermContext ctx) { 
         fileContents.append("\"");
-        this.popCommaSeparatorOffStack();
+        this.popSpaceSeparatorOffStack();
     }
     /**
      * {@inheritDoc}
@@ -1116,7 +1125,6 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * Used to convert a haskell Function name to a Scala function name.
      */
     @Override public void enterHaskellFunctionName(HaskellParser.HaskellFunctionNameContext ctx) {
-        String funcName = ctx.getText();
         fileContents.append(convertHaskellFunctionNameToScala(ctx.getText()));
     }
     /**
@@ -1219,12 +1227,12 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * At the beginning of a function, reset the parameter number.
      */
     private void resetNextParamNumber(){ nextParamNumber = BASE_PARAM_NUMBER; };
-    /**
-     * Checks whether handling the first parameter.
-     * 
-     * @return "true" if the current parameter is the first and "false" otherwise.
-     */
-    private boolean isFirstParameter(){ return nextParamNumber == BASE_PARAM_NUMBER; }
+//    /**
+//     * Checks whether handling the first parameter.
+//     * 
+//     * @return "true" if the current parameter is the first and "false" otherwise.
+//     */
+//    private boolean isFirstParameter(){ return nextParamNumber == BASE_PARAM_NUMBER; }
     /**
      * Sets the indent level to the default.
      */
@@ -1366,8 +1374,8 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * This denotes a new nested comma required location.
      */
     private void pushSpaceSeparatorOntoStack(){
-        commaSeparateTerms.push(Boolean.TRUE);
-        firstCommaTerm.push(Boolean.TRUE);
+        this.spaceSeparateTerms.push(Boolean.TRUE);
+        this.firstSpaceTerm.push(Boolean.TRUE);
     }
     /**
      * Some terms in Scala need to be comma separated.  This is a generic structure to support
@@ -1377,19 +1385,19 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      */
     private void popSpaceSeparatorOffStack(){
         // Clear any nested functions.
-        commaSeparateTerms.pop();
-        firstCommaTerm.pop();
+        this.spaceSeparateTerms.pop();
+        this.firstSpaceTerm.pop();
     }
     /**
      * When handling comma separated lists from Haskell to Scala, this function will
      * add commas to the text as needed.  If it is the first element in the list it does nothing.
      */
     private void addSpaceSeparatorAsAppropriate(){
-        if(!commaSeparateTerms.isEmpty()){
+        if(!spaceSeparateTerms.isEmpty()){
             // For the first term, just skip and do not put a comma,
-            if(firstCommaTerm.peek() == Boolean.TRUE){
-                firstCommaTerm.pop();
-                firstCommaTerm.push(Boolean.FALSE);
+            if(firstSpaceTerm.peek() == Boolean.TRUE){
+                firstSpaceTerm.pop();
+                firstSpaceTerm.push(Boolean.FALSE);
             }
             // For everything after the first term, 
             else{
@@ -1398,6 +1406,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
             }       
         }
         else{
+            fileContents.append(" ");
         }
     }
    

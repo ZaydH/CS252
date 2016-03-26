@@ -97,6 +97,7 @@ patternMatchingExpression : patternMatchingTerm+;
 patternMatchingTerm : dollarSignTerm
                     | lambdaFunction
                     | generalFunctionCall
+                    | partiallyAppliedFunction
                     | patternMatchParen
                     | assignmentStatement
                     | functionToMethod
@@ -129,6 +130,8 @@ assignmentOperator : EQUAL_SIGN;
 assignmentExpression : patternMatchingExpression;
 //Handle the partially applied function notation
 partiallyAppliedFunctionTerm : PARTIALLY_APPLIED_FUNCTION;
+// Partially applied functions in Scala need a special marker so handle that.
+partiallyAppliedFunction : PARTIALLY_APPLIED_FUNCTION;
 //Handle Prepend
 prependTerm : patternMatchParen colonTerm patternMatchParen;
 // Anonymous Function
@@ -237,7 +240,7 @@ MONAD_ARROW : '<-';
 TYPE_SEPARATOR : '->';  // Separates type in the function definition
 //RECURSIVE_MAIN : '((main))';
 MAIN_FUNCTION : 'main';
-PARTIALLY_APPLIED_FUNCTION : '((()))';
+PARTIALLY_APPLIED_FUNCTION : '()';
 INT_VAL : [-]?[0-9]+;       // Integer values
 INT_OP : '+' | '-' | '*' | '==' | '/=' | '>' | '<' | '<=' | '>=' ;
 TYPE_NAME : '[Int]' | 'Int' | '[Char]' | 'Char' | 'Bool';

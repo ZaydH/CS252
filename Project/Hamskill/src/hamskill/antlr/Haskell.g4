@@ -33,12 +33,13 @@ moduleFunctionName : NEWLINE* NAME NEWLINE*;
 
 
 // Handle a function
-func    :  funcPrototype funcbody NEWLINE*
-        |  mainFunction NEWLINE*  // This is for the main() Function
+func    : funcPrototype funcbody NEWLINE*
+        | mainFunction NEWLINE*  // This is for the main() Function
         | singleLinePartiallyAppliedFunction NEWLINE*;
 
 // Handles an assignment expression.
-singleLinePartiallyAppliedFunction : partiallyAppliedFunctionName assignmentOperator assignmentExpression NEWLINE*;
+singleLinePartiallyAppliedFunction : partiallyAppliedFunctionName assignmentOperator 
+                                     assignmentExpression NEWLINE*;
 partiallyAppliedFunctionName : NAME ;
 assignmentOperator : EQUAL_SIGN;
 assignmentExpression : patternMatchingExpression;
@@ -66,7 +67,8 @@ functionName : NAME;
 // This object represents the different haskell types.
 typeSignature: (inputType TYPE_SEPARATOR)* ;
 // Format of function as a type.
-typeFunction: '(' (type typeFunctionSeparator)*  type ')';
+typeMaybeMonad : LEFT_PAREN MAYBE type RIGHT_PAREN;
+typeFunction : LEFT_PAREN (type typeFunctionSeparator)*  type RIGHT_PAREN;
 typeFunctionSeparator : TYPE_SEPARATOR;
 // Parse the input types
 inputType: type ;
@@ -74,7 +76,7 @@ inputType: type ;
 returnType: type;
 
 // A parameter type can either be a type name or a function.
-type: primitiveTypeName | typeFunction | unitType;
+type: typeMaybeMonad | primitiveTypeName | typeFunction | unitType ;
 primitiveTypeName : TYPE_NAME;
 // Make unitType a lexer so I can put a listener on it.
 unitType : UNIT_TYPE;
@@ -92,16 +94,22 @@ patternMatchingArgument : patternMatchParentheses
                         | concatenatedList 
                         | emptyList 
                         | underScoreTerm
+                        | justArgument      // Handle the "Just" argument
+                        | nothingArgument   // Handle the "Nothing" argument.
                         | generalMatchingArgument;  // Most general so should be last
 generalMatchingArgument : NAME;
 //Handle case here paremter is in parentheses.
 patternMatchParentheses : LEFT_PAREN (patternMatchingArgument)+ RIGHT_PAREN;
 underScoreArgument : underScoreTerm;
+// Just argument 
+justArgument : JUST patternMatchingArgument;
+nothingArgument : NOTHING;
 
 // Currently only integer expressions.
 patternMatchingExpression : patternMatchingTerm+;
 patternMatchingTerm : dollarSignTerm
                     | lambdaFunction
+                    | bindExpression
                     | generalFunctionCall
                     | patternMatchParen
                     | functionToMethod
@@ -117,6 +125,9 @@ patternMatchingTerm : dollarSignTerm
                     | populatedList
                     | caseTerm
                     | stringTerm
+                    | returnStatement
+                    | monadUnboxOperator
+                    | justStatement
                     | NAME ; //Name should always berun last since it the most general.
 // Handle an if then else statement
 ifStatementPattern : ifTerm  ifStatementExpression
@@ -127,9 +138,11 @@ ifStatementExpression : NEWLINE* LEFT_PAREN NEWLINE* patternMatchingExpression N
 ifTerm : IF;
 thenTerm : THEN;
 elseTerm : ELSE;
-//Handle Prepend
+
+//Handle Prepend Operator
 prependTerm : patternMatchParen colonTerm patternMatchParen;
-// Anonymous Function
+
+// Lambda/Anonymous Function
 lambdaFunction : LEFT_PAREN BACKSLASH allLambdaArguments
                  lamdaArgumentsBodySeparator patternMatchingExpression RIGHT_PAREN;
 allLambdaArguments : (singleLamdaArgument)+;
@@ -138,6 +151,7 @@ underscoreLambdaArgument : underScoreTerm;
 lamdaArgumentsBodySeparator : TYPE_SEPARATOR;
 typedLamdaArgument : NAME;
 lambdaBody : patternMatchingExpression;
+
 // Define lists for pattern matching.
 concatenatedList : LEFT_PAREN headList colonTerm tailList RIGHT_PAREN;
 headList : patternMatchingTerm;
@@ -147,7 +161,8 @@ tailList : patternMatchingTerm;
 emptyList : LEFT_SQUARE_BRACKET RIGHT_SQUARE_BRACKET;
 populatedList : LEFT_SQUARE_BRACKET (listElement COMMA)* listElement RIGHT_SQUARE_BRACKET;
 listElement : patternMatchingTerm;
-// Handles a "case term".
+
+// Handles a "case" statement.
 caseTerm : caseStatementAndVariable caseConditions;
 caseStatementAndVariable : caseStatement LEFT_PAREN caseVariable RIGHT_PAREN OF NEWLINE;
 caseStatement : CASE;
@@ -159,11 +174,13 @@ caseOtherwiseStatement : otherwiseTerm caseValueImplementationSeparator caseImpl
 caseImplementation : patternMatchingExpression NEWLINE;
 caseValueImplementationSeparator : TYPE_SEPARATOR;
 otherwiseTerm : OTHERWISE;
+
 // Handle an array in the expression
 dollarSignTerm : RIGHT_ASSOC_DOLLAR_SIGN patternMatchingExpression;
 functionToMethod : functionToMethodDollarSign
                  | functionToMethodParen
                  | functionToMethodTerm;
+
 // Some Haskell Functions are actually methods in Scala.
 // These are different cases where this may occur.  This is handled
 // by the parser.
@@ -188,6 +205,19 @@ haskellFunctionName : HASKELL_FUNCTION_NAME;
 stringTerm : QUOTATION_MARK word* QUOTATION_MARK;
 word : NAME;
 //stringWords : NAME;
+
+// Integer Monad
+monadUnboxing : monadVariableName monadUnboxOperator monadEvaluationExpression;
+monadVariableName : NAME;
+monadUnboxOperator : MONAD_ARROW;
+monadEvaluationExpression : patternMatchingExpression;
+// Box an Option Monad
+justStatement : JUST patternMatchingExpression;
+// Box a Monad generally
+returnStatement : RETURN patternMatchingExpression;
+// Handle monad chaining via bind.
+bindExpression : patternMatchParen (bindFunction)+;
+bindFunction : (BIND_OPERATOR patternMatchingExpression);
 
 //----------------------------------------------------------------------//
 //                      Definition of Tokens                            //
@@ -230,6 +260,7 @@ THEN : 'then';
 ELSE : 'else';
 RETURN : 'return';
 OTHERWISE : 'otherwise';
+MAYBE : 'Maybe';
 ARG_TYPE_SEPARATOR : '::';
 MONAD_ARROW : '<-';
 TYPE_SEPARATOR : '->';  // Separates type in the function definition
@@ -240,10 +271,11 @@ INT_OP : '+' | '-' | '*' | '==' | '>' | '<' | '<=' | '>=' ;
 TYPE_NAME : '[Int]' | 'Int' | '[Char]' | 'Char' | 'Bool' | 'String';
 
 HASKELL_FUNCTION_NAME : 'putStrLn' | 'error' | 'putStr' | 'getLine' 
-                      | '`div`' | '`mod`' | '/=' ;
+                      | '`div`' | '`mod`' | '/=' | NOTHING;
 UNIT_TYPE : '()';
 
 BIND_OPERATOR : '>>=';
+JUST : 'Just';
 NOTHING : 'Nothing';
 
 NEWLINE : '\r'? '\n' ;  // return newlines to parser (is end-statement signal)

@@ -298,6 +298,16 @@ public interface HaskellListener extends ParseTreeListener {
 	 */
 	void exitTypeSignature(HaskellParser.TypeSignatureContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HaskellParser#typeMaybeMonad}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypeMaybeMonad(HaskellParser.TypeMaybeMonadContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#typeMaybeMonad}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypeMaybeMonad(HaskellParser.TypeMaybeMonadContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HaskellParser#typeFunction}.
 	 * @param ctx the parse tree
 	 */
@@ -437,6 +447,26 @@ public interface HaskellListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitUnderScoreArgument(HaskellParser.UnderScoreArgumentContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#justArgument}.
+	 * @param ctx the parse tree
+	 */
+	void enterJustArgument(HaskellParser.JustArgumentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#justArgument}.
+	 * @param ctx the parse tree
+	 */
+	void exitJustArgument(HaskellParser.JustArgumentContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#nothingArgument}.
+	 * @param ctx the parse tree
+	 */
+	void enterNothingArgument(HaskellParser.NothingArgumentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#nothingArgument}.
+	 * @param ctx the parse tree
+	 */
+	void exitNothingArgument(HaskellParser.NothingArgumentContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HaskellParser#patternMatchingExpression}.
 	 * @param ctx the parse tree
@@ -957,4 +987,84 @@ public interface HaskellListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitWord(HaskellParser.WordContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#monadUnboxing}.
+	 * @param ctx the parse tree
+	 */
+	void enterMonadUnboxing(HaskellParser.MonadUnboxingContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#monadUnboxing}.
+	 * @param ctx the parse tree
+	 */
+	void exitMonadUnboxing(HaskellParser.MonadUnboxingContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#monadVariableName}.
+	 * @param ctx the parse tree
+	 */
+	void enterMonadVariableName(HaskellParser.MonadVariableNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#monadVariableName}.
+	 * @param ctx the parse tree
+	 */
+	void exitMonadVariableName(HaskellParser.MonadVariableNameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#monadUnboxOperator}.
+	 * @param ctx the parse tree
+	 */
+	void enterMonadUnboxOperator(HaskellParser.MonadUnboxOperatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#monadUnboxOperator}.
+	 * @param ctx the parse tree
+	 */
+	void exitMonadUnboxOperator(HaskellParser.MonadUnboxOperatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#monadEvaluationExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterMonadEvaluationExpression(HaskellParser.MonadEvaluationExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#monadEvaluationExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitMonadEvaluationExpression(HaskellParser.MonadEvaluationExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#justStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterJustStatement(HaskellParser.JustStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#justStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitJustStatement(HaskellParser.JustStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#returnStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterReturnStatement(HaskellParser.ReturnStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#returnStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitReturnStatement(HaskellParser.ReturnStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#bindExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterBindExpression(HaskellParser.BindExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#bindExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitBindExpression(HaskellParser.BindExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#bindFunction}.
+	 * @param ctx the parse tree
+	 */
+	void enterBindFunction(HaskellParser.BindFunctionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#bindFunction}.
+	 * @param ctx the parse tree
+	 */
+	void exitBindFunction(HaskellParser.BindFunctionContext ctx);
 }

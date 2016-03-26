@@ -99,6 +99,30 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      */
     private String SCALA_FUNCTION_DESIGNATOR = "def";
     /**
+     * Equivalent to the Scala "Nothing" operator.
+     */
+    private String SCALA_NOTHING_EQUIVALENT = "None";
+    /**
+     * Defines Scala's "Just" equivalent.
+     */
+    private String SCALA_JUST_EQUIVALENT = "Some";
+    /**
+     * Defines Scala's Monad "return" equivalent.
+     */
+    private String SCALA_MONAD_RETURN_EQUIVALENT = "Option";
+    /**
+     * Define the text that creates an immutable Scala variable.
+     */
+    private String SCALA_CREATE_IMMUTABLE_VARIABLE = "lazy val";
+    /**
+     * Defines the function name for Scala unboxing of a Monad.
+     */
+    private String SCALA_UNBOX_MONAD_FUNCTION_NAME = "get";
+    /**
+     * Scala function name that is the equivalent of the Haskell ">>=" bind operator.
+     */
+    private String SCALA_BIND_OPERATOR_FUNCTION = "bind";
+    /**
      * Define the type name for the parameters.
      */
     private final static String SCALA_TYPE_NAME_BOOL = "Boolean";
@@ -454,6 +478,35 @@ public class HaskellTokensToScala extends HaskellBaseListener {
         // Print the parameter information.
         fileContents.append(ctx.getText());
     }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void enterJustArgument(HaskellParser.JustArgumentContext ctx) {
+        fileContents.append(this.SCALA_JUST_EQUIVALENT);
+        this.addLeftParenthesis();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitJustArgument(HaskellParser.JustArgumentContext ctx) { 
+        this.addRightParenthesis();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void enterNothingArgument(HaskellParser.NothingArgumentContext ctx) { }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitNothingArgument(HaskellParser.NothingArgumentContext ctx) { }
     /**
      * {@inheritDoc}
      *
@@ -1056,7 +1109,6 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     @Override public void enterStringTerm(HaskellParser.StringTermContext ctx) {        
         this.pushSpaceSeparatorOntoStack();
         fileContents.append("\"");
-        
     }
     /**
      * {@inheritDoc}
@@ -1082,21 +1134,140 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * <p>The default implementation does nothing.</p>
      */
     @Override public void exitWord(HaskellParser.WordContext ctx) { }
-//    /**
-//     * {@inheritDoc}
-//     *
-//     * <p>Handles the Haskell "error" function.</p>
-//     */
-//    @Override public void enterErrorTerm(HaskellParser.ErrorTermContext ctx) { 
-//        fileContents.append(this.SCALA_ERROR_FUNCTION);
-//    }
-//    /**
-//     * {@inheritDoc}
-//     *
-//     * <p>The default implementation does nothing.</p>
-//     */
-//    @Override public void exitErrorTerm(HaskellParser.ErrorTermContext ctx) { }
-    
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Handles making an expression from "Just" in Haskell to the Scala equivalent.
+     * It boxes it up and puts an open (left) parenthesis.</p>
+     */
+    @Override public void enterJustStatement(HaskellParser.JustStatementContext ctx) {
+        fileContents.append(this.SCALA_JUST_EQUIVALENT);
+        this.addLeftParenthesis();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Closes the parenthesis with a right ")" parenthesis at the end of a Haskell
+     * "Just" statement.</p>
+     */
+    @Override public void exitJustStatement(HaskellParser.JustStatementContext ctx) {
+        this.addRightParenthesis();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Handles the equivalent of "return" in Scala.</p>
+     */
+    @Override public void enterReturnStatement(HaskellParser.ReturnStatementContext ctx) { 
+        fileContents.append(this.SCALA_MONAD_RETURN_EQUIVALENT);
+        this.addLeftParenthesis();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitReturnStatement(HaskellParser.ReturnStatementContext ctx) {
+        this.addRightParenthesis();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Creates/instantiates the Monad unboxed variable.</p>
+     */
+    @Override public void enterMonadUnboxing(HaskellParser.MonadUnboxingContext ctx) { 
+        fileContents.append(this.SCALA_CREATE_IMMUTABLE_VARIABLE).append(" ");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitMonadUnboxing(HaskellParser.MonadUnboxingContext ctx) { }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Puts the Monad variable name</p>
+     */
+    @Override public void enterMonadVariableName(HaskellParser.MonadVariableNameContext ctx) { 
+        fileContents.append(ctx.getText());
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitMonadVariableName(HaskellParser.MonadVariableNameContext ctx) {
+
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Adds Scala's equivalent of Haskell's left arrow "<-" operator.</p>
+     */
+    @Override public void enterMonadUnboxOperator(HaskellParser.MonadUnboxOperatorContext ctx) { 
+        fileContents.append(" = ");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitMonadUnboxOperator(HaskellParser.MonadUnboxOperatorContext ctx) { }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Puts the Monad Expression inside a parenthesis (i.e. left/open parenthesis).</p>
+     */
+    @Override public void enterMonadEvaluationExpression(HaskellParser.MonadEvaluationExpressionContext ctx) {
+        this.addLeftParenthesis();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Scala cannot use the "<-" operator for unboxing so this function adds the Scala
+     * function that unboxes a Monad.</p>
+     */
+    @Override public void exitMonadEvaluationExpression(HaskellParser.MonadEvaluationExpressionContext ctx) { 
+        this.addRightParenthesis();
+        fileContents.append(".").append(SCALA_UNBOX_MONAD_FUNCTION_NAME).append("()");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void enterBindFunction(HaskellParser.BindFunctionContext ctx) {
+        fileContents.append(".");
+        fileContents.append(this.SCALA_BIND_OPERATOR_FUNCTION);
+        this.addLeftParenthesis();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Closes the function used for binding Monads.</p>
+     */
+    @Override public void exitBindFunction(HaskellParser.BindFunctionContext ctx) { 
+        this.addRightParenthesis();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Converts a Maybe Monad to the Scala Monad Equivalent.  Puts it in an open
+     * (left) square bracket.</p>
+     */
+    @Override public void enterTypeMaybeMonad(HaskellParser.TypeMaybeMonadContext ctx) {
+        fileContents.append(this.SCALA_MONAD_RETURN_EQUIVALENT);
+        fileContents.append("[");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Closes the Monad square bracket.</p>
+     */
+    @Override public void exitTypeMaybeMonad(HaskellParser.TypeMaybeMonadContext ctx) {
+        fileContents.append("]");
+    }
     
     
     /************************************************************************************
@@ -1172,7 +1343,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * Creates the variable name (as immutable) and adds the equal sign.
      */
     @Override public void enterImmutableValueName(HaskellParser.ImmutableValueNameContext ctx) {
-        fileContents.append("lazy val ").append(ctx.getText()).append(" =");
+        fileContents.append(SCALA_CREATE_IMMUTABLE_VARIABLE).append(" ").append(ctx.getText()).append(" =");
     }
     /**
      * Called at the end of an immutable value name.  Currently a no-op.
@@ -1332,9 +1503,10 @@ public class HaskellTokensToScala extends HaskellBaseListener {
             fileContents.append(TAB_STRING);
     }
     /**
+     * Converts a Haskell type name to a Scala type name
      * 
-     * @param haskellType
-     * @return
+     * @param haskellType Name of a type in Haskell.
+     * @return Name of a type in Scala.
      */
     private String convertHaskellTypeNameToScala(String haskellType){
         // Handle the support Haskell types.
@@ -1365,6 +1537,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
             case "`div`" : return "/";
             case "`mod`" : return "%";
             case "/=" : return "!=";
+            case "Nothing" : return this.SCALA_NOTHING_EQUIVALENT;
         }
         return baseErrorMessage + "FUNCTION NAME.";
     }

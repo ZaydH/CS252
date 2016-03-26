@@ -90,6 +90,15 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     private String SCALA_ERROR_FUNCTION = "sys.error";
     private String SCALA_CASE_VALUE_IMPLEMENTATION_SEPARATOR = "=>";
     /**
+     * Scala requires a special symbol to indicate partially applied functions.
+     * This variable defines that value.
+     */
+    private String SCALA_PARTIALLY_APPLIED_FUNCTION_SYMBOL = "_";
+    /**
+     * Denotes a Scala function.
+     */
+    private String SCALA_FUNCTION_DESIGNATOR = "def";
+    /**
      * Define the type name for the parameters.
      */
     private final static String SCALA_TYPE_NAME_BOOL = "Boolean";
@@ -230,7 +239,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
         }
         
         // Designate as a function.
-        fileContents.append("def ");
+        fileContents.append(this.SCALA_FUNCTION_DESIGNATOR).append(" ");
         
         // Reset the parameter number
         resetNextParamNumber();
@@ -362,17 +371,18 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * @param ctx The ANTLR Context
      */
     @Override public void exitReturnType(HaskellParser.ReturnTypeContext ctx) {
-        fileContents.append(" =");
+        fileContents.append(" = ");
         this.addLeftParenthesis();
-        
+        this.pushCommaSeparatorOntoStack();
         // List all parameters for the function.
         for(int i = BASE_PARAM_NUMBER; i < nextParamNumber; i++){
             // Comma separate multiple arguments
-            if(i != BASE_PARAM_NUMBER) fileContents.append(", ");
             
             // Put the parameter name
+            this.addCommaSeparatorAsAppropriate();
             fileContents.append(getInputParameterName(i));
         }
+        this.popCommaSeparatorOffStack();
         this.addRightParenthesis();
         fileContents.append(" ").append(SCALA_USE_HASKELL_PATTERN_MATCHING_STYLE).append(" ");
     }
@@ -472,13 +482,13 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      */
     @Override public void enterPatternMatchingExpression(HaskellParser.PatternMatchingExpressionContext ctx) { 
         //fileContents.append(" ");
-        this.addSpaceSeparatorAsAppropriate();
+        //this.addSpaceSeparatorAsAppropriate();
     }
     /**
      * Prints a pattern matching term.  Currently this does nothing.
      */
     @Override public void enterPatternMatchingTerm(HaskellParser.PatternMatchingTermContext ctx) {
-        //fileContents.append(" ");
+        this.addSpaceSeparatorAsAppropriate();
     }
     /**
      * Opens a parenthesis for the pattern matching term.
@@ -1189,7 +1199,66 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * Handle the return of the unit type.  Closing currently does nothing.
      */
     @Override public void exitReturnUnitType(HaskellParser.ReturnUnitTypeContext ctx) { }
-    
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Begins the management of the spaces for the partially applied function line.</p>
+     */
+    @Override public void enterSingleLinePartiallyAppliedFunction(HaskellParser.SingleLinePartiallyAppliedFunctionContext ctx) {
+        this.pushSpaceSeparatorOntoStack();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Ends the management of the spaces for partially applied function line.</p>
+     */
+    @Override public void exitSingleLinePartiallyAppliedFunction(HaskellParser.SingleLinePartiallyAppliedFunctionContext ctx) { 
+        this.popSpaceSeparatorOffStack();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Prints the function name.</p>
+     */
+    @Override public void enterPartiallyAppliedFunctionName(HaskellParser.PartiallyAppliedFunctionNameContext ctx) {
+        fileContents.append(ctx.getText());
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitPartiallyAppliedFunctionName(HaskellParser.PartiallyAppliedFunctionNameContext ctx) { }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void enterAssignmentOperator(HaskellParser.AssignmentOperatorContext ctx) { 
+        fileContents.append(" = {");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitAssignmentOperator(HaskellParser.AssignmentOperatorContext ctx) { }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void enterAssignmentExpression(HaskellParser.AssignmentExpressionContext ctx) { }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Denotes the object as a partially applied function by appending Scala'a special
+     * symbol for partially applied functions.</p>
+     */
+    @Override public void exitAssignmentExpression(HaskellParser.AssignmentExpressionContext ctx) { 
+        this.addSpaceSeparatorAsAppropriate();
+        fileContents.append(this.SCALA_PARTIALLY_APPLIED_FUNCTION_SYMBOL);
+    }
     
     
     /**************************************************************************************
@@ -1409,7 +1478,6 @@ public class HaskellTokensToScala extends HaskellBaseListener {
             fileContents.append(" ");
         }
     }
-   
     /**
      * Given a parameter name (particular for Lambda functions), this
      * function can determine the appropriate type of the variable.

@@ -236,6 +236,9 @@ base_filename="case_example"
 perform_hamskillStd_and_hamskillPlus_test $base_filename
 
 
+# Perform a test case with partially applied functions
+base_filename="partially_applied_example"
+perform_hamskillStd_and_hamskillPlus_test $base_filename
 
 
 # This should be the last line in the testbench.  It checks the final results

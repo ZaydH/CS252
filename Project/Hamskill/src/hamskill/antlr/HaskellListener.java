@@ -138,6 +138,46 @@ public interface HaskellListener extends ParseTreeListener {
 	 */
 	void exitFunc(HaskellParser.FuncContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HaskellParser#singleLinePartiallyAppliedFunction}.
+	 * @param ctx the parse tree
+	 */
+	void enterSingleLinePartiallyAppliedFunction(HaskellParser.SingleLinePartiallyAppliedFunctionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#singleLinePartiallyAppliedFunction}.
+	 * @param ctx the parse tree
+	 */
+	void exitSingleLinePartiallyAppliedFunction(HaskellParser.SingleLinePartiallyAppliedFunctionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#partiallyAppliedFunctionName}.
+	 * @param ctx the parse tree
+	 */
+	void enterPartiallyAppliedFunctionName(HaskellParser.PartiallyAppliedFunctionNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#partiallyAppliedFunctionName}.
+	 * @param ctx the parse tree
+	 */
+	void exitPartiallyAppliedFunctionName(HaskellParser.PartiallyAppliedFunctionNameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#assignmentOperator}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignmentOperator(HaskellParser.AssignmentOperatorContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#assignmentOperator}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignmentOperator(HaskellParser.AssignmentOperatorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#assignmentExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAssignmentExpression(HaskellParser.AssignmentExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#assignmentExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAssignmentExpression(HaskellParser.AssignmentExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HaskellParser#mainFunction}.
 	 * @param ctx the parse tree
 	 */
@@ -467,56 +507,6 @@ public interface HaskellListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitElseTerm(HaskellParser.ElseTermContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link HaskellParser#assignmentStatement}.
-	 * @param ctx the parse tree
-	 */
-	void enterAssignmentStatement(HaskellParser.AssignmentStatementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HaskellParser#assignmentStatement}.
-	 * @param ctx the parse tree
-	 */
-	void exitAssignmentStatement(HaskellParser.AssignmentStatementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link HaskellParser#variableName}.
-	 * @param ctx the parse tree
-	 */
-	void enterVariableName(HaskellParser.VariableNameContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HaskellParser#variableName}.
-	 * @param ctx the parse tree
-	 */
-	void exitVariableName(HaskellParser.VariableNameContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link HaskellParser#assignmentOperator}.
-	 * @param ctx the parse tree
-	 */
-	void enterAssignmentOperator(HaskellParser.AssignmentOperatorContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HaskellParser#assignmentOperator}.
-	 * @param ctx the parse tree
-	 */
-	void exitAssignmentOperator(HaskellParser.AssignmentOperatorContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link HaskellParser#assignmentExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterAssignmentExpression(HaskellParser.AssignmentExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HaskellParser#assignmentExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitAssignmentExpression(HaskellParser.AssignmentExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link HaskellParser#partiallyAppliedFunctionTerm}.
-	 * @param ctx the parse tree
-	 */
-	void enterPartiallyAppliedFunctionTerm(HaskellParser.PartiallyAppliedFunctionTermContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HaskellParser#partiallyAppliedFunctionTerm}.
-	 * @param ctx the parse tree
-	 */
-	void exitPartiallyAppliedFunctionTerm(HaskellParser.PartiallyAppliedFunctionTermContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link HaskellParser#prependTerm}.
 	 * @param ctx the parse tree

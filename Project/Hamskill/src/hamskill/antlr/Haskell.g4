@@ -34,8 +34,14 @@ moduleFunctionName : NEWLINE* NAME NEWLINE*;
 
 // Handle a function
 func    :  funcPrototype funcbody NEWLINE*
-        |  mainFunction NEWLINE* ; // This is for the main() Function
+        |  mainFunction NEWLINE*  // This is for the main() Function
+        | singleLinePartiallyAppliedFunction NEWLINE*;
 
+// Handles an assignment expression.
+singleLinePartiallyAppliedFunction : partiallyAppliedFunctionName assignmentOperator assignmentExpression NEWLINE*;
+partiallyAppliedFunctionName : NAME ;
+assignmentOperator : EQUAL_SIGN;
+assignmentExpression : patternMatchingExpression;
 
 // Define the main block.
 mainFunction : mainPrototype NEWLINE? mainHeader NEWLINE? (mainStatement)+ NEWLINE?; 
@@ -97,9 +103,7 @@ patternMatchingExpression : patternMatchingTerm+;
 patternMatchingTerm : dollarSignTerm
                     | lambdaFunction
                     | generalFunctionCall
-                    | partiallyAppliedFunction
                     | patternMatchParen
-                    | assignmentStatement
                     | functionToMethod
                     | haskellFunctionName 
                     | prependTerm
@@ -123,15 +127,6 @@ ifStatementExpression : NEWLINE* LEFT_PAREN NEWLINE* patternMatchingExpression N
 ifTerm : IF;
 thenTerm : THEN;
 elseTerm : ELSE;
-// Handles an assignment expression.
-assignmentStatement : variableName assignmentOperator assignmentExpression;
-variableName : NAME ;
-assignmentOperator : EQUAL_SIGN;
-assignmentExpression : patternMatchingExpression;
-//Handle the partially applied function notation
-partiallyAppliedFunctionTerm : PARTIALLY_APPLIED_FUNCTION;
-// Partially applied functions in Scala need a special marker so handle that.
-partiallyAppliedFunction : PARTIALLY_APPLIED_FUNCTION;
 //Handle Prepend
 prependTerm : patternMatchParen colonTerm patternMatchParen;
 // Anonymous Function
@@ -240,7 +235,6 @@ MONAD_ARROW : '<-';
 TYPE_SEPARATOR : '->';  // Separates type in the function definition
 //RECURSIVE_MAIN : '((main))';
 MAIN_FUNCTION : 'main';
-PARTIALLY_APPLIED_FUNCTION : '()';
 INT_VAL : [-]?[0-9]+;       // Integer values
 INT_OP : '+' | '-' | '*' | '==' | '/=' | '>' | '<' | '<=' | '>=' ;
 TYPE_NAME : '[Int]' | 'Int' | '[Char]' | 'Char' | 'Bool';
@@ -250,7 +244,6 @@ UNIT_TYPE : '()';
 
 NEWLINE : '\r'? '\n' ;  // return newlines to parser (is end-statement signal)
 
-CAPITAL_LETTERS : ['A-Z]+;
 NAME : ['a-zA-Z0-9._]+;  // Name of Something
 //ANY_CHAR : ['a-zA-Z0-9._-0-9?*=><+:{}()|!@#$%^&*]+;
 

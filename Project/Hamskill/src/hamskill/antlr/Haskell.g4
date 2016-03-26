@@ -236,11 +236,15 @@ TYPE_SEPARATOR : '->';  // Separates type in the function definition
 //RECURSIVE_MAIN : '((main))';
 MAIN_FUNCTION : 'main';
 INT_VAL : [-]?[0-9]+;       // Integer values
-INT_OP : '+' | '-' | '*' | '==' | '/=' | '>' | '<' | '<=' | '>=' ;
+INT_OP : '+' | '-' | '*' | '==' | '>' | '<' | '<=' | '>=' ;
 TYPE_NAME : '[Int]' | 'Int' | '[Char]' | 'Char' | 'Bool';
 
-HASKELL_FUNCTION_NAME : 'putStrLn' | 'error' | 'putStr' | 'getLine' ;
+HASKELL_FUNCTION_NAME : 'putStrLn' | 'error' | 'putStr' | 'getLine' 
+                      | '`div`' | '`mod`' | '/=' ;
 UNIT_TYPE : '()';
+
+BIND_OPERATOR : '>>=';
+NOTHING : 'Nothing';
 
 NEWLINE : '\r'? '\n' ;  // return newlines to parser (is end-statement signal)
 

@@ -1361,6 +1361,9 @@ public class HaskellTokensToScala extends HaskellBaseListener {
             case "putStr": return "print";
             case "getLine" : return "scala.io.StdIn.readLine()";
             case "error" : return SCALA_ERROR_FUNCTION;
+            case "`div`" : return "/";
+            case "`mod`" : return "%";
+            case "/=" : return "!=";
         }
         return baseErrorMessage + "FUNCTION NAME.";
     }

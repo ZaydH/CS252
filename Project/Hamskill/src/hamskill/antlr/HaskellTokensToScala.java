@@ -107,21 +107,25 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      */
     private String SCALA_JUST_EQUIVALENT = "Some";
     /**
+     * 
+     */
+    private String SCALA_MAYBE_MONAD_NAME = "Option";
+    /**
      * Defines Scala's Monad "return" equivalent.
      */
-    private String SCALA_MONAD_RETURN_EQUIVALENT = "Option";
+    private String SCALA_MONAD_RETURN_EQUIVALENT = "yield";
     /**
      * Define the text that creates an immutable Scala variable.
      */
     private String SCALA_CREATE_IMMUTABLE_VARIABLE = "lazy val";
+//    /**
+//     * Defines the function name for Scala unboxing of a Monad.
+//     */
+//    private String SCALA_UNBOX_MONAD_FUNCTION_NAME = "get";
     /**
-     * Defines the function name for Scala unboxing of a Monad.
+     * For a Haskell "do" block, this is the Scala equivalent.
      */
-    private String SCALA_UNBOX_MONAD_FUNCTION_NAME = "get";
-    /**
-     * Scala function name that is the equivalent of the Haskell ">>=" bind operator.
-     */
-    private String SCALA_BIND_OPERATOR_FUNCTION = "bind";
+    private String SCALA_MONAD_DO_EQUIVALENT = "for";
     /**
      * Define the type name for the parameters.
      */
@@ -1159,6 +1163,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * <p>Handles the equivalent of "return" in Scala.</p>
      */
     @Override public void enterReturnStatement(HaskellParser.ReturnStatementContext ctx) { 
+        this.printIndent();
         fileContents.append(this.SCALA_MONAD_RETURN_EQUIVALENT);
         this.addLeftParenthesis();
     }
@@ -1173,17 +1178,40 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     /**
      * {@inheritDoc}
      *
+     * <p>When using pattern matching, the equivalent of "do" needs to be in parentheses
+     * when using pattern match.  This adds the left ("open") parenthesis.</p>
+     */
+    @Override public void enterDoBlock(HaskellParser.DoBlockContext ctx) {
+        this.incrementIndentLevel(false);
+        this.addLeftParenthesis();
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>When using pattern matching, the equivalent of "do" needs to be in parentheses
+     * when using pattern match.  This adds the right ("close") parenthesis.</p>
+     */
+    @Override public void exitDoBlock(HaskellParser.DoBlockContext ctx) { 
+        this.addRightParenthesis();
+        this.decrementIndentLevel(false);
+    }
+    /**
+     * {@inheritDoc}
+     *
      * <p>Creates/instantiates the Monad unboxed variable.</p>
      */
     @Override public void enterMonadUnboxing(HaskellParser.MonadUnboxingContext ctx) { 
-        fileContents.append(this.SCALA_CREATE_IMMUTABLE_VARIABLE).append(" ");
+        //fileContents.append(this.SCALA_CREATE_IMMUTABLE_VARIABLE).append(" ");
+        this.printIndent();
     }
     /**
      * {@inheritDoc}
      *
      * <p>The default implementation does nothing.</p>
      */
-    @Override public void exitMonadUnboxing(HaskellParser.MonadUnboxingContext ctx) { }
+    @Override public void exitMonadUnboxing(HaskellParser.MonadUnboxingContext ctx) { 
+        fileContents.append("\n");
+    }
     /**
      * {@inheritDoc}
      *
@@ -1197,16 +1225,41 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      *
      * <p>The default implementation does nothing.</p>
      */
-    @Override public void exitMonadVariableName(HaskellParser.MonadVariableNameContext ctx) {
-
-    }
+    @Override public void exitMonadVariableName(HaskellParser.MonadVariableNameContext ctx) { }
     /**
      * {@inheritDoc}
      *
      * <p>Adds Scala's equivalent of Haskell's left arrow "<-" operator.</p>
      */
     @Override public void enterMonadUnboxOperator(HaskellParser.MonadUnboxOperatorContext ctx) { 
-        fileContents.append(" = ");
+        fileContents.append(" <- ");
+    }
+    @Override public void enterDoWord(HaskellParser.DoWordContext ctx) {
+        fileContents.append(this.SCALA_MONAD_DO_EQUIVALENT).append(" ");
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitDoWord(HaskellParser.DoWordContext ctx) { }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void enterDoBlockUnboxings(HaskellParser.DoBlockUnboxingsContext ctx) {
+        fileContents.append("{\n");
+        this.incrementIndentLevel(false);
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override public void exitDoBlockUnboxings(HaskellParser.DoBlockUnboxingsContext ctx) { 
+        this.decrementIndentLevel(true);
+        fileContents.append("}\n");
     }
     /**
      * {@inheritDoc}
@@ -1230,26 +1283,25 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      */
     @Override public void exitMonadEvaluationExpression(HaskellParser.MonadEvaluationExpressionContext ctx) { 
         this.addRightParenthesis();
-        fileContents.append(".").append(SCALA_UNBOX_MONAD_FUNCTION_NAME).append("()");
     }
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override public void enterBindFunction(HaskellParser.BindFunctionContext ctx) {
-        fileContents.append(".");
-        fileContents.append(this.SCALA_BIND_OPERATOR_FUNCTION);
-        this.addLeftParenthesis();
-    }
-    /**
-     * {@inheritDoc}
-     *
-     * <p>Closes the function used for binding Monads.</p>
-     */
-    @Override public void exitBindFunction(HaskellParser.BindFunctionContext ctx) { 
-        this.addRightParenthesis();
-    }
+//    /**
+//     * {@inheritDoc}
+//     *
+//     * <p>The default implementation does nothing.</p>
+//     */
+//    @Override public void enterBindFunction(HaskellParser.BindFunctionContext ctx) {
+//        fileContents.append(".");
+//        fileContents.append(this.SCALA_BIND_OPERATOR_FUNCTION);
+//        this.addLeftParenthesis();
+//    }
+//    /**
+//     * {@inheritDoc}
+//     *
+//     * <p>Closes the function used for binding Monads.</p>
+//     */
+//    @Override public void exitBindFunction(HaskellParser.BindFunctionContext ctx) { 
+//        this.addRightParenthesis();
+//    }
     /**
      * {@inheritDoc}
      *
@@ -1257,7 +1309,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
      * (left) square bracket.</p>
      */
     @Override public void enterTypeMaybeMonad(HaskellParser.TypeMaybeMonadContext ctx) {
-        fileContents.append(this.SCALA_MONAD_RETURN_EQUIVALENT);
+        fileContents.append(this.SCALA_MAYBE_MONAD_NAME);
         fileContents.append("[");
     }
     /**

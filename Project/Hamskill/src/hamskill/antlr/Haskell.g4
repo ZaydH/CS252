@@ -109,7 +109,7 @@ nothingArgument : NOTHING;
 patternMatchingExpression : patternMatchingTerm+;
 patternMatchingTerm : dollarSignTerm
                     | lambdaFunction
-                    | bindExpression
+                    | doBlock
                     | generalFunctionCall
                     | patternMatchParen
                     | functionToMethod
@@ -126,7 +126,6 @@ patternMatchingTerm : dollarSignTerm
                     | caseTerm
                     | stringTerm
                     | returnStatement
-                    | monadUnboxOperator
                     | justStatement
                     | NAME ; //Name should always berun last since it the most general.
 // Handle an if then else statement
@@ -207,7 +206,10 @@ word : NAME;
 //stringWords : NAME;
 
 // Integer Monad
-monadUnboxing : monadVariableName monadUnboxOperator monadEvaluationExpression;
+doBlock : doWord doBlockUnboxings returnStatement;
+doWord : DO NEWLINE? ;
+doBlockUnboxings : (monadUnboxing)+;
+monadUnboxing : monadVariableName monadUnboxOperator monadEvaluationExpression NEWLINE;
 monadVariableName : NAME;
 monadUnboxOperator : MONAD_ARROW;
 monadEvaluationExpression : patternMatchingExpression;
@@ -215,9 +217,6 @@ monadEvaluationExpression : patternMatchingExpression;
 justStatement : JUST patternMatchingExpression;
 // Box a Monad generally
 returnStatement : RETURN patternMatchingExpression;
-// Handle monad chaining via bind.
-bindExpression : patternMatchParen (bindFunction)+;
-bindFunction : (BIND_OPERATOR patternMatchingExpression);
 
 //----------------------------------------------------------------------//
 //                      Definition of Tokens                            //

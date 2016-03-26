@@ -988,6 +988,36 @@ public interface HaskellListener extends ParseTreeListener {
 	 */
 	void exitWord(HaskellParser.WordContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HaskellParser#doBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterDoBlock(HaskellParser.DoBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#doBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitDoBlock(HaskellParser.DoBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#doWord}.
+	 * @param ctx the parse tree
+	 */
+	void enterDoWord(HaskellParser.DoWordContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#doWord}.
+	 * @param ctx the parse tree
+	 */
+	void exitDoWord(HaskellParser.DoWordContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#doBlockUnboxings}.
+	 * @param ctx the parse tree
+	 */
+	void enterDoBlockUnboxings(HaskellParser.DoBlockUnboxingsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#doBlockUnboxings}.
+	 * @param ctx the parse tree
+	 */
+	void exitDoBlockUnboxings(HaskellParser.DoBlockUnboxingsContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HaskellParser#monadUnboxing}.
 	 * @param ctx the parse tree
 	 */
@@ -1047,24 +1077,4 @@ public interface HaskellListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitReturnStatement(HaskellParser.ReturnStatementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link HaskellParser#bindExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterBindExpression(HaskellParser.BindExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HaskellParser#bindExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitBindExpression(HaskellParser.BindExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link HaskellParser#bindFunction}.
-	 * @param ctx the parse tree
-	 */
-	void enterBindFunction(HaskellParser.BindFunctionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link HaskellParser#bindFunction}.
-	 * @param ctx the parse tree
-	 */
-	void exitBindFunction(HaskellParser.BindFunctionContext ctx);
 }

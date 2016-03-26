@@ -248,5 +248,9 @@ perform_hamskillStd_and_hamskillPlus_test $base_filename
 base_filename="compare_ops"
 perform_hamskillStd_and_hamskillPlus_test $base_filename
 
+# Perform a test of the Maybe Monad
+base_filename="maybe_monad"
+perform_hamskillStd_and_hamskillPlus_test $base_filename "True"
+
 # This should be the last line in the testbench.  It checks the final results
 print_final_results

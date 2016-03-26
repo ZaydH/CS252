@@ -237,7 +237,7 @@ TYPE_SEPARATOR : '->';  // Separates type in the function definition
 MAIN_FUNCTION : 'main';
 INT_VAL : [-]?[0-9]+;       // Integer values
 INT_OP : '+' | '-' | '*' | '==' | '>' | '<' | '<=' | '>=' ;
-TYPE_NAME : '[Int]' | 'Int' | '[Char]' | 'Char' | 'Bool';
+TYPE_NAME : '[Int]' | 'Int' | '[Char]' | 'Char' | 'Bool' | 'String';
 
 HASKELL_FUNCTION_NAME : 'putStrLn' | 'error' | 'putStr' | 'getLine' 
                       | '`div`' | '`mod`' | '/=' ;

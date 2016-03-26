@@ -1,0 +1,16 @@
+not equal
+equal
+not_equal
+equal
+greater
+less than or equal
+less than or equal
+greater than or equal
+greater than or equal
+less than
+Greater than or equal
+Greater than or equal
+Less than
+Less THAN or equal
+greater than
+Less THAN or equal

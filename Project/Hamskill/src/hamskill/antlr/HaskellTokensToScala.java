@@ -1343,6 +1343,7 @@ public class HaskellTokensToScala extends HaskellBaseListener {
             case "[Int]": return SCALA_TYPE_NAME_LIST_INT;
             case "Bool": return SCALA_TYPE_NAME_BOOL;
             case "[Char]": return "String";
+            case "String": return "String";
             case "Char": return "Char";
             
         }

@@ -244,5 +244,9 @@ perform_hamskillStd_and_hamskillPlus_test $base_filename
 base_filename="simple_math"
 perform_hamskillStd_and_hamskillPlus_test $base_filename
 
+# Perform a test case for the boolean operators
+base_filename="compare_ops"
+perform_hamskillStd_and_hamskillPlus_test $base_filename
+
 # This should be the last line in the testbench.  It checks the final results
 print_final_results

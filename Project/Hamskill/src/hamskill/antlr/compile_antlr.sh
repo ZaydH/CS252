@@ -8,6 +8,7 @@ export PATH=$PATH:"/cygdrive/C/Program Files/Java/jdk1.7.0_79/bin/"
 #cd grammar
 if [ $# -eq 0 ]; then
 	$antlr4 Haskell.g4 -package hamskill.antlr
+	$antlr4 ScalaOutput.g4 -package hamskill.antlr
 else
 	$antlr4 $1 -package hamskill.antlr
 fi

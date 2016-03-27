@@ -2,11 +2,13 @@ package hamskill;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 //Import ANTLR's libraries
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.StringReader;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -40,7 +42,7 @@ public class HamskillMain {
     /**
      * If true, debug messages are print to the command line.
      */
-    private static final boolean DEBUG_PRINT = false;
+    static final boolean DEBUG_PRINT = false;
     
     /**
      * Stores whether this is Hamskill standard (using the Twitter library) or uses external Scala.
@@ -164,9 +166,40 @@ public class HamskillMain {
         if(!this.isHamskillStandard)
             throw new UnsupportedOperationException("The \"runScala\" method is only supported for HamSkill standard objects.");
         
+        /** Technique for redirecting System.out is borrowed from here: 
+         * 
+         * http://stackoverflow.com/questions/8708342/redirect-console-output-to-string-in-java
+         */
+        // Create a printStream where IO will direct to. 
+        ByteArrayOutputStream byteArrayOutStream = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(byteArrayOutStream);
+        
+        // Save the old print stream
+        PrintStream oldSysOut = System.out;
+
+        // Redirect to the new stream
+        System.setOut(printStream);       
+        
         // Compile run and output the Scala results.
         final Eval eval = new Eval();
         eval.apply(this.scalaCode.toString(),true);
+        
+        // Reset System.out
+        System.out.flush();
+        System.setOut(oldSysOut);
+        
+        // Get the Scala standard output as a String.
+        String scalaOutputString = byteArrayOutStream.toString();
+        
+        // In debug mode, print the output 
+        if(HamskillMain.DEBUG_PRINT)
+            System.out.println(scalaOutputString);
+        
+        
+        // Show what happened
+        ScalaOutput scalaOut = new ScalaOutput(scalaOutputString);
+        scalaOut.reformatToHaskell();
+        System.out.println(scalaOut.getHaskellOutputText() );
     }
     /**
      * Export the Scala code to a file.

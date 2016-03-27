@@ -36,6 +36,9 @@ function perform_hamskillStd_and_hamskillPlus_test {
 	haskell_output="haskellOut_${base_filename}.txt"
 	hamskill_output="hamskillStd_${base_filename}.txt"
 	hamskill_function="main" #Only main currently supported.
+	if [ "$#" -eq 2 ]; then
+		expected_output_file="expected_${base_filename}.txt"
+	fi
 	hamskill_test $test_file $haskell_output $hamskill_output $hamskill_function
 
 	#Test "filter_example.hs" using Hamskill+
@@ -206,7 +209,6 @@ hamskill_test $test_file $haskell_output $hamskill_output $hamskill_function
 
 #Test "map_example.hs" using Hamskill+
 hamskill_output="hamskill+_map_example.txt"
-expected_output_file="expected_map_example.txt"
 hamskill_test $test_file $haskell_output $hamskill_output
 
 
@@ -220,7 +222,6 @@ hamskill_test $test_file $haskell_output $hamskill_output $hamskill_function
 
 #Test "filter_example.hs" using Hamskill+
 hamskill_output="hamskill+_${base_filename}.txt"
-expected_output_file="expected_${base_filename}.txt"
 hamskill_test $test_file $haskell_output $hamskill_output
 
 
@@ -245,7 +246,7 @@ perform_hamskillStd_and_hamskillPlus_test $base_filename
 
 # Perform a test of the Maybe Monad
 base_filename="maybe_monad"
-perform_hamskillStd_and_hamskillPlus_test $base_filename "True"
+perform_hamskillStd_and_hamskillPlus_test $base_filename
 
 # This should be the last line in the testbench.  It checks the final results
 print_final_results

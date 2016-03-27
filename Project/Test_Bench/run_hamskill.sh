@@ -2,10 +2,10 @@
 
 # Verify the command line input quantities.OB
 if [ "$#" == 0 ]; then
-	echo"Zero input arguments provided.  A minimum of 1 and a maximum of 2 is required."
+	printf "Zero input arguments provided.  A minimum of 1 and a maximum of 2 is required."
 	exit -1
 elif [ "$#" -gt 2 ]; then
-	echo"Maximum number of HamSkill arguments is 2."  
+	printf "Maximum number of HamSkill arguments is 2."  
 	exit -1
 fi
 
@@ -41,7 +41,8 @@ if [ "$#" -eq 1 ]; then
         fi
 
 	#echo "${scalaObject}"
-	scala -cp . $scalaObject
+	scala -cp . $scalaObject | java -cp hamskill.jar hamskill.ScalaOutput
+	#java cfe hamskill.jar hamskill.ScalaOutput hamskill/ScalaOutput.class < scala -cp . $scalaObject
 
 	rm *.class
 fi

@@ -52,6 +52,18 @@ public class ScalaOutputBaseListener implements ScalaOutputListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNonSpaceSeparatedTerm(ScalaOutputParser.NonSpaceSeparatedTermContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNonSpaceSeparatedTerm(ScalaOutputParser.NonSpaceSeparatedTermContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterNewLineTerm(ScalaOutputParser.NewLineTermContext ctx) { }
 	/**
 	 * {@inheritDoc}

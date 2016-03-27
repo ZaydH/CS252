@@ -7,14 +7,14 @@
 grammar ScalaOutput;
 
 // Highest level of the parser.
-reformat : spaceSeparatedTerm*;
+reformat : (spaceSeparatedTerm | nonSpaceSeparatedTerm)*;
 spaceSeparatedTerm : singleTerm;
 singleTerm : parenthesesTerm 
            | list 
            | normalWord 
-           | monadReformatter 
-           | newLineTerm;
-            
+           | monadReformatter ;
+nonSpaceSeparatedTerm : newLineTerm;
+
 // Handle a newline
 newLineTerm: NEWLINE;
 
@@ -36,6 +36,7 @@ normalWord : GENERAL_WORD;
 
 
 //--------------------- Define the Tokens ---------------------------//
+
 NONE : 'None';
 SOME : 'Some';
 LEFT_PAREN : '(';
@@ -44,7 +45,7 @@ COMMA : ',';
 ARRAY_KEYWORD : 'Array';
 LIST_KEYWORD : 'List';
 
-GENERAL_WORD : ['a-zA-Z0-9._]+;  // Name of Something
+GENERAL_WORD : ['a-zA-Z0-9._-]+;  // Name of Something
 
 NEWLINE : '\r'? '\n' ;  // return newlines to parser (is end-statement signal)
 

@@ -38,6 +38,16 @@ public interface ScalaOutputListener extends ParseTreeListener {
 	 */
 	void exitSingleTerm(ScalaOutputParser.SingleTermContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ScalaOutputParser#nonSpaceSeparatedTerm}.
+	 * @param ctx the parse tree
+	 */
+	void enterNonSpaceSeparatedTerm(ScalaOutputParser.NonSpaceSeparatedTermContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ScalaOutputParser#nonSpaceSeparatedTerm}.
+	 * @param ctx the parse tree
+	 */
+	void exitNonSpaceSeparatedTerm(ScalaOutputParser.NonSpaceSeparatedTermContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ScalaOutputParser#newLineTerm}.
 	 * @param ctx the parse tree
 	 */

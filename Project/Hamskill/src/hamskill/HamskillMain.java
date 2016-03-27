@@ -174,7 +174,8 @@ public class HamskillMain {
         ByteArrayOutputStream byteArrayOutStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(byteArrayOutStream);
         
-        // Save the old print stream
+        // Save the old print stream.  
+        // This is needed to restore the normal System.out after the redirection.
         PrintStream oldSysOut = System.out;
 
         // Redirect to the new stream
@@ -199,7 +200,7 @@ public class HamskillMain {
         // Show what happened
         ScalaOutput scalaOut = new ScalaOutput(scalaOutputString);
         scalaOut.reformatToHaskell();
-        System.out.println(scalaOut.getHaskellOutputText() );
+        System.out.print(scalaOut.getHaskellOutputText() );
     }
     /**
      * Export the Scala code to a file.

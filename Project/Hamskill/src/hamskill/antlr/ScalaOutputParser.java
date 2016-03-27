@@ -20,12 +20,14 @@ public class ScalaOutputParser extends Parser {
 		NONE=1, SOME=2, LEFT_PAREN=3, RIGHT_PAREN=4, COMMA=5, ARRAY_KEYWORD=6, 
 		LIST_KEYWORD=7, GENERAL_WORD=8, NEWLINE=9, WS=10;
 	public static final int
-		RULE_reformat = 0, RULE_spaceSeparatedTerm = 1, RULE_singleTerm = 2, RULE_newLineTerm = 3, 
-		RULE_parenthesesTerm = 4, RULE_monadReformatter = 5, RULE_none = 6, RULE_somePhrase = 7, 
-		RULE_list = 8, RULE_listTerm = 9, RULE_normalWord = 10;
+		RULE_reformat = 0, RULE_spaceSeparatedTerm = 1, RULE_singleTerm = 2, RULE_nonSpaceSeparatedTerm = 3, 
+		RULE_newLineTerm = 4, RULE_parenthesesTerm = 5, RULE_monadReformatter = 6, 
+		RULE_none = 7, RULE_somePhrase = 8, RULE_list = 9, RULE_listTerm = 10, 
+		RULE_normalWord = 11;
 	public static final String[] ruleNames = {
-		"reformat", "spaceSeparatedTerm", "singleTerm", "newLineTerm", "parenthesesTerm", 
-		"monadReformatter", "none", "somePhrase", "list", "listTerm", "normalWord"
+		"reformat", "spaceSeparatedTerm", "singleTerm", "nonSpaceSeparatedTerm", 
+		"newLineTerm", "parenthesesTerm", "monadReformatter", "none", "somePhrase", 
+		"list", "listTerm", "normalWord"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
@@ -91,6 +93,12 @@ public class ScalaOutputParser extends Parser {
 		public SpaceSeparatedTermContext spaceSeparatedTerm(int i) {
 			return getRuleContext(SpaceSeparatedTermContext.class,i);
 		}
+		public List<NonSpaceSeparatedTermContext> nonSpaceSeparatedTerm() {
+			return getRuleContexts(NonSpaceSeparatedTermContext.class);
+		}
+		public NonSpaceSeparatedTermContext nonSpaceSeparatedTerm(int i) {
+			return getRuleContext(NonSpaceSeparatedTermContext.class,i);
+		}
 		public ReformatContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -112,17 +120,35 @@ public class ScalaOutputParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(25);
+			setState(28);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NONE) | (1L << SOME) | (1L << LEFT_PAREN) | (1L << ARRAY_KEYWORD) | (1L << LIST_KEYWORD) | (1L << GENERAL_WORD) | (1L << NEWLINE))) != 0)) {
 				{
-				{
-				setState(22);
-				spaceSeparatedTerm();
+				setState(26);
+				switch (_input.LA(1)) {
+				case NONE:
+				case SOME:
+				case LEFT_PAREN:
+				case ARRAY_KEYWORD:
+				case LIST_KEYWORD:
+				case GENERAL_WORD:
+					{
+					setState(24);
+					spaceSeparatedTerm();
+					}
+					break;
+				case NEWLINE:
+					{
+					setState(25);
+					nonSpaceSeparatedTerm();
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 				}
 				}
-				setState(27);
+				setState(30);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -163,7 +189,7 @@ public class ScalaOutputParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(28);
+			setState(31);
 			singleTerm();
 			}
 		}
@@ -191,9 +217,6 @@ public class ScalaOutputParser extends Parser {
 		public MonadReformatterContext monadReformatter() {
 			return getRuleContext(MonadReformatterContext.class,0);
 		}
-		public NewLineTermContext newLineTerm() {
-			return getRuleContext(NewLineTermContext.class,0);
-		}
 		public SingleTermContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -212,12 +235,12 @@ public class ScalaOutputParser extends Parser {
 		SingleTermContext _localctx = new SingleTermContext(_ctx, getState());
 		enterRule(_localctx, 4, RULE_singleTerm);
 		try {
-			setState(35);
+			setState(37);
 			switch (_input.LA(1)) {
 			case LEFT_PAREN:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(30);
+				setState(33);
 				parenthesesTerm();
 				}
 				break;
@@ -225,14 +248,14 @@ public class ScalaOutputParser extends Parser {
 			case LIST_KEYWORD:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(31);
+				setState(34);
 				list();
 				}
 				break;
 			case GENERAL_WORD:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(32);
+				setState(35);
 				normalWord();
 				}
 				break;
@@ -240,19 +263,51 @@ public class ScalaOutputParser extends Parser {
 			case SOME:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(33);
+				setState(36);
 				monadReformatter();
-				}
-				break;
-			case NEWLINE:
-				enterOuterAlt(_localctx, 5);
-				{
-				setState(34);
-				newLineTerm();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class NonSpaceSeparatedTermContext extends ParserRuleContext {
+		public NewLineTermContext newLineTerm() {
+			return getRuleContext(NewLineTermContext.class,0);
+		}
+		public NonSpaceSeparatedTermContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_nonSpaceSeparatedTerm; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ScalaOutputListener ) ((ScalaOutputListener)listener).enterNonSpaceSeparatedTerm(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ScalaOutputListener ) ((ScalaOutputListener)listener).exitNonSpaceSeparatedTerm(this);
+		}
+	}
+
+	public final NonSpaceSeparatedTermContext nonSpaceSeparatedTerm() throws RecognitionException {
+		NonSpaceSeparatedTermContext _localctx = new NonSpaceSeparatedTermContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_nonSpaceSeparatedTerm);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(39);
+			newLineTerm();
 			}
 		}
 		catch (RecognitionException re) {
@@ -284,11 +339,11 @@ public class ScalaOutputParser extends Parser {
 
 	public final NewLineTermContext newLineTerm() throws RecognitionException {
 		NewLineTermContext _localctx = new NewLineTermContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_newLineTerm);
+		enterRule(_localctx, 8, RULE_newLineTerm);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(37);
+			setState(41);
 			match(NEWLINE);
 			}
 		}
@@ -325,15 +380,15 @@ public class ScalaOutputParser extends Parser {
 
 	public final ParenthesesTermContext parenthesesTerm() throws RecognitionException {
 		ParenthesesTermContext _localctx = new ParenthesesTermContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_parenthesesTerm);
+		enterRule(_localctx, 10, RULE_parenthesesTerm);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(39);
+			setState(43);
 			match(LEFT_PAREN);
-			setState(40);
+			setState(44);
 			reformat();
-			setState(41);
+			setState(45);
 			match(RIGHT_PAREN);
 			}
 		}
@@ -371,21 +426,21 @@ public class ScalaOutputParser extends Parser {
 
 	public final MonadReformatterContext monadReformatter() throws RecognitionException {
 		MonadReformatterContext _localctx = new MonadReformatterContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_monadReformatter);
+		enterRule(_localctx, 12, RULE_monadReformatter);
 		try {
-			setState(45);
+			setState(49);
 			switch (_input.LA(1)) {
 			case NONE:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(43);
+				setState(47);
 				none();
 				}
 				break;
 			case SOME:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(44);
+				setState(48);
 				somePhrase();
 				}
 				break;
@@ -422,11 +477,11 @@ public class ScalaOutputParser extends Parser {
 
 	public final NoneContext none() throws RecognitionException {
 		NoneContext _localctx = new NoneContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_none);
+		enterRule(_localctx, 14, RULE_none);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(47);
+			setState(51);
 			match(NONE);
 			}
 		}
@@ -465,30 +520,30 @@ public class ScalaOutputParser extends Parser {
 
 	public final SomePhraseContext somePhrase() throws RecognitionException {
 		SomePhraseContext _localctx = new SomePhraseContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_somePhrase);
+		enterRule(_localctx, 16, RULE_somePhrase);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(49);
+			setState(53);
 			match(SOME);
-			setState(50);
-			match(LEFT_PAREN);
 			setState(54);
+			match(LEFT_PAREN);
+			setState(58);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NONE) | (1L << SOME) | (1L << LEFT_PAREN) | (1L << ARRAY_KEYWORD) | (1L << LIST_KEYWORD) | (1L << GENERAL_WORD) | (1L << NEWLINE))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NONE) | (1L << SOME) | (1L << LEFT_PAREN) | (1L << ARRAY_KEYWORD) | (1L << LIST_KEYWORD) | (1L << GENERAL_WORD))) != 0)) {
 				{
 				{
-				setState(51);
+				setState(55);
 				singleTerm();
 				}
 				}
-				setState(56);
+				setState(60);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(57);
+			setState(61);
 			match(RIGHT_PAREN);
 			}
 		}
@@ -532,49 +587,49 @@ public class ScalaOutputParser extends Parser {
 
 	public final ListContext list() throws RecognitionException {
 		ListContext _localctx = new ListContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_list);
+		enterRule(_localctx, 18, RULE_list);
 		int _la;
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(59);
+			setState(63);
 			_la = _input.LA(1);
 			if ( !(_la==ARRAY_KEYWORD || _la==LIST_KEYWORD) ) {
 			_errHandler.recoverInline(this);
 			} else {
 				consume();
 			}
-			setState(60);
+			setState(64);
 			match(LEFT_PAREN);
-			setState(66);
+			setState(70);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,4,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					setState(61);
+					setState(65);
 					listTerm();
-					setState(62);
+					setState(66);
 					match(COMMA);
 					}
 					} 
 				}
-				setState(68);
+				setState(72);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,4,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
 			}
-			setState(70);
+			setState(74);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NONE) | (1L << SOME) | (1L << LEFT_PAREN) | (1L << ARRAY_KEYWORD) | (1L << LIST_KEYWORD) | (1L << GENERAL_WORD) | (1L << NEWLINE))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NONE) | (1L << SOME) | (1L << LEFT_PAREN) | (1L << ARRAY_KEYWORD) | (1L << LIST_KEYWORD) | (1L << GENERAL_WORD))) != 0)) {
 				{
-				setState(69);
+				setState(73);
 				listTerm();
 				}
 			}
 
-			setState(72);
+			setState(76);
 			match(RIGHT_PAREN);
 			}
 		}
@@ -609,11 +664,11 @@ public class ScalaOutputParser extends Parser {
 
 	public final ListTermContext listTerm() throws RecognitionException {
 		ListTermContext _localctx = new ListTermContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_listTerm);
+		enterRule(_localctx, 20, RULE_listTerm);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(74);
+			setState(78);
 			singleTerm();
 			}
 		}
@@ -646,11 +701,11 @@ public class ScalaOutputParser extends Parser {
 
 	public final NormalWordContext normalWord() throws RecognitionException {
 		NormalWordContext _localctx = new NormalWordContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_normalWord);
+		enterRule(_localctx, 22, RULE_normalWord);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(76);
+			setState(80);
 			match(GENERAL_WORD);
 			}
 		}
@@ -666,26 +721,27 @@ public class ScalaOutputParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\fQ\4\2\t\2\4\3\t"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\fU\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4"+
-		"\f\t\f\3\2\7\2\32\n\2\f\2\16\2\35\13\2\3\3\3\3\3\4\3\4\3\4\3\4\3\4\5\4"+
-		"&\n\4\3\5\3\5\3\6\3\6\3\6\3\6\3\7\3\7\5\7\60\n\7\3\b\3\b\3\t\3\t\3\t\7"+
-		"\t\67\n\t\f\t\16\t:\13\t\3\t\3\t\3\n\3\n\3\n\3\n\3\n\7\nC\n\n\f\n\16\n"+
-		"F\13\n\3\n\5\nI\n\n\3\n\3\n\3\13\3\13\3\f\3\f\3\f\2\2\r\2\4\6\b\n\f\16"+
-		"\20\22\24\26\2\3\3\2\b\tN\2\33\3\2\2\2\4\36\3\2\2\2\6%\3\2\2\2\b\'\3\2"+
-		"\2\2\n)\3\2\2\2\f/\3\2\2\2\16\61\3\2\2\2\20\63\3\2\2\2\22=\3\2\2\2\24"+
-		"L\3\2\2\2\26N\3\2\2\2\30\32\5\4\3\2\31\30\3\2\2\2\32\35\3\2\2\2\33\31"+
-		"\3\2\2\2\33\34\3\2\2\2\34\3\3\2\2\2\35\33\3\2\2\2\36\37\5\6\4\2\37\5\3"+
-		"\2\2\2 &\5\n\6\2!&\5\22\n\2\"&\5\26\f\2#&\5\f\7\2$&\5\b\5\2% \3\2\2\2"+
-		"%!\3\2\2\2%\"\3\2\2\2%#\3\2\2\2%$\3\2\2\2&\7\3\2\2\2\'(\7\13\2\2(\t\3"+
-		"\2\2\2)*\7\5\2\2*+\5\2\2\2+,\7\6\2\2,\13\3\2\2\2-\60\5\16\b\2.\60\5\20"+
-		"\t\2/-\3\2\2\2/.\3\2\2\2\60\r\3\2\2\2\61\62\7\3\2\2\62\17\3\2\2\2\63\64"+
-		"\7\4\2\2\648\7\5\2\2\65\67\5\6\4\2\66\65\3\2\2\2\67:\3\2\2\28\66\3\2\2"+
-		"\289\3\2\2\29;\3\2\2\2:8\3\2\2\2;<\7\6\2\2<\21\3\2\2\2=>\t\2\2\2>D\7\5"+
-		"\2\2?@\5\24\13\2@A\7\7\2\2AC\3\2\2\2B?\3\2\2\2CF\3\2\2\2DB\3\2\2\2DE\3"+
-		"\2\2\2EH\3\2\2\2FD\3\2\2\2GI\5\24\13\2HG\3\2\2\2HI\3\2\2\2IJ\3\2\2\2J"+
-		"K\7\6\2\2K\23\3\2\2\2LM\5\6\4\2M\25\3\2\2\2NO\7\n\2\2O\27\3\2\2\2\b\33"+
-		"%/8DH";
+		"\f\t\f\4\r\t\r\3\2\3\2\7\2\35\n\2\f\2\16\2 \13\2\3\3\3\3\3\4\3\4\3\4\3"+
+		"\4\5\4(\n\4\3\5\3\5\3\6\3\6\3\7\3\7\3\7\3\7\3\b\3\b\5\b\64\n\b\3\t\3\t"+
+		"\3\n\3\n\3\n\7\n;\n\n\f\n\16\n>\13\n\3\n\3\n\3\13\3\13\3\13\3\13\3\13"+
+		"\7\13G\n\13\f\13\16\13J\13\13\3\13\5\13M\n\13\3\13\3\13\3\f\3\f\3\r\3"+
+		"\r\3\r\2\2\16\2\4\6\b\n\f\16\20\22\24\26\30\2\3\3\2\b\tQ\2\36\3\2\2\2"+
+		"\4!\3\2\2\2\6\'\3\2\2\2\b)\3\2\2\2\n+\3\2\2\2\f-\3\2\2\2\16\63\3\2\2\2"+
+		"\20\65\3\2\2\2\22\67\3\2\2\2\24A\3\2\2\2\26P\3\2\2\2\30R\3\2\2\2\32\35"+
+		"\5\4\3\2\33\35\5\b\5\2\34\32\3\2\2\2\34\33\3\2\2\2\35 \3\2\2\2\36\34\3"+
+		"\2\2\2\36\37\3\2\2\2\37\3\3\2\2\2 \36\3\2\2\2!\"\5\6\4\2\"\5\3\2\2\2#"+
+		"(\5\f\7\2$(\5\24\13\2%(\5\30\r\2&(\5\16\b\2\'#\3\2\2\2\'$\3\2\2\2\'%\3"+
+		"\2\2\2\'&\3\2\2\2(\7\3\2\2\2)*\5\n\6\2*\t\3\2\2\2+,\7\13\2\2,\13\3\2\2"+
+		"\2-.\7\5\2\2./\5\2\2\2/\60\7\6\2\2\60\r\3\2\2\2\61\64\5\20\t\2\62\64\5"+
+		"\22\n\2\63\61\3\2\2\2\63\62\3\2\2\2\64\17\3\2\2\2\65\66\7\3\2\2\66\21"+
+		"\3\2\2\2\678\7\4\2\28<\7\5\2\29;\5\6\4\2:9\3\2\2\2;>\3\2\2\2<:\3\2\2\2"+
+		"<=\3\2\2\2=?\3\2\2\2><\3\2\2\2?@\7\6\2\2@\23\3\2\2\2AB\t\2\2\2BH\7\5\2"+
+		"\2CD\5\26\f\2DE\7\7\2\2EG\3\2\2\2FC\3\2\2\2GJ\3\2\2\2HF\3\2\2\2HI\3\2"+
+		"\2\2IL\3\2\2\2JH\3\2\2\2KM\5\26\f\2LK\3\2\2\2LM\3\2\2\2MN\3\2\2\2NO\7"+
+		"\6\2\2O\25\3\2\2\2PQ\5\6\4\2Q\27\3\2\2\2RS\7\n\2\2S\31\3\2\2\2\t\34\36"+
+		"\'\63<HL";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

@@ -43,12 +43,7 @@ public class ScalaOutput {
         // Walk the AST
         haskellOutput = new ScalaOutputTokensToHaskellFormat();
         walker.walk(this.haskellOutput, tree);
-        
-        // In debug mode, print the scala code.
-        if(HamskillMain.DEBUG_PRINT){
-            //Print out the scala code for debug purposes.
-            System.out.println(this.haskellOutput.toString());
-        }
+
     }
     
     /**

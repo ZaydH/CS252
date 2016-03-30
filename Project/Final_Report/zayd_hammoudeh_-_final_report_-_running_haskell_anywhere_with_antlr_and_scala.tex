@@ -52,7 +52,7 @@ In this project, I will implement, \emph{HamSkill}, which is a transpiler from H
 
 When designing and implementing this project, there were four primary goals:
 
-\begin{itemize}
+\begin{enumerate}
 
 \item \textbf{Runnable in the Java Virtual Machine} - As explained in section~\ref{sec:jvm}, Java's Virtual Machine enables significant machine independence, which Haskell does not currently enjoy.
 
@@ -62,7 +62,7 @@ When designing and implementing this project, there were four primary goals:
 
 \item \textbf{Human Readable Output Code} - A transpiler is any program that takes source code from one programming languages and outputs as code in another programming language with a similar level of abstraction \cite{jansen_2015}.  To enable increased reuse of the outputted code, HamSkill will use proper indenting, newlines, etc. to maximize readability the generated output.  While this is not a requirement for the complete system to work properly, it can enhance the potential of the tool.
 
-\end{itemize}
+\end{enumerate}
 
 \section{\textit{HamSkill}'s Software Architecture}\label{sec:hamskillSoftwareArchitecture}
 
@@ -97,9 +97,9 @@ A grammar is a formal description of language; it is based off the concept of a 
 
 This project utilizes two separate grammars namely: \texttt{Haskell} and \texttt{ScalaOutput}.  They are described in the following two subsections.
 
-\myparagraph{Haskell Grammar} 
+\myparagraph{\texttt{Haskell} Grammar}\label{sec:haskellG4}
 
-The Haskell parsing grammar is stored in a file named "\texttt{Haskell.g4}."  This grammar defines both the tokens and abstract syntax tree for supported Haskell code.  Some of Haskell features it supports include:
+The \texttt{Haskell} parsing grammar is stored in a file named "\texttt{Haskell.g4}."  This grammar defines both the tokens and abstract syntax tree for supported Haskell code.  Some of Haskell language features that are supported by this grammar include:
 
 \begin{itemize}
    \item \texttt{case} Statement
@@ -113,9 +113,9 @@ The Haskell parsing grammar is stored in a file named "\texttt{Haskell.g4}."  Th
 
 For the complete feature set as well as specific Haskell syntax requirements, see section~\ref{sec:hamskillFeatures}.
 
-\myparagraph{ScalaOutput Grammar} 
+\myparagraph{\texttt{ScalaOutput} Grammar} 
 
-As mentioned in section~\ref{sec:keyProjectRequirements}, one of the key requirements of this project was that the outputs from Haskell and HamSkill should be identical.  Figure~\ref{fig:printListHaskell} and~\ref{fig:printListScala} show the code to print a list containing ``2", ``3", and ``4'' in Haskell and Scala respectively.  Note that the subsequent lines should the results of the print statement for the two languages are very different.
+As mentioned in section~\ref{sec:keyProjectRequirements}, one of the key requirements of this project was that the outputs from Haskell and HamSkill should be identical.  Figure~\ref{fig:printListHaskell} and~\ref{fig:printListScala} show the code to print a list containing ``2", ``3", and ``4'' in Haskell and Scala respectively.  Note that the subsequent lines which show the very different console outputs for lists that are identical.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -141,7 +141,7 @@ The \texttt{ScalaOutput} grammar (contained in the file "\texttt{ScalaOutput.g4}
 
 \subsubsection{ANTLR Classes}
 
-Programs that use ANTLR do not generally operate directly on the grammar.  Rather, the grammar is converted by ANTLR into a set of Java files; given an example grammar, \emph{GrammarName.g4},  ANTLR would create the following files:
+Programs that use ANTLR do not generally operate directly on the grammar.  Rather, the grammar is converted by ANTLR into a set of Java classes; given an example grammar, \emph{GrammarName.g4},  ANTLR would create the following files:
 
 \begin{itemize}
 	\item \emph{GrammarName}Lexer.java - This class is the the lexer definition for the input grammar file.  It also extends ANTLR's base Lexer class.
@@ -151,14 +151,31 @@ Programs that use ANTLR do not generally operate directly on the grammar.  Rathe
 	\item \emph{GrammarName}.tokens - Assigns a token type (e.g. integer, identifier, floating point number etc.) to each token in the input grammar file.
 	
 	\item \emph{GrammarName}Listener.java \& \emph{GrammarName}BaseListener.java - ANTLR builds applies the grammar to a text input to build an Abstract Syntax Tree (AST).  While walking the tree, ANTLR fires events that can be captured by a listener\cite{antlrDefinitiveReference}.
+	
 \end{itemize}
 
 Most programs that want to use ANTLR override the functions in the file \emph{GrammarName}BaseListener.java.
 
 
-\myparagraph{HaskellTokensToScala}
+\myparagraph{\texttt{HaskellTokensToScala}}
+
+The class ``\texttt{HaskellTokensToScala}" overrides some of the methods ANTLR auto-generated in the file ``\texttt{HaskellBaseListener.java}"; note that all of these methods are derived from the grammar ``\texttt{Haskell.g4}" described in section~\ref{sec:haskellG4}.
 
 \myparagraph{ScalaOutputTokensToHaskellFormat}
+
+Similar to the \texttt{HaskellTokensToScala} class, the class, ``\texttt{ScalaOutput}" extends the ANTLR auto-generated class, ``\texttt{ScalaOutputBaseListener}".
+
+The listeners in this class are primarily transforming for two different categories of Scala outputs.  They are:
+
+\begin{itemize}
+
+\item \textbf{Lists} - As shown in figures~\ref{fig:printListHaskell} and~\ref{fig:printListScala}, the console output of lists in Scala and Haskell are significantly different.  The methods in this class coupled with the \texttt{ScalaOutput} grammar convert printed lists from Scala to Haskell format.
+
+\item \textbf{\texttt{Maybe}} Monad - The Scala equivalent of Haskell's \texttt{Maybe} monad is named \texttt{Option}.  While the syntax for the two are similar, they are not identical.  For example, \texttt{Just} and \texttt{Nothing} in Haskell are \texttt{Some} and \texttt{None} in Scala.  The conversion from Scala format to Haskell is handled by this class.
+
+\end{itemize}
+
+Any other Scala console outputs that do not fall into these two categories are passed through unchanged.
 
 
 \subsection{Transpiler Output Language: Scala}
@@ -175,15 +192,41 @@ As mentioned previously, a transpiler takes source code from one programming lan
 
 \end{itemize}
 
-The language that best fit all three of these criteria is Scala, which is a functional language which can be fully run inside the JVM \cite{whatIsScala}. What is more, it natively supports many of Haskell's core features including: functions written in a pattern matching style, immutability of objects, currying, partially applied functions, lazy evaluation, static typing, etc.  One of the disadvantages of Scala is its weaker type inference in comparison to Haskell; due to this specific requirements were placed on the requirements of the Haskell dialect supported by Hamskill as described in section \ref{sec:hamskillFeatures}.
+The language that best fit all three of these criteria is Scala, which is a functional language which can be fully run inside the JVM \cite{whatIsScala}. What is more, it natively supports many of Haskell's core features including: functions written in a pattern matching style, immutability of objects, currying, partially applied functions, lazy evaluation, static typing, etc.  One of the disadvantages of Scala is its weaker type inference in comparison to Haskell; due to this specific requirements were placed on the requirements of the Haskell dialect supported by Hamskill as described in section \ref{sec:hamskillFeatures}.  It is also important to note that the author has had a personal predisposed interest in learning Scala given its extensive support by Apache Spark.  As such, given the "personal interest" requirement mentioned previously, the selection of Scala for this project became an even more obvious choice.
 
-It is also important to note that the author has had a personal predisposed interest in learning Scala given its extensive support by Apache Spark.  As such, given the "personal interest" requirement mentioned previously, the selection of Scala for this project became an even more obvious choice.
+HamSkill implements two different schemes for running the transpiled Scala.  These two approaches, \textit{HamSkill} Standard and \textit{HamSkill}+ are described in the follow subsections.
 
 \myparagraph{\textit{HamSkill} Standard}
 
+Since Scala is a compiled language, it does not lend itself tremendously well to Java runtime compilation and execution.  To achieve this functionality, I leveraged Twitter's \texttt{util-eval} library, which allows runtime compilation and execution of Scala code entirely within a Java program \cite{githubTwitterEvalUtil}.  The advantages and disadvantages of using  this library are:
+
+\begin{itemize}
+
+\item \textbf{Advantages}:
+
+\begin{enumerate}
+
+\item \textbf{Reduced JVM Requirements} - Twitter's \texttt{util-eval} library is a JAR file that only requires the presence of Scala compile and main library to run.  Hence, this eliminates the need for the user to have Scala installed in their environment.  This addresses one of the key requirements enumerated in section~\ref{sec:keyProjectRequirements}.
+
+\item \textbf{Simplified Usage} - When Hamskill Standard is used, only the \texttt{main} method in the \texttt{HaskellMain} Java class needs to be called to import the Haskell code, transpile it to Scala, compile and run the Scala code, and then post-process the output.  \textit{Hamskill}+ requires three calls to perform the same action.
+
+\end{enumerate}
+
+\item \textbf{Disadvantages}:
+
+\begin{enumerate}
+
+\item \textbf{Reduced Feature Set} - The \texttt{util-eval} library does not support all Scala features.  An example of a missing feature is \texttt{readLine} which takes console inputs.
+
+\item \textbf{Reliant on Third Party Developers} - As mentioned previously, \texttt{util-eval} was developed by Twitter.  Hence, it can be deprecated at any time as was previously planned \cite{deprecateUtilEval}.  While the tool is open-source, picking up a dropped project introduces an additional set of complications.
+
+\end{enumerate}
+
+\end{itemize}
+
 \myparagraph{\textit{HamSkill}+}
 
-\section{HamSkill Features}\label{sec:hamskillFeatures}
+\section{Haskell Features Supported by \textit{HamSkill}}\label{sec:hamskillFeatures}
 
 This section enumerates the Haskell features that are supported by HamSkill.  It also describes any formatting requirements that may apply to these features.
 
@@ -226,6 +269,8 @@ Scala also supports ``call-by-name" to achieve laziness of function parameters. 
 \emph{HamSkill} will only support a select subset of Haskell's available types.  The list of planned types are: {\tt Bool}, {\tt Integer} (i.e. bounded), and {\tt List} (currently only finite lists are planned, but that may change depending on the complexity of the implementation).
 
 While implementing floating point numbers would not add substantial complexity at a basic level, ensuring that the floating point behavior of \emph{HamSkill} (i.e. Scala) and Haskell are identical is beyond the scope of this project.
+
+\subsection{\texttt{main} Function}
 
 \subsection{Conversion from Functions to Methods}
 
@@ -338,7 +383,7 @@ There is an additional function in the \texttt{bash} test bench named ``\texttt{
 
 \section{Conclusions}
 
-
+\textit{HamSkill} provides a foundation for running a dialect of Haskell inside the JVM.  All of the original key features outlined in the proposal were implemented as well as additional features including Monads and the Scala output reformatter.  While \textit{HamSkill} does have limitation as all languages do (in particular those with a scope as limited as this), it is viewed by the development team as a very successful project that has exceeded our expectations.
 
 \pagebreak
 \bibliographystyle{plainurl}

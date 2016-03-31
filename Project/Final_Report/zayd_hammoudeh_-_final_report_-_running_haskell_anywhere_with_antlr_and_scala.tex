@@ -169,7 +169,7 @@ Most programs that want to use ANTLR override the functions in the file \emph{Gr
 
 The class ``\texttt{HaskellTokensToScala}" overrides some of the methods ANTLR auto-generated in the file ``\texttt{HaskellBaseListener.java}"; note that all of these methods are derived from the grammar ``\texttt{Haskell.g4}" described in section~\ref{sec:haskellG4}.  Note that it is the Java code in this file that performs the actual transpilation from Haskell to Scala.
 
-\myparagraph{ScalaOutputTokensToHaskellFormat}\label{sec:scalaOutputFunctionality}
+\myparagraph{\texttt{ScalaOutputTokensToHaskellFormat}}\label{sec:scalaOutputFunctionality}
 
 Similar to the \texttt{HaskellTokensToScala} class, the class, ``\texttt{ScalaOutput}" extends the ANTLR auto-generated class, ``\texttt{ScalaOutputBaseListener}".
 
@@ -286,7 +286,7 @@ Currently, \textit{HamSkill} only supports a single Haskell file at a time.  If 
 
 \subsection{Functions}
 
-Functions written in Haskell can be interpretted by \textit{HamSkill}.  Figure~\ref{fig:myFuncDefinition} is a function from the \textit{HamSkill} testcase named ``\texttt{simple\_function\_call.hs}".
+Functions written in Haskell can be interpretted by \textit{HamSkill}.  Figure~\ref{fig:myFunctionHaskell} is a function from the \textit{HamSkill} testcase named ``\texttt{simple\_function\_call.hs}".
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -295,7 +295,7 @@ myFunc :: [Int] -> Int -> Int
 myFunc x y = 3 + 5
 \end{lstlisting}
 \end{mdframed}
-\caption{Simple \textit{HamSkill} Function}\label{fig:myFuncDefinition}
+\caption{Simple \textit{HamSkill} Function}\label{fig:myFunctionHaskell}
 \end{figure}
 
 The following subsections enumerate the requirements a Haskell function must satisfy to be supported by \textit{HamSkill}.
@@ -345,7 +345,7 @@ If the user wants to define subvariables or execute multiple commands for a sing
 
 Recursion is supported by \textit{HamSkill}; however, there are requirements on how function function parameters must be specified as explained in section~\ref{sec:nestedFunctionCalls}.
 
-Figure~\ref{fig:functionFactorial} is a recursive function that adds all elements in a list; note that this function is in the \textit{HamSkill} test case named ``\texttt{addList.hs}".
+Figures~\ref{fig:functionZaydFoldr} and~\ref{fig:functionAddList} are recursive functions supported by \textit{HamSkill}; note that the function in figure~\ref{fig:functionAddList} is in the \textit{HamSkill} test case named ``\texttt{addList.hs}".
 
 \begin{tiny}
 \begin{figure}[H]
@@ -356,10 +356,9 @@ addList [] = 0
 addList (x:xs) = x + (((addList xs)))
 \end{lstlisting}
 \end{mdframed}
-\caption{Executing the Scala Code and Pipe to \texttt{ScalaOutput}}\label{fig:functionFactorial}
+\caption{Recursive Haskell Function to Add All Integers in a List}\label{fig:functionAddList}
 \end{figure}
 \end{tiny}
-
 
 \subsubsection{Empty Line at the End of the File}
 
@@ -369,8 +368,88 @@ After the last function in the file, there must be at least a single empty line.
 
 Every Haskell file that is run in either \textit{HamSkill} Standard or \textit{HamSkill}+ must have a \texttt{main} function.  This function is sole entry point into the HamSkill function.  As with all functions, this method must have a function prototype.
 
-Unlike other functi
+Unlike other functions, multiple distinct statements may appear in the main block; these statements may even use the syntax ``\texttt{<-}" as long as they are being used to unbox a Haskell \texttt{IO String} object.
 
+Figure~\ref{fig:functionHaskellMainConsoleInput} is a recursive, multi-instruction \texttt{main} function that supports taking text inputs from the console, and then prints them to the screen.  This figure also shows the special syntax required when recursing on main where the function name must be surrounded by triple parentheses (i.e. ``\texttt{(((main)))}").  This was done to simplify the parsing to let HamSkill know that this is a recursive call and that when converting this code to Scala, it must pass it an argument as shown in figure~\ref{fig:functionScalaMainConsoleInput}; this \texttt{main} recursive syntax is only supported within the \texttt{main} method itself.
+
+\begin{tiny}
+\begin{figure}[H]
+\begin{mdframed}
+\begin{lstlisting}[language=Haskell]
+main :: IO ()
+main = do 
+     x <- getLine 
+     putStrLn $ x
+     if (length x == 0) 
+     then 
+          (return () )
+     else
+          ( (((main))) )
+\end{lstlisting}
+\end{mdframed}
+\caption{Haskell Function That Takes and Prints Console Inputs}\label{fig:functionHaskellMainConsoleInput}
+\end{figure}
+\end{tiny}
+
+\begin{tiny}
+\begin{figure}[H]
+\begin{mdframed}
+\begin{lstlisting}[language=scala]
+  def main(args : Array[String]){
+    lazy val x = scala.io.StdIn.readLine();
+     println (x)
+     if((x).length() == 0)
+      {
+         return;
+      }
+      else{
+         main(args)
+      }
+  } // End of function
+\end{lstlisting}
+\end{mdframed}
+\caption{\textit{HamSkill} Generated Scala Code to Take and Print Console Inputs}\label{fig:functionScalaMainConsoleInput}
+\end{figure}
+\end{tiny}
+
+Note that the code shown in figure~\ref{fig:} is only supported in \textit{HamSkill}+.
+
+\subsection{Currying}\label{sec:currying}
+
+Haskell is a fully curried language \cite{learnYouAHaskell}.  In contrast, a Scala function's prototype must be specially formatted to support currying by default. Figure~\ref{fig:myFuncInScalaNoCurrying} shows Scala code generated by \textit{HamSkill} with currying disabled (note the Haskell version of ``\texttt{myFunc}" is shown figure~\ref{fig:myFunctionHaskell}); in contrast, figure~\ref{fig:myFuncInScalaWithCurrying} shows the \textit{HamSkill} generated Scala code with currying enabled.  Notice that when currying is enabled, each of the function parameter is inside its own set of parentheses.
+
+\begin{tiny}
+\begin{figure}[H]
+\begin{mdframed}
+\begin{lstlisting}[basicstyle=\small, language=scala]
+  def myFunc(___0___ : => Array[Int], ___1___ : => Int) : 
+                           Int = (___0___, ___1___) match {
+      case (x, y) => 3 + 5
+  } 
+\end{lstlisting}
+\end{mdframed}
+\caption{\textit{HamSkill} Generated Scala Code for Function \texttt{myFunc} with \textbf{No} Currying}\label{fig:myFuncInScalaNoCurrying}
+\end{figure}
+\end{tiny}
+
+\begin{tiny}
+\begin{figure}[H]
+\begin{mdframed}
+\begin{lstlisting}[basicstyle=\small, language=scala]
+  def myFunc(___0___ : => Array[Int], ___1___ : => Int) : Int = (___0___, ___1___) match {
+      case (x, y) => 3 + 5
+  } 
+\end{lstlisting}
+\end{mdframed}
+\caption{\textit{HamSkill} Generated Scala Code for Function \texttt{myFunc} \textbf{with} Currying}\label{fig:myFuncInScalaWithCurrying}
+\end{figure}
+\end{tiny}  
+
+\subsection{Supported Types}\label{sec:supportedTypes}
+
+\emph{HamSkill} only supports a select subset of Haskell's available types, namely: \texttt{Bool}, \texttt{\tt Integer} (i.e. bounded), and finite \texttt{List}s.
+
+While implementing floating point numbers would not add substantial complexity at a basic level, ensuring that the floating point behavior of \emph{HamSkill} (i.e. Scala) and Haskell are identical is beyond the scope of this project.
 
 \subsection{Immutability in Scala}\label{sec:immutabilityScala}
 
@@ -406,11 +485,6 @@ def lazyTime(){
 
 Scala also supports ``call-by-name" to achieve laziness of function parameters.  However, this feature is not truly lazy as it will recalculate the value each time the parameter is used in the function.  This limitation often degrades the overall the performance; for this reason, I do not plan to implement laziness in \emph{HamSkill} across functions.
 
-\subsection{Supported Types}\label{sec:supportedTypes}
-
-\emph{HamSkill} will only support a select subset of Haskell's available types.  The list of planned types are: {\tt Bool}, {\tt Integer} (i.e. bounded), and {\tt List} (currently only finite lists are planned, but that may change depending on the complexity of the implementation).
-
-While implementing floating point numbers would not add substantial complexity at a basic level, ensuring that the floating point behavior of \emph{HamSkill} (i.e. Scala) and Haskell are identical is beyond the scope of this project.
 
 
 \subsection{Conversion from Functions to Methods}
@@ -491,6 +565,8 @@ Scala and Haskell are both functional programming languages; one important conse
 There is significant similarity between a Lamda function in Haskell and an anonymous function in Scala.  One primary difference is that Scala requires the developer to specify the types of the parameters in the anonymous function while Scala does not. For this project, I will implement support for anonymous functions either as parameters to other functions or for support for an operation such as folding or filtering a list. 
 
 \subsection{Maybe Monad Support}
+
+\subsection{Preserving Comments}\label{sec:preservingComments}
 
 \section{\textit{HamSkill} Testing Overview}
 

@@ -35,9 +35,17 @@ with ANTLR and Scala\\[1in]
 
 \maketitle
 
+\pagenumbering{roman}
+
 \tableofcontents{\protect\newpage}
 
+\listoffigures
+\newpage
+ 
+\pagenumbering{arabic}
+
 \renewcommand\thesection{\arabic{section}}
+
 \section{Running in the Java Virtual Machine}\label{sec:jvm}
 
 C/C++ are two of the most commonly used languages when the goal is maximum performance.  However, C/C++'s ``write once, compile anywhere" paradigm limits its portability.  In contrast, the near ubiquity of the Java Virtual Machine (JVM) allows Java to be ``write once, run anywhere."  
@@ -249,7 +257,7 @@ java -jar hamskill.jar "$@"
 scalac $scalaSrcFile
 \end{lstlisting}
 \end{mdframed}
-\caption{Executing the Transpilation for \texttt{HamSkill}+}\label{fig:compileScala}
+\caption{Executing the Transpiled Code in \texttt{HamSkill}+}\label{fig:compileScala}
 \end{figure}
 
 \item \textbf{Execute the Transpiled Scala Code} - The \texttt{bash} command to run a compiled Scala class is simply ``\texttt{scala}" as shown in figure~\ref{fig:runScalaAndConvertOutput}.  Note that ``\texttt{\$scalaSrcFile}" is the filename where the transpiled Scala code was written.
@@ -261,7 +269,7 @@ scala -cp . $scalaObject
           | java -cp hamskill.jar hamskill.ScalaOutput
 \end{lstlisting}
 \end{mdframed}
-\caption{Executing the Scala Code and Pipe to \texttt{ScalaOutput}}\label{fig:runScalaAndConvertOutput}
+\caption{Executing the Scala Code and Piping to \texttt{ScalaOutput}}\label{fig:runScalaAndConvertOutput}
 \end{figure}
 
 \item \textbf{Pipe Scala Output to the \texttt{ScalaOutput} Class} - The console output of the Scala code is piped (``\texttt{|}") into the standard Java class \texttt{ScalaOutput} as shown in figure~\ref{fig:runScalaAndConvertOutput}.  As explained in section~\ref{sec:scalaOutputFunctionality}, this class performs any necessary transformations on the console outputs and then prints them to the console as if the original code had been run in Haskell.
@@ -287,7 +295,7 @@ myFunc :: [Int] -> Int -> Int
 myFunc x y = 3 + 5
 \end{lstlisting}
 \end{mdframed}
-\caption{Executing the Scala Code and Pipe to \texttt{ScalaOutput}}\label{fig:myFuncDefinition}
+\caption{Simple \textit{HamSkill} Function}\label{fig:myFuncDefinition}
 \end{figure}
 
 The following subsections enumerate the requirements a Haskell function must satisfy to be supported by \textit{HamSkill}.
@@ -296,7 +304,7 @@ The following subsections enumerate the requirements a Haskell function must sat
 
 All functions (excluding partially applied functions described in section~\ref{sec:partiallyAppliedFunctions}) must have a valid function prototype.  Note that only a subset of Haskell's base classes are supported (see section \ref{sec:supportedTypes} for the list).  Note that type variables (even if they map to a supported type) are not supported.
 
-\subsubsection{Pattern Matching}
+\subsubsection{Pattern Matching}\label{sec:supportedPatternMatching}
 
 As shown in figure~\ref{fig:myFuncDefinition}, pattern matching of function variables is supported.  Special pattern matching cases that HamSkill can handle include:
 
@@ -310,7 +318,7 @@ As shown in figure~\ref{fig:myFuncDefinition}, pattern matching of function vari
 
 \end{itemize}
 
-Figure~\ref{fig:functionZaydFoldr} is a function from the \textit{HamSkill} test case ``" that uses all three of the previously mentioned special pattern matching cases.
+Figure~\ref{fig:functionZaydFoldr} is a function from the \textit{HamSkill} test case ``" that uses three of the four the previously mentioned special pattern matching cases.
 
 \begin{tiny}
 \begin{figure}[H]
@@ -321,7 +329,7 @@ zayd_foldr _ acc [] = acc
 zayd_foldr f acc (x:xs) = f (x) (zayd_foldr (f) (acc) (xs))
 \end{lstlisting}
 \end{mdframed}
-\caption{Executing the Scala Code and Pipe to \texttt{ScalaOutput}}\label{fig:functionZaydFoldr}
+\caption{\textit{HamSkill} Pattern Matching Example}\label{fig:functionZaydFoldr}
 \end{figure}
 \end{tiny}
 
@@ -333,13 +341,35 @@ For each pattern matching case, only a single command is allowed; Haskell's \tex
 
 If the user wants to define subvariables or execute multiple commands for a single pattern matching case, these additional steps must be defined as separate functions.  While this requirement may make a developer's code more verbose, it should limit the capabilities of the user.
 
+\subsubsection{Recursion}
+
+Recursion is supported by \textit{HamSkill}; however, there are requirements on how function function parameters must be specified as explained in section~\ref{sec:nestedFunctionCalls}.
+
+Figure~\ref{fig:functionFactorial} is a recursive function that adds all elements in a list; note that this function is in the \textit{HamSkill} test case named ``\texttt{addList.hs}".
+
+\begin{tiny}
+\begin{figure}[H]
+\begin{mdframed}
+\begin{lstlisting}[language=Haskell]
+addList :: [Int] -> Int
+addList [] = 0
+addList (x:xs) = x + (((addList xs)))
+\end{lstlisting}
+\end{mdframed}
+\caption{Executing the Scala Code and Pipe to \texttt{ScalaOutput}}\label{fig:functionFactorial}
+\end{figure}
+\end{tiny}
+
+
 \subsubsection{Empty Line at the End of the File}
 
 After the last function in the file, there must be at least a single empty line.  This requirement was included because it simplifies the parsing process.
 
 \subsection{\texttt{main} Function}
 
+Every Haskell file that is run in either \textit{HamSkill} Standard or \textit{HamSkill}+ must have a \texttt{main} function.  This function is sole entry point into the HamSkill function.  As with all functions, this method must have a function prototype.
 
+Unlike other functi
 
 
 \subsection{Immutability in Scala}\label{sec:immutabilityScala}

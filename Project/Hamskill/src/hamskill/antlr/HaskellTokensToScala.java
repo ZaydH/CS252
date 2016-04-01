@@ -1320,6 +1320,45 @@ public class HaskellTokensToScala extends HaskellBaseListener {
     @Override public void exitTypeMaybeMonad(HaskellParser.TypeMaybeMonadContext ctx) {
         fileContents.append("]");
     }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBooleanTrueFalse(HaskellParser.BooleanTrueFalseContext ctx) { 
+		fileContents.append(ctx.getText().toLowerCase());
+	}
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>Opens a block comment and increments the .</p>
+	 */
+	@Override public void enterHeaderComment(HaskellParser.HeaderCommentContext ctx) { 
+		fileContents.append("/*");
+		this.incrementIndentLevel(false);
+		this.pushSpaceSeparatorOntoStack();
+	}
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterHeaderCommentNewLine(HaskellParser.HeaderCommentNewLineContext ctx) {
+		this.popSpaceSeparatorOffStack();
+		fileContents.append("\n");
+		this.printIndent();
+		this.pushSpaceSeparatorOntoStack();
+	}
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>Closes the block comment and decrements the indent level.</p>
+	 */
+	@Override public void exitHeaderComment(HaskellParser.HeaderCommentContext ctx) {
+		this.decrementIndentLevel(false);
+		this.popSpaceSeparatorOffStack();
+		fileContents.append("*/\n\n");
+	}
     
     
     /************************************************************************************

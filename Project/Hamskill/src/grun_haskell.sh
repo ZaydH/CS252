@@ -1,2 +1,2 @@
-bash grun_gui.sh hamskill.antlr.Haskell program -tokens maybe_monad.hs
+bash grun_gui.sh hamskill.antlr.Haskell program -tokens simple_function_call.hs
 

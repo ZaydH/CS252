@@ -38,6 +38,16 @@ public interface HaskellListener extends ParseTreeListener {
 	 */
 	void exitHeaderComment(HaskellParser.HeaderCommentContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HaskellParser#headerCommentNewLine}.
+	 * @param ctx the parse tree
+	 */
+	void enterHeaderCommentNewLine(HaskellParser.HeaderCommentNewLineContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#headerCommentNewLine}.
+	 * @param ctx the parse tree
+	 */
+	void exitHeaderCommentNewLine(HaskellParser.HeaderCommentNewLineContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HaskellParser#lineComment}.
 	 * @param ctx the parse tree
 	 */
@@ -888,6 +898,16 @@ public interface HaskellListener extends ParseTreeListener {
 	 */
 	void exitReturnUnitType(HaskellParser.ReturnUnitTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link HaskellParser#booleanTrueFalse}.
+	 * @param ctx the parse tree
+	 */
+	void enterBooleanTrueFalse(HaskellParser.BooleanTrueFalseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#booleanTrueFalse}.
+	 * @param ctx the parse tree
+	 */
+	void exitBooleanTrueFalse(HaskellParser.BooleanTrueFalseContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link HaskellParser#patternMatchArray}.
 	 * @param ctx the parse tree
 	 */
@@ -1077,4 +1097,24 @@ public interface HaskellListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitReturnStatement(HaskellParser.ReturnStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#reservedKeywords}.
+	 * @param ctx the parse tree
+	 */
+	void enterReservedKeywords(HaskellParser.ReservedKeywordsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#reservedKeywords}.
+	 * @param ctx the parse tree
+	 */
+	void exitReservedKeywords(HaskellParser.ReservedKeywordsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link HaskellParser#reservedSymbols}.
+	 * @param ctx the parse tree
+	 */
+	void enterReservedSymbols(HaskellParser.ReservedSymbolsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link HaskellParser#reservedSymbols}.
+	 * @param ctx the parse tree
+	 */
+	void exitReservedSymbols(HaskellParser.ReservedSymbolsContext ctx);
 }

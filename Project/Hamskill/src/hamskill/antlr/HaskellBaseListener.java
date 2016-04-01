@@ -52,6 +52,18 @@ public class HaskellBaseListener implements HaskellListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterHeaderCommentNewLine(HaskellParser.HeaderCommentNewLineContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHeaderCommentNewLine(HaskellParser.HeaderCommentNewLineContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLineComment(HaskellParser.LineCommentContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1072,6 +1084,18 @@ public class HaskellBaseListener implements HaskellListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBooleanTrueFalse(HaskellParser.BooleanTrueFalseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBooleanTrueFalse(HaskellParser.BooleanTrueFalseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterPatternMatchArray(HaskellParser.PatternMatchArrayContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1295,6 +1319,30 @@ public class HaskellBaseListener implements HaskellListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitReturnStatement(HaskellParser.ReturnStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterReservedKeywords(HaskellParser.ReservedKeywordsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReservedKeywords(HaskellParser.ReservedKeywordsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterReservedSymbols(HaskellParser.ReservedSymbolsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReservedSymbols(HaskellParser.ReservedSymbolsContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

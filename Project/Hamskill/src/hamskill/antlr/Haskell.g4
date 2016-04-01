@@ -7,13 +7,16 @@
 grammar Haskell;
 
 // May have exactly one header comment block.
-program : headerComment? moduleDefinition? (NEWLINE* codeBlock)* NEWLINE*;
+program : headerComment? NEWLINE* moduleDefinition? (NEWLINE* codeBlock)* NEWLINE*;
 
 // A code block is a set of contiguous code.
 codeBlock : func | lineComment;
 
 // Placeholder for handling a header comment.
-headerComment : HEADER_COMMENT_OPEN (NAME)* HEADER_COMMENT_CLOSE;
+headerComment : HEADER_COMMENT_OPEN 
+                (headerCommentNewLine* word headerCommentNewLine*)* 
+                HEADER_COMMENT_CLOSE;
+headerCommentNewLine : NEWLINE;
 // Line comment is a comment that takes a whole line.
 lineComment : generalComment NEWLINE;
 // General comment is any comment after the header.
@@ -115,7 +118,6 @@ patternMatchingTerm : dollarSignTerm
                     | functionToMethod
                     | haskellFunctionName 
                     | prependTerm
-                    | generalPatternMatchingTerm
                     | patternMatchArray 
                     | ifStatementPattern
                     | recursiveMain
@@ -127,7 +129,8 @@ patternMatchingTerm : dollarSignTerm
                     | stringTerm
                     | returnStatement
                     | justStatement
-                    | NAME ; //Name should always berun last since it the most general.
+                    | booleanTrueFalse
+                    | generalPatternMatchingTerm; //Name should always be run last since it the most general.
 // Handle an if then else statement
 ifStatementPattern : ifTerm  ifStatementExpression
                      thenTerm ifStatementExpression
@@ -190,6 +193,9 @@ functionToMethodTerm : haskellFunctionToScalaMethodName generalPatternMatchingTe
 recursiveMain : FUNC_ARGS_OPEN_PAREN MAIN_FUNCTION FUNC_ARGS_CLOSE_PAREN;
 returnUnitType : RETURN UNIT_TYPE;
 
+// Used to identify true and false boolean primitives.
+booleanTrueFalse : TRUE | FALSE;
+
 patternMatchArray : LEFT_SQUARE_BRACKET patternMatchingExpression RIGHT_SQUARE_BRACKET;
 patternMatchParen : LEFT_PAREN patternMatchingExpression RIGHT_PAREN;
 generalPatternMatchingTerm : INT_VAL | INT_OP  | NAME;
@@ -199,10 +205,12 @@ functionArgument : patternMatchingTerm ;
 functionCallFunctionName : haskellFunctionName | nonHaskellReservedFunctionName;
 nonHaskellReservedFunctionName : NAME;
 
+
+
 // Create a lexer for the Haskell function so I can attach a listener to it.
 haskellFunctionName : HASKELL_FUNCTION_NAME;
 stringTerm : QUOTATION_MARK word* QUOTATION_MARK;
-word : NAME;
+word : NAME | INT_VAL | reservedKeywords | reservedSymbols;
 //stringWords : NAME;
 
 // Integer Monad
@@ -217,6 +225,15 @@ monadEvaluationExpression : patternMatchingExpression;
 justStatement : JUST patternMatchingExpression;
 // Box a Monad generally
 returnStatement : RETURN patternMatchingExpression;
+
+// Make a list of reserved key words
+reservedKeywords : TRUE | FALSE | NOTHING | JUST | BIND_OPERATOR | UNIT_TYPE
+                  | HASKELL_FUNCTION_NAME | INT_OP | MAIN_FUNCTION | MAYBE 
+                  | OTHERWISE | RETURN | ELSE | THEN | IF | OF | CASE | LET 
+                  | DO | IO | HASKELL_FUNCTIONS_METHODS_IN_SCALA;
+
+reservedSymbols : COMMA | QUOTATION_MARK | COLON | INT_OP | EQUAL_SIGN 
+                | MONAD_ARROW | TYPE_SEPARATOR;
 
 //----------------------------------------------------------------------//
 //                      Definition of Tokens                            //
@@ -278,6 +295,9 @@ JUST : 'Just';
 NOTHING : 'Nothing';
 
 NEWLINE : '\r'? '\n' ;  // return newlines to parser (is end-statement signal)
+
+TRUE : 'True';
+FALSE : 'False';
 
 NAME : ['a-zA-Z0-9._]+;  // Name of Something
 //ANY_CHAR : ['a-zA-Z0-9._-0-9?*=><+:{}()|!@#$%^&*]+;

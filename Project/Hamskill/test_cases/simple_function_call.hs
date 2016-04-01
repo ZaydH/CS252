@@ -1,3 +1,11 @@
+{-
+  Name: Zayd Hammoudeh
+  Class: CS 252
+  Assignment: Final Project
+  Date: April 1, 2016
+  Description: simple_function_call test case.
+-}
+
 module Simple_Function_Call (
    myFunc2,
    myFunc

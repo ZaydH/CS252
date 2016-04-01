@@ -78,7 +78,7 @@ When designing and implementing this project, there were four primary goals:
 \begin{itemize}
    \item ANTLR Lexer and Parser
    \item \texttt{Haskell} Antlr Grammar
-   \item \texttt{HaskellMain} Java Class
+   \item \texttt{HamskillMain} Java Class
    \item Scala Runtime Environment
    \item \texttt{ScalaOutput} Antlr Grammar
    \item \texttt{ScalaOutput} Java Class
@@ -104,7 +104,7 @@ This project utilizes two separate grammars namely: \texttt{Haskell} and \texttt
 
 \myparagraph{\textit{HamSkill}'s \texttt{Haskell} Grammar}\label{sec:haskellG4}
 
-The \texttt{Haskell} parsing grammar is stored in a file named ``\texttt{Haskell.g4}."  This grammar defines both the tokens and abstract syntax tree for supported Haskell code.  Some of Haskell language features that are supported by this grammar include:
+The ANTLR grammar, \texttt{Haskell}, is contained in the file ``\texttt{Haskell.g4}."  This grammar defines both the tokens and abstract syntax tree for supported Haskell code.  Some of the Haskell language features that are supported by this grammar include:
 
 \begin{itemize}
    \item \texttt{case} Statements
@@ -116,11 +116,11 @@ The \texttt{Haskell} parsing grammar is stored in a file named ``\texttt{Haskell
    \item Lazy Evaluation
 \end{itemize}
 
-For the complete feature set as well as specific Haskell syntax requirements, see section~\ref{sec:hamskillFeatures}.
+For the complete feature set as well as any Haskell syntax requirements, see section~\ref{sec:hamskillFeatures}.
 
 \myparagraph{\textit{HamSkill}'s \texttt{ScalaOutput} Grammar} 
 
-As mentioned in section~\ref{sec:keyProjectRequirements}, one of the key requirements of this project was that the outputs from Haskell and \textit{HamSkill} be identical.  Figure~\ref{fig:printListHaskell} and~\ref{fig:printListScala} show the Haskell and Scala code respectively to print a list containing integers ``2", ``3", and ``4".  Note that the subsequent lines, which show each language's respective console outputs, are very different.
+As mentioned in section~\ref{sec:keyProjectRequirements}, one of the key requirements of this project was that the outputs from Haskell and \textit{HamSkill} be identical.  Figure~\ref{fig:printListHaskell} and~\ref{fig:printListScala} show the Haskell and Scala code respectively to print to the console a list containing integers ``2", ``3", and ``4".  Note that the second line in each figure (which show each language's respective console output) are very different.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -142,31 +142,31 @@ List(2, 3, 4)
 \caption{Printing a Three Element List in Scala}\label{fig:printListScala}
 \end{figure}
 
-The \texttt{ScalaOutput} grammar (contained in the file ``\texttt{ScalaOutput.g4}") corrects these types of differences by parsing the console output of the Scala program and converting that output to a syntax that is more similar to that of Haskell.
+The ANTLR grammar, \texttt{ScalaOutput}, (contained in the file ``\texttt{ScalaOutput.g4}") is used to account for these types of differences by parsing the console output of a Scala program and converting that output to a syntax that is more similar to that of Haskell.
 
 \subsubsection{ANTLR-Generated Java Classes}
 
-Programs that use ANTLR do not generally operate directly on the grammar.  Rather, the grammar is converted by ANTLR into a set of Java classes; given an  grammar (e.g. \emph{GrammarName.g4}),  ANTLR would create the following files:
+Programs that use ANTLR do not generally operate directly on the grammar.  Rather, the grammar is converted by ANTLR into a set of Java classes; given an  grammar (e.g. ``\emph{GrammarName.g4}"),  ANTLR creates the following files:
 
 \begin{itemize}
-	\item \emph{GrammarName}Lexer.java - This class is the the lexer defined by the input grammar file.  It also extends ANTLR's base \texttt{Lexer} class.
+	\item \emph{GrammarName}Lexer.java - This class is the the lexer defined by the input grammar file.  It extends ANTLR's base \texttt{Lexer} class.
 	
 	\item \emph{GrammarName}Parser.java - Each rule in the original grammar constitutes a method in this class; it forms the parser class definition associated with the input grammar file.
 	
-	\item \emph{GrammarName}.tokens - Assigns a token type (e.g. integer, identifier, floating point number etc.) to each token in the input grammar file.
+	\item \emph{GrammarName}.tokens - Assigns a token type (e.g. integer, identifier, floating point number, etc.) to each token in the input grammar file.
 	
-	\item \emph{GrammarName}Listener.java \& \emph{GrammarName}BaseListener.java - ANTLR applies the grammar to a text input to build an Abstract Syntax Tree (AST).  While walking the tree, ANTLR fires events that can be captured by a listener\cite{antlrDefinitiveReference}.
+	\item \emph{GrammarName}Listener.java \& \emph{GrammarName}BaseListener.java - ANTLR applies the grammar to a text input to build an Abstract Syntax Tree (AST).  While walking the tree, ANTLR fires events that can be captured by a listener in this two classes\cite{antlrDefinitiveReference}.
 	
 \end{itemize}
 
 Most programs that want to use ANTLR override the functions in the file \emph{GrammarName}BaseListener.java.
 
 
-\myparagraph{\texttt{HaskellTokensToScala}}
+\myparagraph{\texttt{HaskellTokensToScala} Java Class}
 
-The class ``\texttt{HaskellTokensToScala}" overrides some of the methods ANTLR auto-generated in the file ``\texttt{HaskellBaseListener.java}"; note that all of these methods are derived from the grammar ``\texttt{Haskell.g4}" described in section~\ref{sec:haskellG4}.  Note that it is the Java code in this file that performs the actual transpilation from Haskell to Scala.
+The class ``\texttt{HaskellTokensToScala}" overrides some of the methods ANTLR auto-generated in the file ``\texttt{HaskellBaseListener.java}"; note that all of these overridden methods are derived from the grammar ``\texttt{Haskell.g4}" described in section~\ref{sec:haskellG4}.  In the end, it is the Java code in this file that performs the actual transpilation from Haskell to Scala.
 
-\myparagraph{\texttt{ScalaOutputTokensToHaskellFormat}}\label{sec:scalaOutputFunctionality}
+\myparagraph{\texttt{ScalaOutputTokensToHaskellFormat} Java Class}\label{sec:scalaOutputFunctionality}
 
 Similar to the \texttt{HaskellTokensToScala} class, the class, ``\texttt{ScalaOutput}" extends the ANTLR auto-generated class, ``\texttt{ScalaOutputBaseListener}".
 
@@ -176,7 +176,7 @@ The listeners in this class are primarily responsible for transforming two diffe
 
 \item \textbf{Lists} - As shown in figures~\ref{fig:printListHaskell} and~\ref{fig:printListScala}, the console output of lists in Scala and Haskell are significantly different.  The methods in this class coupled with the \texttt{ScalaOutput} grammar convert printed lists from Scala to Haskell format.
 
-\item \textbf{\texttt{Maybe}} Monad - The Scala equivalent of Haskell's \texttt{Maybe} monad is named \texttt{Option}.  While the syntax for the two are similar, they are not identical.  For example, ``\texttt{Just}" and ``\texttt{Nothing}" in Haskell are referred to as ``\texttt{Some}" and ``\texttt{None}" in Scala.  The naming convention conversion for console outputs from Scala back to Haskell to is handled by this class.
+\item \textbf{\texttt{Maybe}} Monad - The Scala equivalent of Haskell's \texttt{Maybe} monad is named \texttt{Option}.  While the syntax for the two are similar, they are not identical.  For example, ``\texttt{Just}" and ``\texttt{Nothing}" in Haskell are referred to as ``\texttt{Some}" and ``\texttt{None}" in Scala.  The naming convention conversion for console outputs from Scala back to Haskell is handled by this class.
 
 \end{itemize}
 
@@ -185,21 +185,21 @@ Any other Scala console outputs that do not fall into these two categories are p
 
 \subsection{Transpiler Output Language: Scala}
 
-As mentioned previously, a transpiler takes source code from one programming language and converts it to code in another language.  It was also previous explained that the primary criteria when deciding on the output language was that it needed to be runnable in the Java Virtual Machine.  Other important criteria that guided language selection were:
+As defined previously, a transpiler takes source code from one programming language and converts it to code in another language.  It was also previous explained that the primary criteria when deciding on the output language was that it needed to be runnable in the Java Virtual Machine.  Other important criteria that guided language selection were:
 
 \begin{itemize}
 
-	\item \textbf{Higher Order Function Support} - Any language that is devoid of higher order support would be a poor match for a purely functional language like Haskell.
+	\item \textbf{Higher-Order Function Support} - Any language that is devoid of higher-order function support would be a poor match for a purely functional language like Haskell.
 	
-	\item \textbf{Similar Syntactic Structure} - Closer alignment between the input and output languages will simplify the transcompilation.  Inevitably though, some amount of restructuring and reformatting will be required.  
+	\item \textbf{Similar Syntactic Structure} - Closer alignment between the input and output languages simplifies the transcompilation.  Inevitably though, some degree of restructuring and reformatting is required.  
 	
 	\item \textbf{Personal Interest} - Increased personal investment in a project topic generally leads to a more fulfilling outcome for the student and a better project overall.  
 
 \end{itemize}
 
-The language that best fit these criteria is Scala, which is a functional language which can be fully run inside the JVM \cite{whatIsScala}. What is more, Scala natively supports many of Haskell's core features including: functions written in a pattern matching style, immutability of objects, currying, partially applied functions, lazy evaluation, static typing, etc.  One of the disadvantages of Scala is its weaker type inference in comparison to Haskell; due to this, specific requirements were placed on the Haskell dialect supported by \textit{HamSkill} as described in section \ref{sec:hamskillFeatures}.  It is also important to note that the author has had a personal predisposed interest to learning Scala given its extensive support by Apache Spark.  Given all of these factors, the selection of Scala for this project became an even more obvious choice.
+The language that best fit these criteria is Scala, which is a functional language that is run inside the JVM \cite{whatIsScala}. What is more, Scala natively supports many of Haskell's core features including: functions written in a pattern matching style, immutability of objects, currying, partially applied functions, lazy evaluation, static typing, etc.  One of the disadvantages of Scala is its weaker type inference in comparison to Haskell; due to this, specific requirements were placed on the Haskell dialect supported by \textit{HamSkill} as described in section \ref{sec:hamskillFeatures}.  It is also important to note that the author has had a personal predisposed interest towards learning Scala given its extensive support by Apache Spark.  Given all of these factors, the selection of Scala for this project became an obvious choice.\footnote{Additional recognition to Dr. Thomas Austin is required for pointing me in the direction of Scala.}
 
-\textit{HamSkill} implements two different schemes for running the transpiled Scala code, namely \textit{HamSkill} Standard and \textit{HamSkill}+.  They are described in the follow subsections.
+\textit{HamSkill} implements two different schemes for running the transpiled Scala code, namely \textit{HamSkill} Standard and \textit{HamSkill}+.  They are described in the following subsections.
 
 \myparagraph{\textit{HamSkill} Standard}
 
@@ -213,7 +213,7 @@ Since Scala is a compiled language, it does not lend itself tremendously well to
 
 \item \textbf{Reduced JVM Requirements} - Twitter's \texttt{util-eval} library is a JAR file that only requires the presence of Scala's compile and main library JAR files to run.  Hence, this eliminates the need for the user to have Scala installed in their environment.  This addresses one of the key requirements enumerated in section~\ref{sec:keyProjectRequirements}.
 
-\item \textbf{Simplified Usage} - When \textit{HamSkill} Standard is used, the number of steps the system must perform to transpile, compile, then run the Scala code is non-trivial.  A single call to \textit{HamSkill} standard's main function performs all three of these steps.  In contrast, \textit{HamSkill}+ requires at least three steps to do the same task introduction additional possible points of failure..
+\item \textbf{Simplified Usage} - When running \textit{HamSkill} Standard, only a single function call is required to transpile, compile, then run the Scala code.  In contrast, \textit{HamSkill}+ at least four steps to do the same task, which inevitably introduces additional possible points of error.
 
 \end{enumerate}
 
@@ -221,9 +221,9 @@ Since Scala is a compiled language, it does not lend itself tremendously well to
 
 \begin{enumerate}
 
-\item \textbf{Reduced Feature Set} - The \texttt{util-eval} library does not support all Scala features.  An example of a missing feature is \texttt{readLine} which takes console inputs.
+\item \textbf{Reduced Feature Set} - The \texttt{util-eval} library does not support all Scala features.  An example of a missing feature is the function ``\texttt{readLine}", which takes console inputs.
 
-\item \textbf{Reliance on Third Party Developers} - As mentioned previously, \texttt{util-eval} was developed by Twitter.  Hence, it can be deprecated at any time as was previously planned \cite{deprecateUtilEval}.  While the tool is open-source, picking up a dropped project introduces an additional set of complications.
+\item \textbf{Reliance on Third Party Developers} - As mentioned previously, \texttt{util-eval} was developed by Twitter.  Hence, it can be deprecated at any time (as Twitter had was previously planned \cite{deprecateUtilEval}).  While the tool is open-source, picking up a dropped project introduces an additional set of complications.
 
 \end{enumerate}
 
@@ -231,11 +231,11 @@ Since Scala is a compiled language, it does not lend itself tremendously well to
 
 \myparagraph{\textit{HamSkill}+}
 
-Unlike \textit{HamSkill} Standard, \textit{HamSkill}+ requires Scala to be installed on the host PC.  What this then enables is that any feature that is supported by the install version of Scala could in theory be supported by \textit{HamSkill}+.  Currently, running a Haskell program in \textit{HamSkill}+ requires four separate steps, all of which are controlled by a \texttt{bash} scripts as shown in figures~\ref{fig:runHamSkill},~\ref{fig:compileScala}, and~\ref{fig:runScalaAndConvertOutput}.
+Unlike \textit{HamSkill} Standard, \textit{HamSkill}+ requires Scala to be installed on the host PC.  What this enables is that any feature that is supported by the installed version of Scala could in theory be supported by \textit{HamSkill}+.  Currently, running a Haskell program with \textit{HamSkill}+ requires four separate steps, all of which are controlled by a \texttt{bash} script as shown in figures~\ref{fig:runHamSkill},~\ref{fig:compileScala}, and~\ref{fig:runScalaAndConvertOutput}.
 
 \begin{enumerate}
 
-\item \textbf{Transpile the Haskell code to Scala} - This is done by running the \texttt{main} method in the \texttt{HamSkillMain} class as shown in figure~\ref{fig:runHamSkill}.  Note that ``\texttt{"\$@"}" in \texttt{bash} means that any parameters passed to the \texttt{bash} script are directly passed as arguments into the \texttt{main} method.  In \textit{HamSkill+}, the last argument is the name of the file where the Scala code will be written.
+\item \textbf{Transpile the Haskell code to Scala} - This is done by running the \texttt{main} method in the \texttt{HamskillMain} class as shown in figure~\ref{fig:runHamSkill}.  Note that ``\texttt{"\$@"}" is \texttt{bash} syntax that entails that any any parameters passed to the \texttt{bash} script are directly passed as arguments into the JAR's \texttt{main} method.  In \textit{HamSkill+}, the last argument passed to the JAR is the name of the file where the Scala code will be written.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -243,10 +243,10 @@ Unlike \textit{HamSkill} Standard, \textit{HamSkill}+ requires Scala to be insta
 java -jar hamskill.jar ``$@"
 \end{lstlisting}
 \end{mdframed}
-\caption{Executing the Transpilation for \textit{HamSkill}+}\label{fig:runHamSkill}
+\caption{Tranpiling from Haskell to Scala with \textit{HamSkill}+}\label{fig:runHamSkill}
 \end{figure}
 
-\item \textbf{Compile the Transpiled Scala Code} - The \texttt{bash} command to compile Scala is ``\texttt{scalac}" as shown in figure~\ref{fig:compileScala}.  Note that ``\texttt{\$scalaSrcFile}" is the filename where the transpiled Scala code was written.
+\item \textbf{Compile the Transpiled Scala Code} - The \texttt{bash} command to compile Scala is ``\texttt{scalac}" as shown in figure~\ref{fig:compileScala}.  Note that ``\texttt{\$scalaSrcFile}" is the filename where the transpiled Scala code was written in the previous step.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -254,10 +254,10 @@ java -jar hamskill.jar ``$@"
 scalac $scalaSrcFile
 \end{lstlisting}
 \end{mdframed}
-\caption{Executing the Transpiled Code in \textit{HamSkill}+}\label{fig:compileScala}
+\caption{Compiling the Transpiled Scala Code in \textit{HamSkill}+}\label{fig:compileScala}
 \end{figure}
 
-\item \textbf{Execute the Transpiled Scala Code} - The \texttt{bash} command to run a compiled Scala class is simply ``\texttt{scala}" as shown in figure~\ref{fig:runScalaAndConvertOutput}.  Note that ``\texttt{\$scalaSrcFile}" is the filename where the transpiled Scala code was written.
+\item \textbf{Execute the Transpiled Scala Code} - The \texttt{bash} command to run a compiled Scala class is simply ``\texttt{scala}" as shown in figure~\ref{fig:runScalaAndConvertOutput}.  Note that ``\texttt{\$scalaObject}" is the name of the Scala object (similar to a class in Java) in the compiled Scala file.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -266,15 +266,15 @@ scala -cp . $scalaObject
           | java -cp hamskill.jar hamskill.ScalaOutput
 \end{lstlisting}
 \end{mdframed}
-\caption{Executing the Scala Code and Piping to \textit{HamSkill} Java Class \texttt{ScalaOutput}}\label{fig:runScalaAndConvertOutput}
+\caption{Executing the Scala Code and Piping the Output to \textit{HamSkill} Java Class ``\texttt{ScalaOutput}"}\label{fig:runScalaAndConvertOutput}
 \end{figure}
 
-\item \textbf{Pipe Scala Output to the \texttt{ScalaOutput} Class} - The console output of the Scala code is piped (``\texttt{|}") into the standard Java class \texttt{ScalaOutput} as shown in figure~\ref{fig:runScalaAndConvertOutput}.  As explained in section~\ref{sec:scalaOutputFunctionality}, this class performs any necessary transformations on the console outputs and then prints them to the console as if the original code had been run in Haskell.
+\item \textbf{Pipe Scala Output to the \texttt{ScalaOutput} Class} - The console output of the Scala code is piped (``\texttt{|}") into the standard Java class \texttt{ScalaOutput} as shown in figure~\ref{fig:runScalaAndConvertOutput}.  As explained in section~\ref{sec:scalaOutputFunctionality}, this class performs any necessary transformations on the console outputs and then prints the transformed output to the console as if the original code had been run in Haskell.
 
 \end{enumerate} 
 
 
-\section{\textit{HamSkill} Testing Overview}
+\section{Overview of \textit{HamSkill}'s Test Strategy and Architecture}
 
 Software testing is important for detecting defects in software programs.  What is more, there is different types of software testing including unit testing, module level testing, and system tests.  Given that ANTLR relies heavily on the Listener pattern, it reduces the ease at which unit testing can be performed.  What is more, given that \textit{HamSkill} relies on the end to end operation of programs written in Haskell, ANTLR, Java, and Scala, it really emphasizes the importance of system level test.
 
@@ -338,7 +338,7 @@ All functions (excluding partially applied functions described in section~\ref{s
 
 \subsubsection{Pattern Matching}\label{sec:supportedPatternMatching}
 
-As shown in figure~\ref{fig:myFuncDefinition}, pattern matching of function variables is supported.  Special pattern matching cases that HamSkill can handle include:
+As shown in figure~\ref{fig:myFunctionHaskell}, pattern matching of function variables is supported.  Special pattern matching cases that HamSkill can handle include:
 
 \begin{itemize}
 
@@ -370,23 +370,6 @@ Note that guards are not currently supported.
 For each pattern matching case, only a single expression is allowed; Haskell's \texttt{where} and \texttt{let} syntaxes are not supported.  For example, in figure~\ref{fig:functionZaydFoldr}, the first pattern matching case simply returns ``\texttt{acc}" while the second pattern matching case returns the result of calling the function ``\texttt{f}" on two parameters (even if the second parameter is a recursive function call itself).
 
 If a user wants to define subvariables or execute multiple commands for a single pattern matching case, these additional steps must be defined as separate functions.  While this requirement may make a developer's code more verbose, it should limit the capabilities of the user.
-
-\subsubsection{Recursion}
-
-Recursion is supported by \textit{HamSkill}; however, there are requirements on how function function parameters must be specified as explained in section~\ref{sec:nestedFunctionCalls}.
-
-Figures~\ref{fig:functionZaydFoldr} and~\ref{fig:functionAddList} are recursive functions supported by \textit{HamSkill}; note that the function in figure~\ref{fig:functionAddList} is in the \textit{HamSkill} test case named ``\texttt{addList.hs}".
-
-\begin{figure}[H]
-\begin{mdframed}
-\begin{lstlisting}[language=Haskell]
-addList :: [Int] -> Int
-addList [] = 0
-addList (x:xs) = x + (((addList xs)))
-\end{lstlisting}
-\end{mdframed}
-\caption{Recursive Haskell Function to Sum All Integers in a List}\label{fig:functionAddList}
-\end{figure}
 
 \subsubsection{Empty Line at the End of the File}
 
@@ -436,7 +419,7 @@ def main(args : Array[String]){
 \caption{\textit{HamSkill} Generated Scala Code to Take and Print Console Inputs}\label{fig:functionScalaMainConsoleInput}
 \end{figure}
 
-Note that the code shown in figure~\ref{fig:} is only supported in \textit{HamSkill}+.
+Note that the code shown in figure~\ref{fig:functionScalaMainConsoleInput} is only supported in \textit{HamSkill}+.
 
 \subsection{Currying}\label{sec:currying}
 
@@ -493,7 +476,7 @@ main = do
 \caption{Specifying Function Parameters using ``\texttt{\$}" in Haskell}\label{fig:useDollarSignHaskell}
 \end{figure}
 
-As a point of reference, figure~\ref{fig:useDollarSignScala} shows the \texttt{main} function from figure~\ref{useDollarSignHaskell} transpiled by \textbf{HamSkill} into Scala.
+As a point of reference, figure~\ref{fig:useDollarSignScala} shows the \texttt{main} function from figure~\ref{fig:useDollarSignHaskell} transpiled by \textit{HamSkill} into Scala.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -633,6 +616,23 @@ zayd_map f (x:xs) = ( f(x) ):( zayd_map(f)(xs) )
 \end{lstlisting}
 \end{mdframed}
 \caption{\textit{HamSkill} Supported Implementation of Haskell's \texttt{map} Function}\label{fig:haskellFunctionMap}
+\end{figure}
+
+\subsubsection{Recursion}
+
+Recursion is supported by \textit{HamSkill}; however, there are requirements on how function parameters must be specified as explained in section~\ref{sec:callingAFunction}.
+
+Figures~\ref{fig:functionZaydFoldr} and~\ref{fig:functionAddList} are recursive functions supported by \textit{HamSkill}; note that the function in figure~\ref{fig:functionAddList} is in the \textit{HamSkill} test case named ``\texttt{addList.hs}".
+
+\begin{figure}[H]
+\begin{mdframed}
+\begin{lstlisting}[language=Haskell]
+addList :: [Int] -> Int
+addList [] = 0
+addList (x:xs) = x + (((addList xs)))
+\end{lstlisting}
+\end{mdframed}
+\caption{Recursive Haskell Function to Sum All Integers in a List}\label{fig:functionAddList}
 \end{figure}
 
 \subsection{Conversion from Haskell Functions to Scala Object Methods}

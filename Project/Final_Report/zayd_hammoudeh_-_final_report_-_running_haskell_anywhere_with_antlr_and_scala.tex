@@ -1,4 +1,3 @@
-%\documentclass[twocolumn]{article}
 \documentclass{report}
 
 \usepackage{url}
@@ -7,7 +6,6 @@
 \usepackage{listings} % Include the listings-package
 \usepackage{mdframed}
 \usepackage[numbers,sort]{natbib}
-%\usepackage{titlesec} % Needed to support sub-subsections
 %\usepackage[english]{babel} % Need for text wrap in table.
 \usepackage{array} % Needed for centering in the table
 \usepackage{graphicx}
@@ -91,7 +89,7 @@ The relationships between these components are shown in figure~\ref{fig:hamskill
 \begin{figure}[ht!]
 	\centering
 		\includegraphics[width=1.0\textwidth]{images/cs252_project_diagram_cropped.pdf}
-	\caption{HamSkill Project Architecture}
+	\caption{\textit{HamSkill} Project Architecture}
 \end{figure}\label{fig:hamskillArchitecture}
 
 The following subsections describe each of the architecture's components.
@@ -354,7 +352,7 @@ As shown in figure~\ref{fig:myFuncDefinition}, pattern matching of function vari
 
 \end{itemize}
 
-Figure~\ref{fig:functionZaydFoldr} is a function from the \textit{HamSkill} test case ``" that uses three of the four the previously mentioned special pattern matching cases.
+Figure~\ref{fig:functionZaydFoldr} is a function from the \textit{HamSkill} test case ``\texttt{partially\_applied\_example.hs}" that uses three of the four the previously mentioned special pattern matching cases.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -369,11 +367,11 @@ zayd_foldr f acc (x:xs) = f (x) (zayd_foldr (f) (acc) (xs))
 
 Note that guards are not currently supported.
 
-\subsubsection{A Single Executable Expression per Pattern Matching Case}
+\subsubsection{A Single Executable Expression per Pattern Matching Statement}
 
 For each pattern matching case, only a single expression is allowed; Haskell's \texttt{where} and \texttt{let} syntaxes are not supported.  For example, in figure~\ref{fig:functionZaydFoldr}, the first pattern matching case simply returns ``\texttt{acc}" while the second pattern matching case returns the result of calling the function ``\texttt{f}" on two parameters (even if the second parameter is a recursive function call itself).
 
-If the user wants to define subvariables or execute multiple commands for a single pattern matching case, these additional steps must be defined as separate functions.  While this requirement may make a developer's code more verbose, it should limit the capabilities of the user.
+If a user wants to define subvariables or execute multiple commands for a single pattern matching case, these additional steps must be defined as separate functions.  While this requirement may make a developer's code more verbose, it should limit the capabilities of the user.
 
 \subsubsection{Recursion}
 
@@ -424,17 +422,17 @@ main = do
 \begin{figure}[H]
 \begin{mdframed}
 \begin{lstlisting}[language=scala]
-  def main(args : Array[String]){
+def main(args : Array[String]){
     lazy val x = scala.io.StdIn.readLine();
-     println (x)
-     if((x).length() == 0)
-      {
-         return;
-      }
-      else{
-         main(args)
-      }
-  }
+    println (x)
+    if((x).length() == 0)
+    {
+        return;
+    }
+    else{
+       main(args)
+    }
+}
 \end{lstlisting}
 \end{mdframed}
 \caption{\textit{HamSkill} Generated Scala Code to Take and Print Console Inputs}\label{fig:functionScalaMainConsoleInput}
@@ -543,23 +541,23 @@ For completeness, figure~\ref{fig:scalaFunctionParenthesesFuncArgs} shows the \t
 
 \begin{figure}[H]
 \begin{mdframed}
-\begin{lstlisting}[language=Scala]
-  private def notEqual (___0___ : Int) (___1___ : Int) 
+\begin{lstlisting}[language=Scala, showstringspaces=false]
+private def notEqual (___0___ : Int) (___1___ : Int) 
                  :  String = (___0___, ___1___) match {
-      case (x, y) =>  if(x != y)
-        {
-           ``not equal"
-        }
-        else{
-           ``equal"
-        }
-  } 
+    case (x, y) =>  if(x != y)
+      {
+           "not equal"
+      }
+      else{
+         "equal"
+      }
+} 
   
-  def main(args : Array[String]){
-     println (notEqual (5) (4))
-     println (notEqual (3) (3))
-     ...
-  }
+def main(args : Array[String]){
+   println (notEqual (5) (4))
+   println (notEqual (3) (3))
+   ...
+}
 \end{lstlisting}
 \end{mdframed}
 \caption{Transpiled \textit{HamSkill} Code for Function Parameters with Parentheses}\label{fig:scalaFunctionParenthesesFuncArgs}
@@ -621,8 +619,8 @@ Figure~\ref{fig:functionZaydFoldr} showed Haskell's \texttt{foldr} function impl
 zayd_filter :: (Int -> Bool) -> [Int] -> [Int]
 zayd_filter _ [] = []
 zayd_filter f (x:xs) = if ( (((f x))) )
-                       then ( (x):( zayd_filter(f) (xs)  ))
-                       else ( zayd_filter(f)(xs) )
+                       then ( (x):(zayd_filter(f) (xs) ))
+                       else (zayd_filter(f)(xs))
 \end{lstlisting}
 \end{mdframed}
 \caption{\textit{HamSkill} Supported Implementation of Haskell's \texttt{filter} Function}\label{fig:haskellFunctionFilter}
@@ -649,7 +647,7 @@ Since Haskell does not support objects, there are only functions; there are no m
 
 One of the benefits of function currying is that it enables partially applied functions.  \textit{HamSkill} supports partially applied functions with only with integers as the function input and output parameters.  What is more, partially applied functions need to be defined as a dedicated function and are the only exception to the requirement that functions have an explicit type signature (for more details, see section~\ref{sec:explicitTypeSignature}).  
 
-Figure~\ref{fig:haskellFunctionAddTwoPlusOne} shows a partially applied Haskell function (``\texttt{addTwoPlusOne}'') that is supported by \textit{HamSkill}.\footnote{The function ``\texttt{addTwoPlusOne}" is in the \textit{HamSkill} test bench file ``\texttt{partially\_applied\_example.hs}".}  Figure~\ref{fig:scalaFunctionAddTwoPlusOne} shows the transpiled version of \texttt{addTwoPlus}.  Note that the partially applied function call is followed by an underscore (``\texttt{\_}").  This is a requirement of Scala tells the Scala compiler that the object is a partially applied function and is the reason for the \textit{HamSkill} requirement that partially applied functions be their own functions with no type signature.
+Figure~\ref{fig:haskellFunctionAddTwoPlusOne} shows a partially applied Haskell function (``\texttt{addTwoPlusOne}") that is supported by \textit{HamSkill}.\footnote{The function ``\texttt{addTwoPlusOne}" is in the \textit{HamSkill} test bench file ``\texttt{partially\_applied\_example.hs}".}  Figure~\ref{fig:scalaFunctionAddTwoPlusOne} shows the transpiled version of \texttt{addTwoPlus}.  Note that the partially applied function call is followed by an underscore (``\texttt{\_}").  This is a requirement of Scala tells the Scala compiler that the object is a partially applied function and is the reason for the \textit{HamSkill} requirement that partially applied functions be their own functions with no type signature.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -674,7 +672,7 @@ addTwoPlusOne = add3(1)
   def addTwoPlusOne = {add3 (1) _  } /
 \end{lstlisting}
 \end{mdframed}
-\caption{\textit{HamSkill} Generated Scala Version of Haskell Function ``\texttt{addTwoPlusOne}''}\label{fig:scalaFunctionAddTwoPlusOne}
+\caption{\textit{HamSkill} Generated Scala Version of Haskell Function ``\texttt{addTwoPlusOne}"}\label{fig:scalaFunctionAddTwoPlusOne}
 \end{figure}
 
 
@@ -711,7 +709,7 @@ def main(args : Array[String]){
 
 \subsection{Supported Types}\label{sec:supportedTypes}
 
-\emph{HamSkill} only supports a select subset of Haskell's available types, namely: \texttt{Bool}, \texttt{\tt Integer} (i.e. bounded), and finite \texttt{List}s.  The Haskell integer operators that are supported are: addition (``\texttt{+}"), subtraction (``\texttt{-}"), multiplication (``\texttt{*}"), division (``\texttt{`div`}" - infix only), and modulus (``\texttt{`mod`}" - infix only) \footnote{The integer mathematical operators are verified in the \textit{HamSkill} test bench file ``\texttt{simple\_math.hs}".}.  In addition, the following integer comparison operators are supported: equal (``\texttt{==}"), not equal (``\texttt{/=}''), greater than (``\texttt{>}''), greater than or equal (``\texttt{>=}''), less than (``\texttt{<}"), and less than or equal (``\texttt{<=}")\footnote{The comparison operators are verified in the \textit{HamSkill} test bench file ``compare\_ops.hs''.}.
+\emph{HamSkill} only supports a select subset of Haskell's available types, namely: \texttt{Bool}, \texttt{\tt Integer} (i.e. bounded), and finite \texttt{List}s.  The Haskell integer operators that are supported are: addition (``\texttt{+}"), subtraction (``\texttt{-}"), multiplication (``\texttt{*}"), division (``\texttt{`div`}" - infix only), and modulus (``\texttt{`mod`}" - infix only) \footnote{The integer mathematical operators are verified in the \textit{HamSkill} test bench file ``\texttt{simple\_math.hs}".}.  In addition, the following integer comparison operators are supported: equal (``\texttt{==}"), not equal (``\texttt{/=}"), greater than (``\texttt{>}"), greater than or equal (``\texttt{>=}"), less than (``\texttt{<}"), and less than or equal (``\texttt{<=}")\footnote{The comparison operators are verified in the \textit{HamSkill} test bench file ``compare\_ops.hs".}.
 
 While implementing floating point numbers would not add substantial complexity at a basic level, ensuring that the floating point behavior of \emph{HamSkill} (i.e. Scala) and Haskell are identical is beyond the scope of this project.
 
@@ -741,48 +739,141 @@ module Simple_Function_Call (
 
 \subsection{\texttt{Maybe} Monad Support}
 
-\subsection{\texttt{if} Conditional}
+One of the stretch goals for this project was monad support in \textit{HamSkill}.  I was able to implement support for Haskell's \texttt{Maybe} monad (referred to as ``\texttt{Option}" in Scala).  The requirements for use of \texttt{Maybe} is:
+
+\begin{enumerate}
+
+\item Use of the ``\texttt{do}" syntax.  Note bind (``\texttt{>>=}")
+
+\item The last line of the ``\texttt{do}" block must be \texttt{return} some value.
+
+\item The \texttt{do} block cannot be in the ``\texttt{main}" function.
+
+\end{enumerate}
+
+Figures~\ref{fig:haskellMaybeMonad} and~\ref{fig:haskellOptionMonad} show the original Haskell Maybe Monad code and the \textit{HamSkill} transpiled Scala code.  Note that ``\texttt{do}" in Haskell is changed to ``\texttt{for}" in Scala while ``\texttt{return}" became ``\texttt{yield}".\footnote{The ``\texttt{Maybe}" monad example is in the test bench file ``\texttt{maybe\_monad.hs}".}
+
+\begin{figure}[H]
+\begin{mdframed}
+\begin{lstlisting}[language=Haskell]
+doubleIncrementMonad :: Int -> (Maybe Int)
+doubleIncrementMonad x = do
+                         y <- maybeAddOne (x)
+                         z <- maybeAddOne (y)
+                         return z
+\end{lstlisting}
+\end{mdframed}
+\caption{Haskell \texttt{Maybe} Syntax Supported by \textit{HamSkill}}
+\label{fig:haskellMaybeMonad}
+\end{figure}
+
+\begin{figure}[H]
+\begin{mdframed}
+\begin{lstlisting}[language=Scala, basicstyle=\small]
+private def doubleIncrementMonad (___0___ : Int) 
+                         : Option[ Int] = (___0___) match {
+    case (x) =>  (for {
+        y <- (maybeAddOne (x))
+        z <- (maybeAddOne (y))
+      }
+      yield(z))
+}
+\end{lstlisting}
+\end{mdframed}
+\caption{\textit{HamSkill} Generated Scala \texttt{Option} Monad}
+\label{fig:haskellOptionMonad}
+\end{figure}
+
+\subsection{\texttt{if} Conditionals}
 
 Like most languages, Haskell supports a conditional statement via the ``\texttt{if}", ``\texttt{then}", ``\texttt{else}" model.  Figure~\ref{fig:haskellFunctionIfCheck} shows Haskell code that is parsable by \textit{HamSkill}.  One specific formatting requirement of \textit{HamSkill} is that contents of the \texttt{if}", ``\texttt{then}", ``\texttt{else}" must all be enclosed with parentheses as shown in the figure.
 
 \begin{figure}[H]
 \begin{mdframed}
 \begin{lstlisting}[language=Haskell]
-ifcheck :: Bool -> String
+ifCheck :: Bool -> String
 ifCheck x = if (x) then ("True") else ("False")
 \end{lstlisting}
 \end{mdframed}
-\caption{Haskell ``\texttt{if}'' Statement Supported by \textit{HamSkill}}\label{fig:haskellFunctionIfCheck}
+\caption{Haskell ``\texttt{if}" Statement Supported by \textit{HamSkill}}\label{fig:haskellFunctionIfCheck}
 \end{figure}
 
 Figure~\ref{fig:scalaFunctionIfCheck} shows the transpiled output generated by \textit{HamSkill}. \footnote{The ``\texttt{if}" example code shown in these figures is included in the \textit{HamSkill} test case ``\texttt{if\_statement}".}
 
 \begin{figure}[H]
 \begin{mdframed}
-\begin{lstlisting}[language=Scala]
-  private def ifCheck (___0___ : Boolean) :  String = (___0___) match {
-      case (x) =>  if(x)
-        {
-           "True"
-        }
-        else{
-           "False"
-        }
-  }
+\begin{lstlisting}[language=Scala, basicstyle=\small]
+private def ifCheck (___0___ : Boolean) 
+                              :  String = (___0___) match {
+    case (x) =>  if(x)
+      {
+         "True"
+      }
+      else{
+         "False"
+      }
+}
 \end{lstlisting}
 \end{mdframed}
-\caption{Scala Transpiled ``\texttt{if}'' Statement Generated by \textit{HamSkill}}\label{fig:scalaFunctionIfCheck}
+\caption{Scala Transpiled ``\texttt{if}" Statement Generated by \textit{HamSkill}}\label{fig:scalaFunctionIfCheck}
 \end{figure}
 
-\subsection{\texttt{case} Statement}
+\subsection{\texttt{case} Statements}
 
-Must have otherwise.
+\texttt{case} statements are often preferable over \texttt{if} conditional statements due to \texttt{case}'s conciseness.  What is more, \texttt{case} in Haskell is often more useful when performing pattern matching on boxed results such as monad.
+
+\textit{HamSkill} supports Haskell's \texttt{case} statement when the syntax meets the following two criteria:
+
+\begin{enumerate}
+
+\item The compare parameter must be enclosed in parentheses.
+
+\item The \texttt{case} statement ends with an ``\texttt{otherwise}" clause.
+
+\end{enumerate}
+
+Figure~\ref{fig:haskellCaseStatement} shows a \textit{HamSkill} supported \texttt{case} statement.\footnote{This ``\texttt{case}" statement is in the \textit{HamSkill} test case ``\texttt{case\_example.hs}".}
+
+
+Figure~\ref{fig:scalaCaseStatement} is \textit{HamSkill} transpiled Scala code for the preceding \texttt{case} statement.
+
+\begin{figure}[H]
+\begin{mdframed}
+\begin{lstlisting}[language=Haskell, basicstyle=\scriptsize, showstringspaces=false]
+case_example :: Int -> [Char]
+case_example x = case (x) of
+                     1 -> "Positive One"
+                     (-1) -> "Negative One"
+                     0 -> "Zero"
+                     otherwise -> error("Something went wrong here")
+\end{lstlisting}
+\end{mdframed}
+\caption{Haskell \texttt{case} Statement}\label{fig:haskellCaseStatement}
+\end{figure}
+
+\begin{figure}[H]
+\begin{mdframed}
+\begin{lstlisting}[language=Scala, basicstyle=\scriptsize]
+private def case_example (___0___ : Int) 
+                                     :  String = (___0___) match {
+    case (x) =>  (x) match {
+      case (1) => ("Positive One")
+      case ((-1)) => ("Negative One")
+      case (0) => ("Zero")
+      case whatever => (sys.error ("Something went wrong here"))
+    }
+\end{lstlisting}
+\end{mdframed}
+\caption{Scala Transpiled ``\texttt{case}" Statement Generated by \textit{HamSkill}}\label{fig:scalaCaseStatement}
+\end{figure}
+
+Note that the Haskell ``\texttt{error}" function was transpiled to ``\texttt{sys.error}" in Scala.
 
 \subsection{Preserving Comments}\label{sec:preservingComments}
 
 As explained in section~\ref{sec:keyProjectRequirements}, one of the goals of this project was to generate Scala code that was as human readable as possible.  This goal extends to preserving Haskell comments in the transpiled Scala code.
 
-Figure~\ref{fig:haskellHeaderComments} shows a header block of comments at the top of the test case file ``\texttt{}", and figure~\ref{fig:scalaHeaderComments} shows the transpiled Scala version.  
+Figure~\ref{fig:haskellHeaderComments} shows a header block of comments at the top of the test case file ``\texttt{simple\_function\_call.hs}", and figure~\ref{fig:scalaHeaderComments} shows the transpiled Scala version.  
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -813,6 +904,8 @@ Figure~\ref{fig:haskellHeaderComments} shows a header block of comments at the t
 \end{mdframed}
 \caption{Scala Transpiled Header Comment}\label{fig:scalaHeaderComments}
 \end{figure}
+
+Inline comments from Haskell are also preserved in the transpiled code.
 
 \section{Conclusions}
 

@@ -401,7 +401,7 @@ Every Haskell file that is run in either \textit{HamSkill} Standard or \textit{H
 
 Unlike most other functions, multiple distinct statements may appear in the \texttt{main} function; these statements may even use the syntax ``\texttt{<-}" as long as they are being used to unbox a Haskell \texttt{IO String} object.
 
-Figure~\ref{fig:functionHaskellMainConsoleInput} is a recursive, multi-instruction \texttt{main} function that supports taking text inputs from the console, and then prints them to the screen.  This figure also shows the special syntax required when recursing on \texttt{main} where the function name must be surrounded by triple parentheses (i.e. ``\texttt{(((main)))}").  This was done to simplify the parsing to let \textit{HamSkill} know that this is a recursive call and that when converting this code to Scala, it must pass it an argument as shown in figure~\ref{fig:functionScalaMainConsoleInput}; \texttt{main can only be called (recursively or otherwise) within the \texttt{main} method itself.
+Figure~\ref{fig:functionHaskellMainConsoleInput} is a recursive, multi-instruction \texttt{main} function that supports taking text inputs from the console, and then prints them to the screen.  This figure also shows the special syntax required when recursing on \texttt{main} where the function name must be surrounded by triple parentheses (i.e. ``\texttt{(((main)))}").  This was done to simplify the parsing to let \textit{HamSkill} know that this is a recursive call and that when converting this code to Scala, it must pass it an argument as shown in figure~\ref{fig:functionScalaMainConsoleInput}; \texttt{main} can only be called (recursively or otherwise) within the \texttt{main} method itself.
 
 \begin{figure}[H]
 \begin{mdframed}

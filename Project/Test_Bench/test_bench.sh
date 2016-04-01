@@ -133,33 +133,18 @@ function hamskill_test {
 dos2unixOutputDirectory
 
 
-# Test "haskell_code" using Hamskill Standard
-test_file="simple_function_call.hs"
-haskell_output="haskellOut_haskell_code.txt"
-hamskill_output="hamskillStd_haskell_code.txt"
-hamskill_function="main" #Only main currently supported.
-hamskill_test $test_file $haskell_output $hamskill_output $hamskill_function
 
-#Test "haskell_code" using Hamskill+
-test_file="simple_function_call.hs"
-haskell_output="haskellOut_haskell_code.txt"
-hamskill_output="hamskill+_haskell_code.txt"
-hamskill_test $test_file $haskell_output $hamskill_output
+# Perform a test of an if Statement  using Hamskill Standard and HamSkill+
+base_filename="if_statement"
+perform_hamskillStd_and_hamskillPlus_test $base_filename
 
+# Test "simple_function_call" using Hamskill Standard and HamSkill+
+base_filename="simple_function_call"
+perform_hamskillStd_and_hamskillPlus_test $base_filename
 
-# Test "main_print_string" using Hamskill Standard
-test_file="main_print_string.hs"
-haskell_output="haskellOut_main_print_string.txt"
-hamskill_output="hamskillStd_main_print_string.txt"
-hamskill_function="main" #Only main currently supported.
-hamskill_test $test_file $haskell_output $hamskill_output $hamskill_function
-
-#Test "main_print_string" using Hamskill+
-haskell_output="haskellOut_main_print_string.txt"
-hamskill_output="hamskill+_main_print_string.txt"
-hamskill_test $test_file $haskell_output $hamskill_output
-
-
+# Test "main_print_string" using Hamskill Standard and HamSkill+
+base_filename="main_print_string"
+perform_hamskillStd_and_hamskillPlus_test $base_filename
 
 #Test "get_test.hs" using Hamskill+
 #This takes standard input text so pass it to the function.
@@ -170,67 +155,25 @@ hamskill_output="hamskill+_get_text.txt"
 stdin_input_file="$HASKELL_CODE_DIR/test.txt"
 hamskill_test $test_file $haskell_output $hamskill_output
 
+# Test "factorial" using Hamskill Standard and HamSkill+
+base_filename="factorial"
+perform_hamskillStd_and_hamskillPlus_test $base_filename
 
+# Test "add_list" using Hamskill Standard and HamSkill+
+base_filename="add_list"
+perform_hamskillStd_and_hamskillPlus_test $base_filename
 
-#Test "factorial.hs" using Hamskill Standard
-test_file="factorial.hs"
-haskell_output="haskellOut_factorial.txt"
-hamskill_output="hamskillStd_factorial.txt"
-hamskill_function="main" # Only main is currently supported
-hamskill_test $test_file $haskell_output $hamskill_output $hamskill_function
+# Test "map_example" using Hamskill Standard and HamSkill+
+base_filename="map_example"
+perform_hamskillStd_and_hamskillPlus_test $base_filename
 
-#Test "factorial.hs" using Hamskill+
-haskell_output="haskellOut_factorial.txt"
-hamskill_output="hamskill+_factorial.txt"
-hamskill_test $test_file $haskell_output $hamskill_output
-
-
-
-# Test "add_list.hs" using Hamskill Standard
-test_file="add_list.hs"
-haskell_output="haskellOut_add_list.txt"
-hamskill_output="hamskillStd_add_list.txt"
-hamskill_function="main" #Only main currently supported.
-hamskill_test $test_file $haskell_output $hamskill_output $hamskill_function
-
-#Test "add_list.hs" using Hamskill+
-haskell_output="haskellOut_add_list.txt"
-hamskill_output="hamskill+_add_list.txt"
-hamskill_test $test_file $haskell_output $hamskill_output
-
-
-
-# Test "map_example.hs" using Hamskill Standard
-test_file="map_example.hs"
-haskell_output="haskellOut_map_example.txt"
-hamskill_output="hamskillStd_map_example.txt"
-hamskill_function="main" #Only main currently supported.
-hamskill_test $test_file $haskell_output $hamskill_output $hamskill_function
-
-#Test "map_example.hs" using Hamskill+
-hamskill_output="hamskill+_map_example.txt"
-hamskill_test $test_file $haskell_output $hamskill_output
-
-
-# Test "filter_example.hs" using Hamskill Standard
+# Test "filter_example" using Hamskill Standard and HamSkill+
 base_filename="filter_example"
-test_file="${base_filename}.hs"
-haskell_output="haskellOut_${base_filename}.txt"
-hamskill_output="hamskillStd_${base_filename}.txt"
-hamskill_function="main" #Only main currently supported.
-hamskill_test $test_file $haskell_output $hamskill_output $hamskill_function
-
-#Test "filter_example.hs" using Hamskill+
-hamskill_output="hamskill+_${base_filename}.txt"
-hamskill_test $test_file $haskell_output $hamskill_output
-
-
-
+perform_hamskillStd_and_hamskillPlus_test $base_filename
 
 # Perform the case test with strings.
 base_filename="case_example"
 perform_hamskillStd_and_hamskillPlus_test $base_filename
-
 
 # Perform a test case with partially applied functions
 base_filename="partially_applied_example"
@@ -247,6 +190,8 @@ perform_hamskillStd_and_hamskillPlus_test $base_filename
 # Perform a test of the Maybe Monad
 base_filename="maybe_monad"
 perform_hamskillStd_and_hamskillPlus_test $base_filename
+
+
 
 # This should be the last line in the testbench.  It checks the final results
 print_final_results

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="TypeScriptCompiler">
+    <option name="isCompilerEnabled" value="true" />
+    <option name="typeScriptServiceDirectory" value="C:\Users\zhammoud\Desktop\Courses\CS252\Labs\TypeScript" />
+    <option name="scopeName" value="Module 'Lab11'" />
+    <option name="hasOutDirectory" value="true" />
+    <option name="versionType" value="SERVICE_DIRECTORY" />
+  </component>
+</project>

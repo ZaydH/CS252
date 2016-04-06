@@ -78,6 +78,7 @@ CoinClient.prototype.transferFunds = function(details) {
   //
   // YOUR CODE HERE
   //
+  this.sig = sign.update(msg).sign(this.privKey, 'hex');
 
   this.broadcast(trans);
 }

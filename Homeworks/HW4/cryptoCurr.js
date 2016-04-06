@@ -77,8 +77,8 @@ CoinClient.prototype.on('proof', function(self, trans) {
 
   // Validate the length
   validTrans = true;
-  localLedgerLength = this.chainLength(self.ledger);
-  transLedgerLength = this.chainLength(trans.ledger);
+  localLedgerLength = self.chainLength(self.ledger);
+  transLedgerLength = self.chainLength(trans.ledger);
   if(localLedgerLength >= transLedgerLength){
     validTrans = false;
   }
@@ -98,6 +98,7 @@ CoinClient.prototype.on('proof', function(self, trans) {
   // Check the proof.
   if(validTrans) {
     self.ledger = trans.ledger;
+    self.broadcast({type:'shareledger', 'ledger':self.ledger});
   }
   else{
     self.log("Invalid proof.")
@@ -198,8 +199,7 @@ CoinClient.prototype.mineProof = function(newLedger, start) {
     proof = start + i;
     ledgePlusProof = ledge + proof; // Add the number to the ledger string
 
-    mineHash = crypto.createHash('RSA-SHA256');
-    keyString = mineHash.update(ledgePlusProof).digest('hex');
+    keyString = this.hash(ledgePlusProof);
 
     // Compare the substring to see if it has the required number of leading zeros.
     if (keyString.substring(0, ZEROES_REQ) === zeroString) {

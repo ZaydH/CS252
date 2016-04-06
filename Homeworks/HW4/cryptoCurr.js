@@ -130,9 +130,20 @@ CoinClient.prototype.validateTransfer = function(trans) {
 
 
 CoinClient.prototype.mineProof = function(newLedger, start) {
-  if (this.chainLength(this.ledger) >= this.chainLength(newLedger)) return;
-  var ledge = JSON.stringify(newLedger);
+
+  var ledge;
   var proof;
+  var i;
+  var ledgePlusProof;
+  var keyString;
+  var zeroString;
+  var mineHash;
+
+  // Turn the new ledger into a String.
+  ledge = JSON.stringify(newLedger);
+  zeroString = Array(ZEROES_REQ + 1).join('0'); // Zero String need to match for proof.
+
+  if (this.chainLength(this.ledger) >= this.chainLength(newLedger)) return;
 
   //
   // YOUR CODE HERE
@@ -140,6 +151,19 @@ CoinClient.prototype.mineProof = function(newLedger, start) {
   // TIP: Find a proof such that hash(ledge+s) produces the right
   // number of leading zeroes
   //
+
+  for(i = 0; ; i++) {
+    proof = start + i;
+    ledgePlusProof = ledge + proof; // Add the number to the ledger string
+
+    mineHash = crypto.createHash('RSA-SHA256');
+    keyString = mineHash.update(ledgePlusProof).digest('hex');
+
+    // Compare the substring to see if it has the required number of leading zeros.
+    if (keyString.substring(0, ZEROES_REQ) === zeroString) {
+      break;
+    }
+  }
 
   this.broadcast({type: 'proof', ledger: newLedger, proof: proof});
 }

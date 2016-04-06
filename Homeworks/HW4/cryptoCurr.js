@@ -65,6 +65,47 @@ CoinClient.prototype.on('reject', function(self, trans) {
   self.log("Reject from " + trans.id + ": " + trans.msg);
 });
 
+CoinClient.prototype.on('reject', function(self, trans) {
+  self.log("Reject from " + trans.id + ": " + trans.msg);
+});
+
+// Added by Super Zayd
+// Does the proof.
+CoinClient.prototype.on('proof', function(self, trans) {
+  var zerosString;
+  var validTrans;
+  var ledgePlusProof;
+  var keyString;
+  var validTrans;
+
+  // Validate the length
+  validTrans = true;
+  if (this.chainLength(this.ledger) >= this.chainLength(trans.ledger)){
+    validTrans = false;
+  }
+
+  // Build the proof
+  ledgePlusProof = JSON.stringify(trans.ledger) + trans.proof; // Add the number to the ledger string
+  keyString = crypto.createHash('RSA-SHA256').update(ledgePlusProof).digest('hex');
+
+  // Build the string of zeros
+  zerosString = Array(ZEROES_REQ + 1).join('0');
+
+  // Verify the proof
+  if(keyString.substring(0, ZEROES_REQ) !== zerosString){
+    validTrans = false;
+  }
+
+  // Check the proof.
+  if(validTrans) {
+    self.ledger = trans.ledger;
+  }
+  else{
+    self.log("Invalid proof.")
+  }
+
+});
+
 
 // Broadcast a transfer of money to all parties
 CoinClient.prototype.transferFunds = function(details) {

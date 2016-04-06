@@ -73,14 +73,13 @@ CoinClient.prototype.on('reject', function(self, trans) {
 // Does the proof.
 CoinClient.prototype.on('proof', function(self, trans) {
   var zerosString;
-  var validTrans;
   var ledgePlusProof;
   var keyString;
   var validTrans;
 
   // Validate the length
   validTrans = true;
-  if (this.chainLength(this.ledger) >= this.chainLength(trans.ledger)){
+  if(this.chainLength(this.ledger) >= this.chainLength(trans.ledger)){
     validTrans = false;
   }
 

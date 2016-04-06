@@ -65,10 +65,6 @@ CoinClient.prototype.on('reject', function(self, trans) {
   self.log("Reject from " + trans.id + ": " + trans.msg);
 });
 
-CoinClient.prototype.on('reject', function(self, trans) {
-  self.log("Reject from " + trans.id + ": " + trans.msg);
-});
-
 // Added by Super Zayd
 // Does the proof.
 CoinClient.prototype.on('proof', function(self, trans) {
@@ -76,10 +72,14 @@ CoinClient.prototype.on('proof', function(self, trans) {
   var ledgePlusProof;
   var keyString;
   var validTrans;
+  var localLedgerLength;
+  var transLedgerLength;
 
   // Validate the length
   validTrans = true;
-  if(this.chainLength(this.ledger) >= this.chainLength(trans.ledger)){
+  localLedgerLength = this.chainLength(self.ledger);
+  transLedgerLength = this.chainLength(trans.ledger);
+  if(localLedgerLength >= transLedgerLength){
     validTrans = false;
   }
 
@@ -139,6 +139,8 @@ CoinClient.prototype.validateTransfer = function(trans) {
     this.broadcast({type: 'reject', msg: 'bad signature'});
     return;
   }
+  // Print the signature is valid.
+  this.log("Signature is valid from " + trans.id);
 
   var coins = this.ledger[trans.id];
 
@@ -205,6 +207,7 @@ CoinClient.prototype.mineProof = function(newLedger, start) {
     }
   }
 
+  this.log("Found a proof: " + proof)
   this.broadcast({type: 'proof', ledger: newLedger, proof: proof});
 }
 

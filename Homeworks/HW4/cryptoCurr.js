@@ -3,8 +3,8 @@ var net = require('net');
 var crypto = require('crypto');
 var events = require('events');
 
-var PORT_MIN_RANGE = 9000
-var PORT_MAX_RANGE = 9010
+var PORT_MIN_RANGE = 9000;
+var PORT_MAX_RANGE = 9010;
 
 var ZEROES_REQ = 10;
 
@@ -85,7 +85,7 @@ CoinClient.prototype.on('proof', function(self, trans) {
 
   // Build the proof
   ledgePlusProof = JSON.stringify(trans.ledger) + trans.proof; // Add the number to the ledger string
-  keyString = crypto.createHash('RSA-SHA256').update(ledgePlusProof).digest('hex');
+  keyString = this.hash(ledgePlusProof);
 
   // Build the string of zeros
   zerosString = Array(ZEROES_REQ + 1).join('0');
@@ -98,10 +98,8 @@ CoinClient.prototype.on('proof', function(self, trans) {
   // Check the proof.
   if(validTrans) {
     self.ledger = trans.ledger;
-    self.broadcast({type:'shareledger', 'ledger':self.ledger});
-  }
-  else{
-    self.log("Invalid proof.")
+    self.log("New ledger accepted for proof " + proof);
+    self.showLedger();
   }
 
 });
@@ -180,7 +178,6 @@ CoinClient.prototype.mineProof = function(newLedger, start) {
   var ledgePlusProof;
   var keyString;
   var zeroString;
-  var mineHash;
 
   // Turn the new ledger into a String.
   ledge = JSON.stringify(newLedger);

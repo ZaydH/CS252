@@ -78,7 +78,7 @@ CoinClient.prototype.transferFunds = function(details) {
   //
   // YOUR CODE HERE
   //
-  this.sig = sign.update(msg).sign(this.privKey, 'hex');
+  trans.sig = sign.update(msg).sign(this.privKey, 'hex');
 
   this.broadcast(trans);
 }
@@ -92,6 +92,13 @@ CoinClient.prototype.validateTransfer = function(trans) {
   //
   // YOUR CODE HERE
   //
+
+  // Handle an invalid signature.
+  var isLegit = verifier.update(msg).verify(trans.pubKey, trans.sig, 'hex');
+  if(!isLegit){
+    this.broadcast({type: 'reject', msg: 'bad signature'});
+    return;
+  }
 
   var coins = this.ledger[trans.id];
 

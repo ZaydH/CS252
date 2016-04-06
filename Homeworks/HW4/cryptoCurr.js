@@ -98,7 +98,7 @@ CoinClient.prototype.on('proof', function(self, trans) {
   // Check the proof.
   if(validTrans) {
     self.ledger = trans.ledger;
-    self.log("New ledger accepted for proof " + proof);
+    self.log("New ledger accepted for proof " + trans.proof);
     self.showLedger();
   }
 

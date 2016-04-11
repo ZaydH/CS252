@@ -10,6 +10,9 @@
 \usepackage{array} % Needed for centering in the table
 \usepackage{graphicx}
 
+\usepackage{hyperref} % Creates links in the PDF document.
+\hypersetup{hidelinks} % Do not include boxes around links
+
 % Defines the table of contents depth and the subsection numbering depth
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{5}
@@ -49,7 +52,7 @@ with ANTLR and Scala\\[1in]
 
 C is one of the most commonly used languages when the primary objective is maximum performance.  However, C's ``write once, compile anywhere" paradigm limits its portability.  In contrast, the near ubiquity of the Java Virtual Machine (JVM) allows Java to be ``write once, run anywhere."  
 
-Developers have often leveraged the JVM's ``run anywhere" capability for other than Java.  Examples include: JRuby for the Ruby programming language \cite{jruby}, Jython for the Python programming language \cite{jython_jvm}, Renjin for the R programming language \cite{renjin}, and Scala \cite{scala}.
+Developers have often leveraged the JVM's ``run anywhere" capability for other languages than Java.  Examples include: JRuby for the Ruby programming language \cite{jruby}, Jython for the Python programming language \cite{jython_jvm}, Renjin for the R programming language \cite{renjin}, and Scala \cite{scala}.
 
 Currently, there is no full implementation of Haskell in the JVM.  One Haskell dialect that is runnable in Java is Frege \cite{frege}.  
 
@@ -913,9 +916,9 @@ Particularly useful features that could be added to \textit{HamSkill} include:
 
 \begin{enumerate}
 
-\item A debugger for detecting any incompatibilities in the input Haskell code
+\item A code analyzer for detecting any incompatibilities in the input Haskell program
 
-\item Support for multiple linked Haskell files
+\item Support for multiple, linked Haskell files
 
 \item Entry to the Haskell file via functions other than \texttt{main}
 

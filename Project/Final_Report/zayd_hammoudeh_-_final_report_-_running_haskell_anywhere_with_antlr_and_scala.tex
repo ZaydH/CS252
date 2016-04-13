@@ -3,7 +3,10 @@
 \usepackage{url}
 \usepackage{indentfirst}
 \usepackage{float}
+\usepackage{textcomp} % Required for upquote.
 \usepackage{listings} % Include the listings-package
+\lstset{upquote=true} % Ensure quotes in listings are straight.
+\lstset{showstringspaces=false} % Cleaner way to print strings in listings packages so no space symbol.
 \usepackage{mdframed}
 \usepackage[numbers,sort]{natbib}
 %\usepackage[english]{babel} % Need for text wrap in table.
@@ -243,7 +246,7 @@ Unlike \textit{HamSkill} Standard, \textit{HamSkill}+ requires Scala to be insta
 \begin{figure}[H]
 \begin{mdframed}
 \begin{lstlisting}[language=bash]
-java -jar hamskill.jar ``$@"
+java -jar hamskill.jar "$@"
 \end{lstlisting}
 \end{mdframed}
 \caption{Transpiling from Haskell to Scala with \textit{HamSkill}+}\label{fig:runHamSkill}

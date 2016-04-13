@@ -1,0 +1,241 @@
+\documentclass{report}
+
+\usepackage{url}
+\usepackage{indentfirst}
+\usepackage{float}
+\usepackage{listings} % Include the listings-package
+\usepackage{mdframed}
+\usepackage[numbers,sort]{natbib}
+%\usepackage[english]{babel} % Need for text wrap in table.
+\usepackage{array} % Needed for centering in the table
+\usepackage{graphicx}
+
+\usepackage{fullpage}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+%\usepackagen{url}
+\usepackage{float}
+\usepackage{paralist}
+
+\floatstyle{boxed}
+\restylefloat{figure}
+
+\usepackage{framed, color}
+\definecolor{shadecolor}{rgb}{1, 0.8, 0.3}
+
+\usepackage{hyperref} % Creates links in the PDF document.
+\hypersetup{hidelinks} % Do not include boxes around links
+
+
+\newcommand{\rel}[1]{ \mbox{\sc [#1]} }
+
+\title{Progress and Preservation Proofs for the \\
+Expressions ``\texttt{iszero}" and ``\texttt{pred}" in the Arith Language}
+
+\author{
+  Zayd Hammoudeh \\
+  (zayd.hammoudeh@sjsu.edu)
+  }
+
+
+% Skip lines after each paragraph.
+\setlength\parskip{\baselineskip}
+
+\begin{document}
+
+\maketitle
+
+\pagenumbering{roman}
+
+\tableofcontents{\protect\newpage}
+
+\addcontentsline{toc}{section}{List of Figures}
+\listoffigures
+\newpage
+ 
+\pagenumbering{arabic}
+
+\renewcommand\thesection{\arabic{section}}
+
+\section{Arith Language}\label{sec:jvm}
+
+Arith is a basic language; its expressions, values, and types are enumerated in figure~\ref{fig:arithLanguage}.  Arith's small-step, evaluation order semantics are defined in figure~\ref{fig:arithSmallStepRules} while Arith's type rules are enumerated in figure~\ref{fig:arithTypeRules}.
+
+% Commands for formatting figure
+\newcommand{\mydefhead}[2]{\multicolumn{2}{l}{{#1}}&\mbox{\emph{#2}}\\}
+\newcommand{\mydefcase}[2]{\qquad\qquad& #1 &\mbox{#2}\\}
+
+% Commands for language format
+\newcommand{\assign}[2]{#1~{:=}~#2}
+\newcommand{\ife}[3]{\mbox{\tt if}~({#1})~\mbox{\tt then}~({#2})~\mbox{\tt else}~({#3})}
+\newcommand{\iszeroe}[1]{\mbox{\tt iszero}~(#1)}
+\newcommand{\prede}[1]{\mbox{\tt pred}~(#1)}
+\newcommand{\succe}[1]{\mbox{\tt succ}~(#1)}
+\newcommand{\true}{\mbox{\tt true}}
+\newcommand{\false}{\mbox{\tt false}}
+\newcommand{\zero}{\mbox{\tt 0}}
+\newcommand{\boolt}{\mbox{\tt Bool}}
+\newcommand{\intt}{\mbox{\tt Int}}
+
+\begin{figure}[H]
+\[
+\begin{array}{llr}
+  \mydefhead{e ::=\qquad\qquad\qquad\qquad}{Expressions}
+  \mydefcase{\true}{Boolean True}
+  \mydefcase{\false}{Boolean False}
+  \mydefcase{\zero}{Integer Value 0}
+  \mydefcase{\succe e}{Successor Expressions}
+  \mydefcase{\prede e}{Predecessor Expressions}
+  \mydefcase{\iszeroe e}{Zero Value Check Expressions}
+  \mydefcase{\ife e e e}{Conditional Expressions}
+  \\
+  \mydefhead{v ::=\qquad\qquad\qquad\qquad}{Values}
+  \mydefcase{i}{integer values}
+  \mydefcase{b}{boolean values}
+  \\
+  \mydefhead{T ::=\qquad\qquad\qquad\qquad}{Types}
+  \mydefcase{\boolt}{Boolean Type}
+  \mydefcase{\intt}{Integer Type}
+\end{array}
+\]
+\caption{The Arith language}
+\end{figure}\label{fig:arithLanguage}
+
+
+\newcommand{\ruleNoBar}[2]{
+  \rel{#1} &
+     \strut\begin{array}{@{}c@{}} #2 \end{array}
+   \\~\\~\\
+}
+\newcommand{\ruleWithBar}[3]{
+  \rel{#1} &
+  \frac{\strut\begin{array}{@{}c@{}} #2 \end{array}}
+       {\strut\begin{array}{@{}c@{}} #3 \end{array}}
+   \\~\\~\\
+}
+\newcommand{\sstep}[2]{{#1} \rightarrow {#2}}
+\newcommand{\typeRule}[2]{{#1} : {#2}}
+
+
+\begin{figure}[H]
+{\bf Evaluation Rules:~~~ \fbox{$\sstep{e}{e'}$}} \\
+\[
+\begin{array}{r@{\qquad\qquad}l}
+\ruleWithBar{E-Succ-Ctxt}{
+  \sstep{e}{e'}
+}{
+  \sstep{\succe e}{\succe e'}
+}
+\ruleWithBar{E-Succ}{
+  i' = i + 1
+}{
+  \sstep{\succe i}{i'}
+}
+\ruleWithBar{E-Pred-Ctxt}{
+  \sstep{e}{e'}
+}{
+  \sstep{\prede e}{\prede e'}
+}
+\ruleWithBar{E-Pred}{
+  i' = i - 1
+}{
+  \sstep{\prede i}{i'}
+}
+\ruleWithBar{E-IsZero-Ctxt}{
+  \sstep{e}{e'}
+}{
+  \sstep{\iszeroe e}{\iszeroe {e'}}
+}
+\ruleNoBar{E-IsZero-Z}{
+  \sstep{\iszeroe \zero}{\true}
+}
+\ruleWithBar{E-IsZero-NZ}{
+   i \ne 0
+}{
+  \sstep{\iszeroe i}{\false}
+}
+\ruleWithBar{E-If-Ctxt}{
+  \sstep{e_1}{e'_1}
+}{
+  \sstep{\ife {e_1} {e_2} {e_3}}{\ife {e'_1} {e_2} {e_3}}
+}
+\ruleNoBar{E-If-True}{
+  \sstep{\ife \true {e_2} {e_3}}{e_2}
+}
+\ruleNoBar{E-If-False}{
+  \sstep{\ife \false {e_2} {e_3}}{e_3}
+}
+\end{array}
+\]
+\caption{Small-Step, Evaluation Order Semantics Semantics for the Arith Language}
+\end{figure}\label{fig:arithSmallStepRules}
+
+\begin{figure}[H]
+{\bf Type Rules:~~~ \fbox{$\typeRule{e}{T}$}} \\
+\[
+\begin{array}{r@{\qquad\qquad}l}
+\ruleNoBar{T-True}{
+  \typeRule{\true}{\boolt}
+}
+\ruleNoBar{T-False}{
+  \typeRule{\false}{\boolt}
+}
+\ruleNoBar{T-Int}{
+  \typeRule{i}{\intt}
+}
+\ruleWithBar{T-Succ}{
+  \typeRule{e}{\intt}
+}{
+  \typeRule{\succe e}{\intt}
+}
+\ruleWithBar{T-Pred}{
+  \typeRule{e}{\intt}
+}{
+  \typeRule{\prede e}{\intt}
+}
+\ruleWithBar{T-IsZero}{
+  \typeRule{e}{\intt}
+}{
+  \typeRule{\iszeroe e}{\boolt}
+}
+\ruleWithBar{T-If}{
+  \typeRule{e_1}{\boolt},~~\typeRule{e_2}{T},~~\typeRule{e_3}{T}
+}{
+  \typeRule{\ife {e_1} {e_2} {e_3}}{T}
+}
+\end{array}
+\]
+\caption{Type Rules for the Arith Language}
+\end{figure}\label{fig:arithTypeRules}
+
+
+
+\section{Progress}\label{sec:progress}
+
+In semantics context, ``progress" entails that a well-type expression will not ``get stuck."  Figure~\ref{fig:progresstheorem} shows the formal, theoretical definition of progress.
+
+\begin{figure}[ht!]
+
+	Given $e : T$, then either:
+	
+	\begin{enumerate}
+	
+      \item $e$ is a value.
+      
+      \item There exists an $e'$ such that: $e \rightarrow e'$.
+	
+	\end{enumerate}
+	
+  \caption{Formal Definition of the Progress Theorem}
+\end{figure}\label{fig:progresstheorem}
+
+The following subsections are the formal proofs of progress for the type rules in figure~\ref{fig:arithTypeRules}.
+
+\subsection{Progress Proof for $iszero$}
+
+
+
+
+\end{document}

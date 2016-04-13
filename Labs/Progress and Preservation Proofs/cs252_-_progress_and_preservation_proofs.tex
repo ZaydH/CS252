@@ -79,7 +79,7 @@ Arith is a basic language; its expressions, values, and types are enumerated in 
 \newcommand{\boolt}{\mbox{\tt Bool}}
 \newcommand{\intt}{\mbox{\tt Int}}
 
-\begin{figure}[H]
+\begin{figure}[ht!]
 \[
 \begin{array}{llr}
   \mydefhead{e ::=\qquad\qquad\qquad\qquad}{Expressions}
@@ -100,8 +100,8 @@ Arith is a basic language; its expressions, values, and types are enumerated in 
   \mydefcase{\intt}{Integer Type}
 \end{array}
 \]
-\caption{The Arith language}
-\end{figure}\label{fig:arithLanguage}
+\caption{The Arith language}\label{fig:arithLanguage}
+\end{figure}
 
 
 \newcommand{\ruleNoBar}[2]{
@@ -124,9 +124,9 @@ Arith is a basic language; its expressions, values, and types are enumerated in 
 \[
 \begin{array}{r@{\qquad\qquad}l}
 \ruleWithBar{E-Succ-Ctxt}{
-  \sstep{e}{e'}
+  \sstep{e_1}{e'_1}
 }{
-  \sstep{\succe e}{\succe e'}
+  \sstep{\succe {e_1}}{\succe {e'_1}}
 }
 \ruleWithBar{E-Succ}{
   i' = i + 1
@@ -134,9 +134,9 @@ Arith is a basic language; its expressions, values, and types are enumerated in 
   \sstep{\succe i}{i'}
 }
 \ruleWithBar{E-Pred-Ctxt}{
-  \sstep{e}{e'}
+  \sstep{e_1}{e'_1}
 }{
-  \sstep{\prede e}{\prede e'}
+  \sstep{\prede {e_1}}{\prede {e'_1}}
 }
 \ruleWithBar{E-Pred}{
   i' = i - 1
@@ -144,9 +144,9 @@ Arith is a basic language; its expressions, values, and types are enumerated in 
   \sstep{\prede i}{i'}
 }
 \ruleWithBar{E-IsZero-Ctxt}{
-  \sstep{e}{e'}
+  \sstep{e_1}{e'_1}
 }{
-  \sstep{\iszeroe e}{\iszeroe {e'}}
+  \sstep{\iszeroe {e_1}}{\iszeroe {e_1'}}
 }
 \ruleNoBar{E-IsZero-Z}{
   \sstep{\iszeroe \zero}{\true}
@@ -169,8 +169,8 @@ Arith is a basic language; its expressions, values, and types are enumerated in 
 }
 \end{array}
 \]
-\caption{Small-Step, Evaluation Order Semantics Semantics for the Arith Language}
-\end{figure}\label{fig:arithSmallStepRules}
+\caption{Small-Step, Evaluation Order Semantics Semantics for the Arith Language}\label{fig:arithSmallStepRules}
+\end{figure}
 
 \begin{figure}[H]
 {\bf Type Rules:~~~ \fbox{$\typeRule{e}{T}$}} \\
@@ -186,19 +186,19 @@ Arith is a basic language; its expressions, values, and types are enumerated in 
   \typeRule{i}{\intt}
 }
 \ruleWithBar{T-Succ}{
-  \typeRule{e}{\intt}
+  \typeRule{e_1}{\intt}
 }{
-  \typeRule{\succe e}{\intt}
+  \typeRule{\succe e_1}{\intt}
 }
 \ruleWithBar{T-Pred}{
-  \typeRule{e}{\intt}
+  \typeRule{e_1}{\intt}
 }{
-  \typeRule{\prede e}{\intt}
+  \typeRule{\prede e_1}{\intt}
 }
 \ruleWithBar{T-IsZero}{
-  \typeRule{e}{\intt}
+  \typeRule{e_1}{\intt}
 }{
-  \typeRule{\iszeroe e}{\boolt}
+  \typeRule{\iszeroe e_1}{\boolt}
 }
 \ruleWithBar{T-If}{
   \typeRule{e_1}{\boolt},~~\typeRule{e_2}{T},~~\typeRule{e_3}{T}
@@ -207,16 +207,16 @@ Arith is a basic language; its expressions, values, and types are enumerated in 
 }
 \end{array}
 \]
-\caption{Type Rules for the Arith Language}
-\end{figure}\label{fig:arithTypeRules}
+\caption{Type Rules for the Arith Language}\label{fig:arithTypeRules}
+\end{figure}
 
 
 
 \section{Progress}\label{sec:progress}
 
-In semantics context, ``progress" entails that a well-type expression will not ``get stuck."  Figure~\ref{fig:progresstheorem} shows the formal, theoretical definition of progress.
+In semantics context, ``progress" entails that a well-type expression will not ``get stuck."  Figure~\ref{fig:progressTheorem} is the formal, theoretical definition of progress.
 
-\begin{figure}[ht!]
+\begin{figure}[H]
 
 	Given $e : T$, then either:
 	
@@ -228,14 +228,78 @@ In semantics context, ``progress" entails that a well-type expression will not `
 	
 	\end{enumerate}
 	
-  \caption{Formal Definition of the Progress Theorem}
-\end{figure}\label{fig:progresstheorem}
+  \caption{Formal Definition of the Progress Theorem}\label{fig:progressTheorem}
+\end{figure}
 
 The following subsections are the formal proofs of progress for the type rules in figure~\ref{fig:arithTypeRules}.
 
-\subsection{Progress Proof for $iszero$}
+\subsection{Proving Progress for Boolean and Integer Values}
 
+Figure~\ref{fig:progressTheorem} establish that progress is achieved if an expression $e$ is a value.  Hence, by this criterion, type rules \rel{T-True}, \rel{T-False}, and \rel{T-Int} all hold.
 
+\subsection{Proving Progress for the If Expression}
 
+Figure~\ref{fig:ifProofProgress} is the proof of progress for the If expression in the Arith Language.
+
+\begin{figure}[ht!]
+Given:
+\begin{center}
+   $e = \ife {e_1} {e_2} {e_3}$
+   $\typeRule{e_1}{\boolt},~~\typeRule{e_2}{T},~~\typeRule{e_3}{T}$
+\end{center}
+Then:
+\begin{center}
+   $\typeRule{e}{T}$
+\end{center}
+By induction, an expression $e_1$ must be a value or $\exists e_1$ such that:
+\begin{enumerate}
+
+    \item If $e_1 = i$ where ``$i$", then $\sstep{e}{i'}$ where:
+    
+    \begin{center}
+       $i' = i + 1$
+    \end{center}
+      
+    \item Otherwise, $\sstep{e_1}{e'_1}$ which means that $\rel{E-If-Ctxt}$ applies (as shown below) which by induction holds.
+    
+    \begin{center}
+      $\sstep{\succ e_1}{\ife {e'_1} {e_2} {e_3}}$
+    \end{center}
+	
+	\end{enumerate}
+	
+  \caption{Proof of Progress for the If Expression}\label{fig:ifProofProgress}
+\end{figure}
+
+\subsection{Proving Progress for the Successor Expression}
+
+Figure~\ref{fig:arithTypeRules} shows the type rule for the successor expression.  The proof of progress for this expression is shown in figure~\ref{fig:succProofProgress}.
+
+\begin{figure}[ht!]
+Given:
+\begin{center}
+  $e = \succe {e_1}$ \\
+   $\typeRule{e_1}{\intt}$
+\end{center}
+Then:~\\
+\begin{center}
+   $T = \intt$
+\end{center}
+
+By induction, $e_1$ must either be a value or $\exists e'_1$ such that:~\\
+
+	\begin{enumerate}
+    \item If $e_1$ is a value, then either \rel{E-If-True} or \rel{E-If-False} applies since $\typeRule{e_1}{\boolt}$.
+      
+    \item Otherwise $\rel{E-If-Ctxt}$ applies (as shown below) which by induction holds.
+    
+    \begin{center}
+      $\sstep{e}{\ife {e'_1} {e_2} {e_3}}$
+    \end{center}
+	
+	\end{enumerate}
+	
+  \caption{Proof of Progress for the Successor Expression}\label{fig:succProofProgress}
+\end{figure}
 
 \end{document}

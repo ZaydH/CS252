@@ -383,22 +383,17 @@ Figure~\ref{fig:ifProofPreservation} is the proof of preservation for the \textt
 \begin{figure}[ht!]
 Given:
 \begin{center}
-   $e = \ife {e_1} {e_2} {e_3}$
-   $\sstep{e}{e'}$
+   $e = \ife {e_1} {e_2} {e_3}$~\\
    $\typeRule{e_1}{\boolt},~~\typeRule{e_2}{T},~~\typeRule{e_3}{T}$
 \end{center}
-Then:
-\begin{center}
-   $\typeRule{e'}{T}$
-\end{center}
-For the \texttt{if} expression, three evaluation rules may apply.
+For the \texttt{if} expression, \textbf{three} evaluation rules may apply.
 \begin{enumerate}
 
     \item If $\rel{E-IfTrue}$ applies, then $e_1 = \true$.  Hence, $e' = e_2$.  This proof holds since by definition $\typeRule{e_2}{T}$.
       
     \item If $\rel{E-IfFalse}$ applies, then $e_1 = \false$.  Hence, $e' = e_3$.  This proof holds since by definition $\typeRule{e_3}{T}$.
     
-    \item If $\rel{E-If-Ctxt}$ applies, then $\sstep{e_1}{e'_1}$ by induction $\typeRule{e_1}{\boolt}$ (this can be assumed by induction since $e_1$ is a subcase of $e$).  Furthermore, by induction using $\rel{T-If}$, then:
+    \item If $\rel{E-If-Ctxt}$ applies, then $\sstep{e_1}{e'_1}$ by induction $\typeRule{e_1}{\boolt}$ (this can be assumed by induction since $e_1$ is a subcase of $e$).  Then using $\rel{T-If}$:
     
     \begin{center}
       $\sstep{e' = \ife {e'_1}{e_2}{e_3}}{T}$
@@ -407,6 +402,120 @@ For the \texttt{if} expression, three evaluation rules may apply.
 	\end{enumerate}
 	
   \caption{Proof of Preservation for the \texttt{if} Expression}\label{fig:ifProofPreservation}
+\end{figure} 
+
+\eject
+\subsection{Proving Preservation for the \texttt{succ} Expression}
+
+Figure~\ref{fig:succProofPreservation} is the proof of preservation for the \texttt{succ} expression in the Arith Language.
+
+\begin{figure}[ht!]
+Given:
+\begin{center}
+   $e = \succe {e_1}$~\\
+   $\typeRule{e_1}{\intt}$
+\end{center}
+Then:
+\begin{center}
+   $T = \intt$
+\end{center}
+For the \texttt{succ} expression, \textbf{two} evaluation rules may apply.
+\begin{enumerate}
+
+    \item If $\rel{E-Succ-Ctxt}$ applies, then $\sstep{e_1}{e'_1}$ by induction $\typeRule{e_1}{\intt}$.  Using type rule $\rel{T-Succ}$,
+    
+    \begin{center}
+      $\sstep{e' = \succe {e'_1}}{\intt}$
+    \end{center}
+      
+    \item If $\rel{E-Succ}$ applies, then $e_1 = i$.  Hence, $\sstep{e = \succe{i}}{i'}$ where $i' = i + 1$.  Therefore, $\typeRule{e'}{\intt}$ using Lemma-Int defined in Figure~\ref{fig:lemmaInt}.
+    
+\end{enumerate}
+	
+  \caption{Proof of Preservation for the \texttt{succ} Expression}\label{fig:succProofPreservation}
+\end{figure} 
+
+The preservation proof for successor relies on a lemma defining integer arithmetic; it is shown in Figure~\ref{fig:lemmaInt}.
+
+\begin{figure}[ht!]
+
+\textbf{Lemma Int}~\\
+
+If $\typeRule{i}{\intt}$ and either:
+
+\begin{enumerate}
+
+    \item $i' = i + 1$
+      
+    \item $i' = i - 1$
+    
+\end{enumerate}
+
+then $\typeRule{i'}{\intt}$.
+	
+  \caption{Definition of Lemma Int}\label{fig:lemmaInt}
+\end{figure} 
+
+\subsection{Proving Preservation for the \texttt{pred} Expression}
+
+Figure~\ref{fig:predProofPreservation} is the proof of preservation for the \texttt{pred} expression in the Arith Language.
+
+\begin{figure}[ht!]
+Given:
+\begin{center}
+   $e = \prede {e_1}$~\\
+   $\typeRule{e_1}{\intt}$
+\end{center}
+Then:
+\begin{center}
+   $T = \intt$
+\end{center}
+For the \texttt{pred} expression, \textbf{two} evaluation rules may apply.
+\begin{enumerate}
+
+    \item If $\rel{E-Pred-Ctxt}$ applies, then $\sstep{e_1}{e'_1}$ by induction $\typeRule{e_1}{\intt}$.  Using type rule $\rel{T-Pred}$,
+    
+    \begin{center}
+      $\sstep{e' = \prede {e'_1}}{\intt}$
+    \end{center}
+      
+    \item If $\rel{E-Pred}$ applies, then $e_1 = i$.  Hence, $\sstep{e = \prede{i}}{i'}$ where $i' = i - 1$.  Therefore, $\typeRule{e'}{\intt}$ using Lemma-Int defined in Figure~\ref{fig:lemmaInt}.
+    
+\end{enumerate}
+
+  \caption{Proof of Preservation for the \texttt{pred} Expression}\label{fig:predProofPreservation}
+\end{figure} 
+
+\subsection{Proving Preservation for the \texttt{iszero} Expression}
+
+Figure~\ref{fig:isZeroProofPreservation} is the proof of preservation for the \texttt{iszero} expression in the Arith Language.
+
+\begin{figure}[ht!]
+Given:
+\begin{center}
+   $e = \iszeroe {e_1}$~\\
+   $\typeRule{e_1}{\intt}$
+\end{center}
+Then:
+\begin{center}
+   $T = \boolt$
+\end{center}
+For the \texttt{iszero} expression, \textbf{three} evaluation rules may apply.
+\begin{enumerate}
+
+    \item If $\rel{E-IsZero-Z}$ applies, then $e_1 = 0$.  Hence, $e' = \true$ which holds using rule $\rel{T-True}$.
+      
+    \item If $\rel{E-IsZero-NZ}$ applies, then $e_1$ is a value such that $e_1 \ne 0$.  Hence, $e' = \false$ which holds using rule $\rel{T-False}$.
+    
+    \item If $\rel{E-IsZero-Ctxt}$ applies, then $\sstep{e_1}{e'_1}$ by induction $\typeRule{e_1}{\boolt}$ (this can be assumed by induction since $e_1$ is a subcase of $e$).  Then using $\rel{T-IsZero}$:
+    
+    \begin{center}
+      $\sstep{e' = \iszeroe {e'_1}}{\boolt}$
+    \end{center}
+    
+\end{enumerate}
+
+  \caption{Proof of Preservation for the \texttt{iszero} Expression}\label{fig:isZeroProofPreservation}
 \end{figure} 
 
 \end{document}

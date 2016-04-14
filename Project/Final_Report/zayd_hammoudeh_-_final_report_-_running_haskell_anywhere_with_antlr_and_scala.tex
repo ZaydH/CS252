@@ -3,14 +3,21 @@
 \usepackage{url}
 \usepackage{indentfirst}
 \usepackage{float}
+
+\usepackage[T1]{fontenc}
 \usepackage{textcomp} % Required for upquote.
 \usepackage{listings} % Include the listings-package
-\lstset{upquote=true} % Ensure quotes in listings are straight.
-\lstset{showstringspaces=false} % Cleaner way to print strings in listings packages so no space symbol.
+% Ensure quotes in listings are straight.
+% Cleaner way to print strings in listings packages so no space symbol.
+\lstset{showstringspaces=false, 
+        upquote=true} 
+
+
 \usepackage{mdframed}
 \usepackage[numbers,sort]{natbib}
 %\usepackage[english]{babel} % Need for text wrap in table.
 \usepackage{array} % Needed for centering in the table
+\usepackage[export]{adjustbox} % loads also graphicx
 \usepackage{graphicx}
 
 \usepackage{hyperref} % Creates links in the PDF document.
@@ -53,9 +60,9 @@ with ANTLR and Scala\\[1in]
 
 \section{Running in the Java Virtual Machine}\label{sec:jvm}
 
-C is one of the most commonly used languages when the primary objective is maximum performance.  However, C's ``write once, compile anywhere" paradigm limits its portability.  In contrast, the near ubiquity of the Java Virtual Machine (JVM) allows Java to be ``write once, run anywhere."  
+C is one of the most commonly used languages when the primary objective is maximum performance.  However, C's ``write once, compile anywhere'' paradigm limits its portability.  In contrast, the near ubiquity of the Java Virtual Machine (JVM) allows Java to be ``write once, run anywhere.''  
 
-Developers have often leveraged the JVM's ``run anywhere" capability for other languages than Java.  Examples include: JRuby for the Ruby programming language \cite{jruby}, Jython for the Python programming language \cite{jython_jvm}, Renjin for the R programming language \cite{renjin}, and Scala \cite{scala}.
+Developers have often leveraged the JVM's ``run anywhere'' capability for other languages than Java.  Examples include: JRuby for the Ruby programming language \cite{jruby}, Jython for the Python programming language \cite{jython_jvm}, Renjin for the R programming language \cite{renjin}, and Scala \cite{scala}.
 
 Currently, there is no full implementation of Haskell in the JVM.  One Haskell dialect that is runnable in Java is Frege \cite{frege}.  
 
@@ -67,7 +74,7 @@ When designing and implementing this project, there were four primary goals:
 
 \begin{enumerate}
 
-\item \textbf{Runnable in the Java Virtual Machine} - As explained in section~\ref{sec:jvm}, Java's Virtual Machine enables significant machine independence, which Haskell does not currently have.
+\item \textbf{Runnable in the Java Virtual Machine} - As explained in Section~\ref{sec:jvm}, Java's Virtual Machine enables significant machine independence, which Haskell does not currently have.
 
 \item \textbf{Minimal JVM Requirements} - In addition to just running in the JVM, \textit{HamSkill} was created to be as standalone as possible.  As an example, it was not expected that in most applications, the user would have Scala installed on their machine.  To achieve this maximum portability, some more niche features of Haskell may not be supported.
 
@@ -90,7 +97,7 @@ When designing and implementing this project, there were four primary goals:
    \item \texttt{ScalaOutput} Java Class
 \end{itemize}
 
-The relationships between these components are shown in figure~\ref{fig:hamskillArchitecture}, and the following subsections describe the role of each component in the overall system.
+The relationships between these components are shown in Figure~\ref{fig:hamskillArchitecture}, and the following subsections describe the role of each component in the overall system.
 
 \begin{figure}[ht!]
 	\centering
@@ -104,13 +111,13 @@ ANTLR (\underline{AN}other \underline{T}ool for \underline{L}anguage \underline{
 
 \subsubsection{ANTLR Version 4 Grammar}
 
-A grammar is a formal description of sentences in a language; it is based off the concept of a context-free grammar in automata theory.  ANTLR version 4's (v4) grammar files (denoted by the file extension ``\emph{.g4}") explicitly define how ANTLR will parse some structured text.  The grammar file may contain token definitions (which always start with a capital letter) and/or parser rules (which always start with a lowercase letter).  A token is a group of characters that form a single object; the parser uses these tokens to recognize sentence structures within a corpus.
+A grammar is a formal description of sentences in a language; it is based off the concept of a context-free grammar in automata theory.  ANTLR version 4's (v4) grammar files (denoted by the file extension ``\emph{.g4}'') explicitly define how ANTLR will parse some structured text.  The grammar file may contain token definitions (which always start with a capital letter) and/or parser rules (which always start with a lowercase letter).  A token is a group of characters that form a single object; the parser uses these tokens to recognize sentence structures within a corpus.
 
 This project utilizes two separate grammars namely: \texttt{Haskell} and \texttt{ScalaOutput}.  These grammars are described in the following two subsections.
 
 \myparagraph{\textit{HamSkill}'s \texttt{Haskell} Grammar}\label{sec:haskellG4}
 
-The custom ANTLR grammar, \texttt{Haskell}, was created for this project and is contained in the file ``\texttt{Haskell.g4}."  This grammar defines both the tokens and abstract syntax tree for supported Haskell code.  Some of the Haskell language features that this grammar supports include:
+The custom ANTLR grammar, \texttt{Haskell}, was created for this project and is contained in the file ``\texttt{Haskell.g4}.''  This grammar defines both the tokens and abstract syntax tree for supported Haskell code.  Some of the Haskell language features that this grammar supports include:
 
 \begin{itemize}
    \item \texttt{case} Statements
@@ -122,11 +129,11 @@ The custom ANTLR grammar, \texttt{Haskell}, was created for this project and is 
    \item Lazy Evaluation
 \end{itemize}
 
-For the complete feature set as well as any Haskell syntax requirements, see section~\ref{sec:hamskillFeatures}.
+For the complete feature set as well as any Haskell syntax requirements, see Section~\ref{sec:hamskillFeatures}.
 
 \myparagraph{\textit{HamSkill}'s \texttt{ScalaOutput} Grammar} 
 
-As mentioned in section~\ref{sec:keyProjectRequirements}, one of the key requirements of this project was that the outputs from Haskell and \textit{HamSkill} be identical.  Figures~\ref{fig:printListHaskell} and~\ref{fig:printListScala} show the Haskell and Scala code respectively to print a list containing integers ``2", ``3", and ``4" to the console.  Note that the second line in each figure (which shows each language's respective console output) are very different.
+As mentioned in Section~\ref{sec:keyProjectRequirements}, one of the key requirements of this project was that the outputs from Haskell and \textit{HamSkill} be identical.  Figures~\ref{fig:printListHaskell} and~\ref{fig:printListScala} show the Haskell and Scala code respectively to print a list containing integers ``2'', ``3'', and ``4'' to the console.  Note that the second line in each figure (which shows each language's respective console output) are very different.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -148,11 +155,11 @@ List(2, 3, 4)
 \caption{Printing a Three Element List in Scala}\label{fig:printListScala}
 \end{figure}
 
-The ANTLR grammar, \texttt{ScalaOutput}, (contained in the file ``\texttt{ScalaOutput.g4}") is used to account for these types of differences by parsing the console output of a Scala program and converting that output to a syntax that is more similar to that of Haskell.
+The ANTLR grammar, \texttt{ScalaOutput}, (contained in the file ``\texttt{ScalaOutput.g4}'') is used to account for these types of differences by parsing the console output of a Scala program and converting that output to a syntax that is more similar to that of Haskell.
 
 \subsubsection{ANTLR-Generated Java Classes}
 
-Programs that use ANTLR do not generally operate directly on the grammar.  Rather, the grammar is converted by ANTLR into a set of Java classes; given an  grammar (e.g. ``\emph{GrammarName.g4}"),  ANTLR creates the following files:
+Programs that use ANTLR do not generally operate directly on the grammar.  Rather, the grammar is converted by ANTLR into a set of Java classes; given an  grammar (e.g. ``\emph{GrammarName.g4}''),  ANTLR creates the following files:
 
 \begin{itemize}
 	\item \emph{GrammarName}Lexer.java - This class is the the lexer defined by the input grammar file.  It extends ANTLR's base \texttt{Lexer} class.
@@ -165,24 +172,24 @@ Programs that use ANTLR do not generally operate directly on the grammar.  Rathe
 	
 \end{itemize}
 
-Most programs that use ANTLR override at least some of the functions in the file ``\emph{GrammarName}BaseListener.java."
+Most programs that use ANTLR override at least some of the functions in the file ``\emph{GrammarName}BaseListener.java.''
 
 
 \myparagraph{\texttt{HaskellTokensToScala} Java Class}
 
-The class ``\texttt{HaskellTokensToScala}" overrides some of the methods ANTLR auto-generated in the file ``\texttt{HaskellBaseListener.java}"; note that all of these overridden methods are derived from the grammar ``\texttt{Haskell.g4}" described in section~\ref{sec:haskellG4}.  In the end, it is the Java code in this file that performs the actual, low-level transpilation from Haskell to Scala.
+The class ``\texttt{HaskellTokensToScala}'' overrides some of the methods ANTLR auto-generated in the file ``\texttt{HaskellBaseListener.java}''; note that all of these overridden methods are derived from the grammar ``\texttt{Haskell.g4}'' described in Section~\ref{sec:haskellG4}.  In the end, it is the Java code in this file that performs the actual, low-level transpilation from Haskell to Scala.
 
 \myparagraph{\texttt{ScalaOutputTokensToHaskellFormat} Java Class}\label{sec:scalaOutputFunctionality}
 
-Similar to the \texttt{HaskellTokensToScala} class, the class, ``\texttt{ScalaOutput}" extends the ANTLR auto-generated class, ``\texttt{ScalaOutputBaseListener}".
+Similar to the \texttt{HaskellTokensToScala} class, the class, ``\texttt{ScalaOutput}'' extends the ANTLR auto-generated class, ``\texttt{ScalaOutputBaseListener}''.
 
 The listeners in this class are primarily responsible for transforming two different categories of Scala console outputs, specifically:
 
 \begin{itemize}
 
-\item \textbf{Lists} - As shown in figures~\ref{fig:printListHaskell} and~\ref{fig:printListScala}, the console output of lists in Scala and Haskell are significantly different.  The methods in this class coupled with the \texttt{ScalaOutput} grammar convert printed lists from Scala to Haskell format.
+\item \textbf{Lists} - As shown in Figures~\ref{fig:printListHaskell} and~\ref{fig:printListScala}, the console output of lists in Scala and Haskell are significantly different.  The methods in this class coupled with the \texttt{ScalaOutput} grammar convert printed lists from Scala to Haskell format.
 
-\item \textbf{\texttt{Maybe}} Monad - Scala's approximate equivalent of Haskell's \texttt{Maybe} monad is named \texttt{Option}.  While the syntax for the two are similar, they are not identical.  For example, ``\texttt{Just}" and ``\texttt{Nothing}" in Haskell are referred to as ``\texttt{Some}" and ``\texttt{None}" in Scala.  The monad naming convention conversion for console outputs from Scala back to Haskell is handled by the \texttt{ScalaOutput} class.
+\item \textbf{\texttt{Maybe}} Monad - Scala's approximate equivalent of Haskell's \texttt{Maybe} monad is named \texttt{Option}.  While the syntax for the two are similar, they are not identical.  For example, ``\texttt{Just}'' and ``\texttt{Nothing}'' in Haskell are referred to as ``\texttt{Some}'' and ``\texttt{None}'' in Scala.  The monad naming convention conversion for console outputs from Scala back to Haskell is handled by the \texttt{ScalaOutput} class.
 
 \end{itemize}
 
@@ -203,13 +210,13 @@ As defined previously, a transpiler takes source code from one programming langu
 
 \end{itemize}
 
-The language that best fit these criteria is Scala, which is a functional language that is run inside the JVM \cite{whatIsScala}. What is more, Scala natively supports many of Haskell's core features including: functions written in a pattern matching style, immutability of objects, currying, partially applied functions, lazy evaluation, static typing, etc.  One of the disadvantages of Scala is its weaker type inference in comparison to Haskell; due to this, specific requirements were placed on the Haskell dialect supported by \textit{HamSkill} as described in section \ref{sec:hamskillFeatures}.  It must be noted that the author has a predisposed interest towards learning Scala given its extensive support by Apache Spark.  Given all of these factors, the selection of Scala for this project became an obvious choice.\footnote{Additional recognition to Dr. Thomas Austin is required for pointing the author in the direction of Scala.}
+The language that best fit these criteria is Scala, which is a functional language that is run inside the JVM \cite{whatIsScala}. What is more, Scala natively supports many of Haskell's core features including: functions written in a pattern matching style, immutability of objects, currying, partially applied functions, lazy evaluation, static typing, etc.  One of the disadvantages of Scala is its weaker type inference in comparison to Haskell; due to this, specific requirements were placed on the Haskell dialect supported by \textit{HamSkill} as described in Section~\ref{sec:hamskillFeatures}.  It must be noted that the author has a predisposed interest towards learning Scala given its extensive support by Apache Spark.  Given all of these factors, the selection of Scala for this project became an obvious choice.\footnote{Additional recognition to Dr. Thomas Austin is required for pointing the author in the direction of Scala.}
 
 \textit{HamSkill} implements two different schemes for running the transpiled Scala code, namely \textit{HamSkill} Standard and \textit{HamSkill}+.  They are described in the following subsections.
 
 \subsubsection{\textit{HamSkill} Standard}
 
-Since Scala is a compiled language, it is limited in its ability to perform runtime compilation and execution via Java.  To overcome this challenge, \textit{HamSkill} leverages Twitter's \texttt{util-eval} library, which allows runtime compilation and execution of Scala code entirely within a Java program \cite{githubTwitterEvalUtil}.  This approach is known as ``\textit{HamSkill} Standard"; the advantages and disadvantages of using the \texttt{util-eval} library include:
+Since Scala is a compiled language, it is limited in its ability to perform runtime compilation and execution via Java.  To overcome this challenge, \textit{HamSkill} leverages Twitter's \texttt{util-eval} library, which allows runtime compilation and execution of Scala code entirely within a Java program \cite{githubTwitterEvalUtil}.  This approach is known as ``\textit{HamSkill} Standard''; the advantages and disadvantages of using the \texttt{util-eval} library include:
 
 \begin{itemize}
 
@@ -217,7 +224,7 @@ Since Scala is a compiled language, it is limited in its ability to perform runt
 
 \begin{enumerate}
 
-\item \textbf{Reduced JVM Requirements} - Twitter's \texttt{util-eval} library is a JAR file that only requires the presence of Scala's compile and main library JAR files to run.  Hence, this eliminates the need for the user to have Scala installed in their environment.  This addresses one of the key requirements enumerated in section~\ref{sec:keyProjectRequirements}.
+\item \textbf{Reduced JVM Requirements} - Twitter's \texttt{util-eval} library is a JAR file that only requires the presence of Scala's compile and main library JAR files to run.  Hence, this eliminates the need for the user to have Scala installed in their environment.  This addresses one of the key requirements enumerated in Section~\ref{sec:keyProjectRequirements}.
 
 \item \textbf{Simplified Usage} - When running \textit{HamSkill} Standard, only a single function call is required to transpile, compile, then run the Scala code.  In contrast, \textit{HamSkill}+ needs at least four steps to do the same task, which inevitably introduces additional possible points of error.
 
@@ -227,7 +234,7 @@ Since Scala is a compiled language, it is limited in its ability to perform runt
 
 \begin{enumerate}
 
-\item \textbf{Reduced Feature Set} - The \texttt{util-eval} library does not support all Scala features.  An example of a missing feature is the function ``\texttt{readLine}", which takes console inputs.
+\item \textbf{Reduced Feature Set} - The \texttt{util-eval} library does not support all Scala features.  An example of a missing feature is the function ``\texttt{readLine}'', which takes console inputs.
 
 \item \textbf{Reliance on Third Party Developers} - As mentioned previously, \texttt{util-eval} was developed by Twitter.  Hence, it can be deprecated at any time (as Twitter had previously planned \cite{deprecateUtilEval}).  While the library is open-source, picking up a dropped project introduces an additional set of complications.
 
@@ -237,22 +244,22 @@ Since Scala is a compiled language, it is limited in its ability to perform runt
 
 \subsubsection{\textit{HamSkill}+}
 
-Unlike \textit{HamSkill} Standard, \textit{HamSkill}+ requires Scala to be installed on the host PC.  What this enables is that any feature that is supported by the installed version of Scala could in theory be utilized by \textit{HamSkill}+.  Currently, running a Haskell program with \textit{HamSkill}+ requires four separate steps, all of which are controlled by a \texttt{bash} script as shown in figures~\ref{fig:runHamSkill},~\ref{fig:compileScala}, and~\ref{fig:runScalaAndConvertOutput}; these steps are:
+Unlike \textit{HamSkill} Standard, \textit{HamSkill}+ requires Scala to be installed on the host PC.  What this enables is that any feature that is supported by the installed version of Scala could in theory be utilized by \textit{HamSkill}+.  Currently, running a Haskell program with \textit{HamSkill}+ requires four separate steps, all of which are controlled by a \texttt{bash} script as shown in Figures~\ref{fig:runHamSkill},~\ref{fig:compileScala}, and~\ref{fig:runScalaAndConvertOutput}; these steps are:
 
 \begin{enumerate}
 
-\item \textbf{Transpile the Haskell code to Scala} - This is done by running the \texttt{main} method in the \texttt{HamskillMain} class as shown in figure~\ref{fig:runHamSkill}.  Note that ``\texttt{"\$@"}" is \texttt{bash} notation that entails that any parameters passed to the \texttt{bash} script are directly passed as arguments into the JAR's \texttt{main} method.  In \textit{HamSkill+}, the last argument passed to the \texttt{main} method is the name of the file where the transpiled Scala code will be written.
+\item \textbf{Transpile the Haskell code to Scala} - This is done by running the \texttt{main} method in the \texttt{HamskillMain} class as shown in Figure~\ref{fig:runHamSkill}.  Note that ``\texttt{"\$@"}'' is \texttt{bash} notation that entails that any parameters passed to the \texttt{bash} script are directly passed as arguments into the JAR's \texttt{main} method.  In \textit{HamSkill}+, the last argument passed to the \texttt{main} method is the name of the file where the transpiled Scala code will be written.
 
 \begin{figure}[H]
 \begin{mdframed}
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[language=bash, upquote=true]
 java -jar hamskill.jar "$@"
 \end{lstlisting}
 \end{mdframed}
 \caption{Transpiling from Haskell to Scala with \textit{HamSkill}+}\label{fig:runHamSkill}
 \end{figure}
 
-\item \textbf{Compile the Transpiled Scala Code} - The \texttt{bash} command to compile Scala is ``\texttt{scalac}" as shown in figure~\ref{fig:compileScala}.  Note that ``\texttt{\$scalaSrcFile}" is the filename where the transpiled Scala code was written in the previous step.
+\item \textbf{Compile the Transpiled Scala Code} - The \texttt{bash} command to compile Scala is ``\texttt{scalac}'' as shown in Figure~\ref{fig:compileScala}.  Note that ``\texttt{\$scalaSrcFile}'' is the filename where the transpiled Scala code was written in the previous step.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -263,7 +270,7 @@ scalac $scalaSrcFile
 \caption{Compiling the Transpiled Scala Code in \textit{HamSkill}+}\label{fig:compileScala}
 \end{figure}
 
-\item \textbf{Execute the Transpiled Scala Code} - The \texttt{bash} command to run compiled Scala code is simply ``\texttt{scala}" as shown in figure~\ref{fig:runScalaAndConvertOutput}.  Note that ``\texttt{\$scalaObject}" is the name of the encapsulated Scala object (similar to a class in Java) in the compiled Scala file.
+\item \textbf{Execute the Transpiled Scala Code} - The \texttt{bash} command to run compiled Scala code is simply ``\texttt{scala}'' as shown in Figure~\ref{fig:runScalaAndConvertOutput}.  Note that ``\texttt{\$scalaObject}'' is the name of the encapsulated Scala object (similar to a class in Java) in the compiled Scala file.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -272,10 +279,10 @@ scala -cp . $scalaObject
           | java -cp hamskill.jar hamskill.ScalaOutput
 \end{lstlisting}
 \end{mdframed}
-\caption{Executing the Scala Code and Piping the Output to \textit{HamSkill} Java Class ``\texttt{ScalaOutput}"}\label{fig:runScalaAndConvertOutput}
+\caption{Executing the Scala Code and Piping the Output to \textit{HamSkill} Java Class ``\texttt{ScalaOutput}''}\label{fig:runScalaAndConvertOutput}
 \end{figure}
 
-\item \textbf{Pipe the Scala Output to the \texttt{ScalaOutput} Class} - The console output of the Scala code is piped (via ``\texttt{|}") into the Java class \texttt{ScalaOutput} as shown in figure~\ref{fig:runScalaAndConvertOutput}.  As explained in section~\ref{sec:scalaOutputFunctionality}, this class performs any necessary transformations on the console output(s) and then prints the transformed output to the console as if the original code had been run in Haskell.
+\item \textbf{Pipe the Scala Output to the \texttt{ScalaOutput} Class} - The console output of the Scala code is piped (via ``\texttt{|}'') into the Java class \texttt{ScalaOutput} as shown in Figure~\ref{fig:runScalaAndConvertOutput}.  As explained in Section~\ref{sec:scalaOutputFunctionality}, this class performs any necessary transformations on the console output(s) and then prints the transformed output to the console as if the original code had been run in Haskell.
 
 \end{enumerate} 
 
@@ -292,27 +299,27 @@ Regression testing verifies that new features do not affect/compromise existing 
 
 \subsection{Test Bench Implementation Overview}
 
-The \textit{HamSkill} test architecture is written as a \texttt{bash} script (see the file ``\path{Test_Bench/test_bench.sh}" included with the submission).  The function ``\path{perform_hamskillStd_and_hamskillPlus_test}" is the most important in the script as it performs most of the testing; the basic operational flow of this function is:
+The \textit{HamSkill} test architecture is written as a \texttt{bash} script (see the file ``\path{Test_Bench/test_bench.sh}'' included with the submission).  The function ``\path{perform_hamskillStd_and_hamskillPlus_test}'' is the most important in the script as it performs most of the testing; the basic operational flow of this function is:
 
 \begin{itemize}
 
 \item \textbf{Step \#1}: Provide the \texttt{bash} function with the name of a Haskell program written in the dialect supported by \textit{HamSkill}, but without the file extension.
 
-\item \textbf{Step \#2}: Run the specified Haskell program through Haskell and store the program's output to a specific file on disk using the \texttt{bash} command ``\texttt{>}". 
+\item \textbf{Step \#2}: Run the specified Haskell program through Haskell and store the program's output to a specific file on disk using the \texttt{bash} command ``\texttt{>}''. 
 
-\item\label{item:runHamSkillStandard} \textbf{Step \#3}: Run \textit{HamSkill} Standard and output the results to a different file using the \texttt{bash} command ``\texttt{>}". 
+\item\label{item:runHamSkillStandard} \textbf{Step \#3}: Run \textit{HamSkill} Standard and output the results to a different file using the \texttt{bash} command ``\texttt{>}''. 
 
-\item\label{item:diffHamSkillStandard} \textbf{Step \#4}: Perform a file difference operation (using the \texttt{bash} ``\texttt{diff}" command) on the output files from Haskell and \textit{HamSkill} Standard.  If the two files are identical, then mark the test as passing; if they are different, the test failed.
+\item\label{item:diffHamSkillStandard} \textbf{Step \#4}: Perform a file difference operation (using the \texttt{bash} ``\texttt{diff}'' command) on the output files from Haskell and \textit{HamSkill} Standard.  If the two files are identical, then mark the test as passing; if they are different, the test failed.
  
 \item \textbf{Step \#5}: Repeat steps \#3 and \#4 using \textit{HamSkill}+.
 
 \end{itemize}
 
-There is an additional function in the \texttt{bash} test bench named ``\texttt{print\_final\_results}" that prints the number of passing tests versus the total number of tests.
+There is an additional function in the \texttt{bash} test bench named ``\texttt{print\_final\_results}'' that prints the number of passing tests versus the total number of tests.
 
 \subsection{Test Cases}
 
-From the perspective of the test bench, a single Haskell file being run through either \textit{HamSkill} Standard or \textit{HamSkill}+ represents a single test case.  In section~\ref{sec:hamskillFeatures}, the test bench file used to verify each \textit{HamSkill} feature is documented for reference.
+From the perspective of the test bench, a single Haskell file being run through either \textit{HamSkill} Standard or \textit{HamSkill}+ represents a single test case.  In Section~\ref{sec:hamskillFeatures}, the test bench file used to verify each \textit{HamSkill} feature is documented for reference.
 
 \section{Haskell Features Supported by \textit{HamSkill}}\label{sec:hamskillFeatures}
 
@@ -324,7 +331,7 @@ Currently, \textit{HamSkill} only supports a single Haskell file at a time.  If 
 
 \subsection{Support for Functions}
 
-Functions written in Haskell can be interpreted by \textit{HamSkill}.  Figure~\ref{fig:myFunctionHaskell} is a function from the \textit{HamSkill} test case ``\texttt{simple\_function\_call.hs}".
+Functions written in Haskell can be interpreted by \textit{HamSkill}.  Figure~\ref{fig:myFunctionHaskell} is a function from the \textit{HamSkill} test case ``\texttt{simple\_function\_call.hs}''.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -340,13 +347,13 @@ The following subsections enumerate the requirements a Haskell function must sat
 
 \subsubsection{Explicit Function Type Signature}\label{sec:explicitTypeSignature}
 
-All functions (excluding partially applied functions as described in section~\ref{sec:partiallyAppliedFunctions}) must have an explicit type signature.  Note that only a subset of Haskell's base classes are supported (see section \ref{sec:supportedTypes} for details on the supported types).  
+All functions (excluding partially applied functions as described in Section~\ref{sec:partiallyAppliedFunctions}) must have an explicit type signature.  Note that only a subset of Haskell's base classes are supported (see Section~\ref{sec:supportedTypes} for details on the supported types).  
 
 Currently, type variables (even if they map to a supported type) are not supported.
 
 \subsubsection{Pattern Matching}\label{sec:supportedPatternMatching}
 
-As shown in figure~\ref{fig:myFunctionHaskell}, pattern matching of function variables is supported.  Special pattern matching cases that \textit{HamSkill} handles include:
+As shown in Figure~\ref{fig:myFunctionHaskell}, pattern matching of function variables is supported.  Special pattern matching cases that \textit{HamSkill} handles include:
 
 \begin{itemize}
 
@@ -358,7 +365,7 @@ As shown in figure~\ref{fig:myFunctionHaskell}, pattern matching of function var
 
 \end{itemize}
 
-Figure~\ref{fig:functionZaydFoldr} is a function from the \textit{HamSkill} test case ``\texttt{partially\_applied\_example.hs}" that uses all three of the previously mentioned special pattern matching cases.
+Figure~\ref{fig:functionZaydFoldr} is a function from the \textit{HamSkill} test case ``\texttt{partially\_applied\_example.hs}'' that uses all three of the previously mentioned special pattern matching cases.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -376,9 +383,9 @@ Guards in Haskell are not currently supported.
 
 \subsubsection{Recursion}
 
-Recursion is supported by \textit{HamSkill}; however, there are requirements on how function parameters must be specified (see section~\ref{sec:callingAFunction}).
+Recursion is supported by \textit{HamSkill}; however, there are requirements on how function parameters must be specified (see Section~\ref{sec:callingAFunction}).
 
-Figures~\ref{fig:functionZaydFoldr} and~\ref{fig:functionAddList} are recursive functions supported by \textit{HamSkill}; note that the function in figure~\ref{fig:functionAddList} is in the \textit{HamSkill} test case ``\texttt{addList.hs}".
+Figures~\ref{fig:functionZaydFoldr} and~\ref{fig:functionAddList} are recursive functions supported by \textit{HamSkill}; note that the function in Figure~\ref{fig:functionAddList} is in the \textit{HamSkill} test case ``\texttt{addList.hs}''.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -393,7 +400,7 @@ addList (x:xs) = x + (((addList xs)))
 
 \subsubsection{A Single Executable Expression per Pattern Matching Statement}
 
-For each pattern matching case, only a single expression is allowed; Haskell's \texttt{where} and \texttt{let} syntaxes are not supported.  As an example, the first pattern matching case in figure~\ref{fig:functionZaydFoldr} simply returns ``\texttt{acc}" while the second pattern matching case returns the result of calling the function ``\texttt{f}" on two parameters (with the second parameter being a recursive function call).
+For each pattern matching case, only a single expression is allowed; Haskell's \texttt{where} and \texttt{let} syntaxes are not supported.  As an example, the first pattern matching case in Figure~\ref{fig:functionZaydFoldr} simply returns ``\texttt{acc}'' while the second pattern matching case returns the result of calling the function ``\texttt{f}'' on two parameters (with the second parameter being a recursive function call).
 
 If a user wants to define subvariables or execute multiple commands for a single pattern matching case, these additional steps must be defined as separate functions.  While this requirement may make a developer's code more verbose, it should not limit the capabilities of the user.
 
@@ -405,9 +412,9 @@ After the last function in the file, there must be at least one blank line.  Thi
 
 Every Haskell file that is run in either \textit{HamSkill} Standard or \textit{HamSkill}+ must have a \texttt{main} function.  This function is sole entry point into a file.  As with all standard functions, the \texttt{main} method must have its own explicit type signature.
 
-Unlike most other functions, multiple distinct statements may appear in the \texttt{main} function; these statements may even use the syntax ``\texttt{<-}" as long as they are being used to unbox a Haskell \texttt{IO String} object.
+Unlike most other functions, multiple distinct statements may appear in the \texttt{main} function; these statements may even use the syntax ``\texttt{<-}'' as long as they are being used to unbox a Haskell \texttt{IO String} object.
 
-Figure~\ref{fig:functionHaskellMainConsoleInput} is a recursive, multi-instruction \texttt{main} function that supports taking text inputs from the console, and then prints those console inputs to the screen.  This figure also shows the special syntax required when recursing on \texttt{main} where the function name must be surrounded by triple parentheses (i.e. ``\texttt{(((main)))}").  This was done to inform the \textit{HamSkill} parser that the statement is a recursive call and that when converting the code to Scala, it must pass \texttt{main} an argument as shown in figure~\ref{fig:functionScalaMainConsoleInput}; it must also be noted that \texttt{main} can only be called (recursively or otherwise) within the \texttt{main} method itself or by \textit{HamSkill} itself.
+Figure~\ref{fig:functionHaskellMainConsoleInput} is a recursive, multi-instruction \texttt{main} function that supports taking text inputs from the console, and then prints those console inputs to the screen.  This figure also shows the special syntax required when recursing on \texttt{main} where the function name must be surrounded by triple parentheses (i.e. ``\texttt{(((main)))}'').  This was done to inform the \textit{HamSkill} parser that the statement is a recursive call and that when converting the code to Scala, it must pass \texttt{main} an argument as shown in Figure~\ref{fig:functionScalaMainConsoleInput}; it must also be noted that \texttt{main} can only be called (recursively or otherwise) within the \texttt{main} method itself or by \textit{HamSkill} itself.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -445,11 +452,11 @@ def main(args : Array[String]){
 \caption{\textit{HamSkill} Generated Scala Code to take and Print Console Inputs}\label{fig:functionScalaMainConsoleInput}
 \end{figure}
 
-Note that the code shown in figure~\ref{fig:functionScalaMainConsoleInput} is only supported by \textit{HamSkill}+ since it requires the use of the Scala function ``\texttt{getLine}".
+Note that the code shown in Figure~\ref{fig:functionScalaMainConsoleInput} is only supported by \textit{HamSkill}+ since it requires the use of the Scala function ``\texttt{getLine}''.
 
 \subsection{Currying}\label{sec:currying}
 
-Haskell is a fully curried language \cite{learnYouAHaskell}.  In contrast, a Scala function's type signature must be specially formatted to support native currying. Figure~\ref{fig:myFuncInScalaNoCurrying} shows Scala code generated by \textit{HamSkill} with currying disabled (the Haskell version of ``\texttt{myFunc}" is shown figure~\ref{fig:myFunctionHaskell}); in contrast, figure~\ref{fig:myFuncInScalaWithCurrying} shows the \textit{HamSkill} generated Scala code with currying enabled.  Notice that when currying is enabled, each of the function parameter \textbf{must} be inside its own set of parentheses.
+Haskell is a fully curried language \cite{learnYouAHaskell}.  In contrast, a Scala function's type signature must be specially formatted to support native currying. Figure~\ref{fig:myFuncInScalaNoCurrying} shows Scala code generated by \textit{HamSkill} with currying disabled (the Haskell version of ``\texttt{myFunc}'' is shown Figure~\ref{fig:myFunctionHaskell}); in contrast, Figure~\ref{fig:myFuncInScalaWithCurrying} shows the \textit{HamSkill} generated Scala code with currying enabled.  Notice that when currying is enabled, each of the function parameter \textbf{must} be inside its own set of parentheses.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -461,7 +468,7 @@ Haskell is a fully curried language \cite{learnYouAHaskell}.  In contrast, a Sca
   } 
 \end{lstlisting}
 \end{mdframed}
-\caption{\textit{HamSkill} Generated Scala Code for Function ``\texttt{myFunc}" with \textbf{No} Currying}\label{fig:myFuncInScalaNoCurrying}
+\caption{\textit{HamSkill} Generated Scala Code for Function ``\texttt{myFunc}'' with \textbf{No} Currying}\label{fig:myFuncInScalaNoCurrying}
 \end{figure}
 
 \begin{figure}[H]
@@ -474,7 +481,7 @@ Haskell is a fully curried language \cite{learnYouAHaskell}.  In contrast, a Sca
   }
 \end{lstlisting}
 \end{mdframed}
-\caption{\textit{HamSkill} Generated Scala Code for Function ``\texttt{myFunc}" \textbf{with} Currying}\label{fig:myFuncInScalaWithCurrying}
+\caption{\textit{HamSkill} Generated Scala Code for Function ``\texttt{myFunc}'' \textbf{with} Currying}\label{fig:myFuncInScalaWithCurrying}
 \end{figure}
 
 \textit{HamSkill} enables currying for all functions that appear in the input Haskell file.
@@ -487,7 +494,7 @@ In \textit{HamSkill}, there are three separate approaches that can be used to te
 
 \subsubsection{Using the \texttt{\$} Operator}
 
-If a function takes only a single parameter, the right-associative dollar sign (``\texttt{\$}") operator can be used to tell \textit{HamSkill} that the subsequent value is a function parameter.  An example of this is shown in the Haskell code in figure~\ref{fig:useDollarSignHaskell}.\footnote{The Haskell code in this example is in the \textit{HamSkill} test case: ``\texttt{main\_print\_string.hs}".}  Note that functions ``\texttt{putStrLn}" and ``\texttt{show}" both take a single argument and that both use the ``\texttt{\$}" syntax.
+If a function takes only a single parameter, the right-associative dollar sign (``\texttt{\$}'') operator can be used to tell \textit{HamSkill} that the subsequent value is a function parameter.  An example of this is shown in the Haskell code in Figure~\ref{fig:useDollarSignHaskell}.\footnote{The Haskell code in this example is in the \textit{HamSkill} test case: ``\texttt{main\_print\_string.hs}''.}  Note that functions ``\texttt{putStrLn}'' and ``\texttt{show}'' both take a single argument and that both use the ``\texttt{\$}'' syntax.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -501,10 +508,10 @@ main = do
       else ( putStrLn $ show 0 )
 \end{lstlisting}
 \end{mdframed}
-\caption{Specifying Haskell Function Parameters using ``\texttt{\$}" in Haskell}\label{fig:useDollarSignHaskell}
+\caption{Specifying Haskell Function Parameters using ``\texttt{\$}'' in Haskell}\label{fig:useDollarSignHaskell}
 \end{figure}
 
-As a point of reference, figure~\ref{fig:useDollarSignScala} shows the \texttt{main} function from figure~\ref{fig:useDollarSignHaskell} transpiled by \textit{HamSkill} into Scala.
+As a point of reference, Figure~\ref{fig:useDollarSignScala} shows the \texttt{main} function from Figure~\ref{fig:useDollarSignHaskell} transpiled by \textit{HamSkill} into Scala.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -522,12 +529,12 @@ As a point of reference, figure~\ref{fig:useDollarSignScala} shows the \texttt{m
   } 
 \end{lstlisting}
 \end{mdframed}
-\caption{\textit{HamSkill} Transpiled Scala Code of Functions using ``\texttt{\$}" to Specify Function Parameters}\label{fig:useDollarSignScala}
+\caption{\textit{HamSkill} Transpiled Scala Code of Functions using ``\texttt{\$}'' to Specify Function Parameters}\label{fig:useDollarSignScala}
 \end{figure}
 
 \subsubsection{Surround Each Function Parameter by Parentheses}
 
-As explained in section~\ref{sec:currying}, Scala requires that each parameter of a curried function be surrounded by parentheses. If this same formatting is used in the Haskell source code, then \textit{HamSkill} will automatically treat the statement as a function call.  An example usage of this Haskell syntax is shown in figure~\ref{fig:haskellFunctionParenthesesFuncArgs}.~\footnote{The Haskell code in this figure is in the \textit{HamSkill} test case: ``\texttt{compare\_ops.hs}".}  Note that for the function calls to \texttt{notEqual} in \texttt{main}, the parameters (e.g. ``\texttt{5}" and ``\texttt{4}" as well as ``\texttt{3}" and ``\texttt{3}") are each surrounded by their own sets of parentheses.
+As explained in Section~\ref{sec:currying}, Scala requires that each parameter of a curried function be surrounded by parentheses. If this same formatting is used in the Haskell source code, then \textit{HamSkill} will automatically treat the statement as a function call.  An example usage of this Haskell syntax is shown in Figure~\ref{fig:haskellFunctionParenthesesFuncArgs}.~\footnote{The Haskell code in this figure is in the \textit{HamSkill} test case: ``\texttt{compare\_ops.hs}''.}  Note that for the function calls to \texttt{notEqual} in \texttt{main}, the parameters (e.g. ``\texttt{5}'' and ``\texttt{4}'' as well as ``\texttt{3}'' and ``\texttt{3}'') are each surrounded by their own sets of parentheses.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -546,7 +553,7 @@ main = do
 \caption{Haskell Code where Enclosing Parentheses are Used to Specify Function Arguments}\label{fig:haskellFunctionParenthesesFuncArgs}
 \end{figure}
 
-For completeness, figure~\ref{fig:scalaFunctionParenthesesFuncArgs} shows the \textit{HamSkill} transpiled version of the Haskell code in figure~\ref{fig:haskellFunctionParenthesesFuncArgs}.
+For completeness, Figure~\ref{fig:scalaFunctionParenthesesFuncArgs} shows the \textit{HamSkill} transpiled version of the Haskell code in Figure~\ref{fig:haskellFunctionParenthesesFuncArgs}.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -574,7 +581,7 @@ def main(args : Array[String]){
 
 \subsubsection{Triple Parentheses Notation}
 
-Rather than surrounding each individual function parameter by its own set of parentheses, \textit{HamSkill} supports surrounding the entire function call (i.e. the function name and all its parameters) in triple parentheses.  This syntax is shown in figure~\ref{fig:haskellFunctionFactorial}; note that both the initial and recursive calls to the ``\texttt{factorial}" function use triple parentheses.
+Rather than surrounding each individual function parameter by its own set of parentheses, \textit{HamSkill} supports surrounding the entire function call (i.e. the function name and all its parameters) in triple parentheses.  This syntax is shown in Figure~\ref{fig:haskellFunctionFactorial}; note that both the initial and recursive calls to the ``\texttt{factorial}'' function use triple parentheses.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -619,7 +626,7 @@ Figure~\ref{fig:scalaFunctionFactorial} shows the Haskell \texttt{factorial} tri
 
 One of the most important and widely used features of Haskell is its ability to treats functions as first class objects.  Because of that, it was very important to build higher-order function support into \textit{HamSkill}.
 
-Figure~\ref{fig:functionZaydFoldr} shows Haskell's \texttt{foldr} function implemented in a \textit{HamSkill} test bench file.  Other higher-order function implementations that are part of \textit{HamSkill}'s test bench include: ``\texttt{filter}"\footnote{The equivalent ``\texttt{filter}" function is in the test bench file ``\texttt{filter\_example.hs}".} (see figure~\ref{fig:haskellFunctionFilter}) and ``\texttt{map}"\footnote{The equivalent ``\texttt{map}" function is in the test bench file ``\texttt{map\_example.hs}".} (see figure \ref{fig:haskellFunctionMap}).
+Figure~\ref{fig:functionZaydFoldr} shows Haskell's \texttt{foldr} function implemented in a \textit{HamSkill} test bench file.  Other higher-order function implementations that are part of \textit{HamSkill}'s test bench include: ``\texttt{filter}''\footnote{The equivalent ``\texttt{filter}'' function is in the test bench file ``\texttt{filter\_example.hs}''.} (see Figure~\ref{fig:haskellFunctionFilter}) and ``\texttt{map}''\footnote{The equivalent ``\texttt{map}'' function is in the test bench file ``\texttt{map\_example.hs}''.} (see figure \ref{fig:haskellFunctionMap}).
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -649,13 +656,13 @@ zayd_map f (x:xs) = ( f(x) ):( zayd_map(f)(xs) )
 
 Since Haskell does not support objects, it only has functions; Haskell does not have methods.  In contrast, Scala supports objects.  Hence, when transpiling Haskell code to Scala, the parser must identify those Haskell functions that must be converted to Scala methods.  
 
-\textit{HamSkill} supports converting two types of functions to methods namely: ``\texttt{show}" which converts a value to a string, and ``\texttt{length}", which returns the number of elements in a list.  Figures~\ref{fig:functionScalaMainConsoleInput} and~\ref{fig:scalaFunctionFactorial} show Haskell code from the \textit{HamSkill} test bench where functions are converted to methods.
+\textit{HamSkill} supports converting two types of functions to methods namely: ``\texttt{show}'' which converts a value to a string, and ``\texttt{length}'', which returns the number of elements in a list.  Figures~\ref{fig:functionScalaMainConsoleInput} and~\ref{fig:scalaFunctionFactorial} show Haskell code from the \textit{HamSkill} test bench where functions are converted to methods.
 
 \subsection{Partially Applied Functions}\label{sec:partiallyAppliedFunctions}
 
-One of the benefits of function currying is that it enables partially applied functions.  \textit{HamSkill} supports partially applied functions with only with integers as the function input and output parameters.  What is more, partially applied functions in \textit{HamSkill} need to be defined as a dedicated function and are the only exception to the requirement that functions have an explicit type signature (for more details, see section~\ref{sec:explicitTypeSignature}).  
+One of the benefits of function currying is that it enables partially applied functions.  \textit{HamSkill} supports partially applied functions with only with integers as the function input and output parameters.  What is more, partially applied functions in \textit{HamSkill} need to be defined as a dedicated function and are the only exception to the requirement that functions have an explicit type signature (for more details, see Section~\ref{sec:explicitTypeSignature}).  
 
-Figure~\ref{fig:haskellFunctionAddTwoPlusOne} shows a partially applied Haskell function (``\texttt{addTwoPlusOne}") that is supported by \textit{HamSkill}.\footnote{The function ``\texttt{addTwoPlusOne}" is in the \textit{HamSkill} test bench file ``\texttt{partially\_applied\_example.hs}".}  Figure~\ref{fig:scalaFunctionAddTwoPlusOne} shows the transpiled version of \texttt{addTwoPlus}.  Note that Scala's partially applied function call is followed by an underscore (``\texttt{\_}").  This notation is used to tell the Scala compiler that the object is a partially applied function and is the reason for the \textit{HamSkill} requirement that partially applied functions be their own functions with no type signature.
+Figure~\ref{fig:haskellFunctionAddTwoPlusOne} shows a partially applied Haskell function (``\texttt{addTwoPlusOne}'') that is supported by \textit{HamSkill}.\footnote{The function ``\texttt{addTwoPlusOne}'' is in the \textit{HamSkill} test bench file ``\texttt{partially\_applied\_example.hs}''.}  Figure~\ref{fig:scalaFunctionAddTwoPlusOne} shows the transpiled version of \texttt{addTwoPlus}.  Note that Scala's partially applied function call is followed by an underscore (``\texttt{\_}'').  This notation is used to tell the Scala compiler that the object is a partially applied function and is the reason for the \textit{HamSkill} requirement that partially applied functions be their own functions with no type signature.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -680,15 +687,15 @@ addTwoPlusOne = add3(1)
   def addTwoPlusOne = {add3 (1) _  }
 \end{lstlisting}
 \end{mdframed}
-\caption{Scala Version of Haskell Function ``\texttt{addTwoPlusOne}" Generated by \textit{HamSkill}}\label{fig:scalaFunctionAddTwoPlusOne}
+\caption{Scala Version of Haskell Function ``\texttt{addTwoPlusOne}'' Generated by \textit{HamSkill}}\label{fig:scalaFunctionAddTwoPlusOne}
 \end{figure}
 
 
 \subsection{Converting a Haskell Lambda Function to a Scala Anonymous Function}\label{sec:lambdaAnonymousFunctions}
 
-Haskell's lambda functions allow a program to create a function without explicitly defining it.  The concept of lamda functions exists in Scala where they are known as ``anonymous functions".
+Haskell's lambda functions allow a program to create a function without explicitly defining it.  The concept of lamda functions exists in Scala where they are known as ``anonymous functions''.
 
-Figure~\ref{fig:haskellLambdaFunction} shows an example lambda function that is parsable by \textit{HamSkill}; this function returns a \texttt{Boolean} value depending on whether xINT is greater than 30.\footnote{The example lamda function is in the \textit{HamSkill} test bench file ``\texttt{filter\_example.hs}".}  Also, the suffix ``\texttt{INT}" at the end of the variable name tells \textit{HamSkill} the parameter's type (integer in this example).
+Figure~\ref{fig:haskellLambdaFunction} shows an example lambda function that is parsable by \textit{HamSkill}; this function returns a \texttt{Boolean} value depending on whether xINT is greater than 30.\footnote{The example lamda function is in the \textit{HamSkill} test bench file ``\texttt{filter\_example.hs}''.}  Also, the suffix ``\texttt{INT}'' at the end of the variable name tells \textit{HamSkill} the parameter's type (integer in this example).
 
 To simplify parsing, \textit{HamSkill} requires that lambda functions be surrounded by parentheses.
 
@@ -703,7 +710,7 @@ main = putStrLn $ show $ ( zayd_filter ( (\xINT -> xINT > 30) )
 \caption{A Haskell Lambda Function Supported by \textit{HamSkill}}\label{fig:haskellLambdaFunction}
 \end{figure}
 
-Figure~\ref{fig:scalaLambdaFunction} is the \textit{HamSkill} generated Scala code for the Haskell lambda function in figure~\ref{fig:haskellLambdaFunction}.
+Figure~\ref{fig:scalaLambdaFunction} is the \textit{HamSkill} generated Scala code for the Haskell lambda function in Figure~\ref{fig:haskellLambdaFunction}.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -719,7 +726,7 @@ def main(args : Array[String]){
 
 \subsection{Supported Types}\label{sec:supportedTypes}
 
-\emph{HamSkill} only supports a subset of Haskell's available types, namely: \texttt{Bool}, \texttt{\tt Integer} (i.e. bounded), and finite \texttt{List}s.  The Haskell integer operators that are supported are: addition (``\texttt{+}"), subtraction (``\texttt{-}"), multiplication (``\texttt{*}"), division (``\texttt{`div`}" - infix only), and modulus (``\texttt{`mod`}" - infix only) \footnote{The integer mathematical operators are verified in the \textit{HamSkill} test bench file ``\texttt{simple\_math.hs}".}.  In addition, the following integer comparison operators are supported: equal (``\texttt{==}"), not equal (``\texttt{/=}"), greater than (``\texttt{>}"), greater than or equal (``\texttt{>=}"), less than (``\texttt{<}"), and less than or equal (``\texttt{<=}")\footnote{The comparison operators are verified in the \textit{HamSkill} test bench file ``\texttt{compare\_ops.hs}".}.
+\emph{HamSkill} only supports a subset of Haskell's available types, namely: \texttt{Bool}, \texttt{\tt Integer} (i.e. bounded), and finite \texttt{List}s.  The Haskell integer operators that are supported are: addition (``\texttt{+}''), subtraction (``\texttt{-}''), multiplication (``\texttt{*}''), division (``\texttt{`div`}'' - infix only), and modulus (``\texttt{`mod`}'' - infix only) \footnote{The integer mathematical operators are verified in the \textit{HamSkill} test bench file ``\texttt{simple\_math.hs}''.}.  In addition, the following integer comparison operators are supported: equal (``\texttt{==}''), not equal (``\texttt{/=}''), greater than (``\texttt{>}''), greater than or equal (``\texttt{>=}''), less than (``\texttt{<}''), and less than or equal (``\texttt{<=}'')\footnote{The comparison operators are verified in the \textit{HamSkill} test bench file ``\texttt{compare\_ops.hs}''.}.
 
 While implementing floating point numbers would not add substantial complexity at a basic level, ensuring that the floating point behavior of \emph{HamSkill} (i.e. Scala) and Haskell are identical is beyond the scope of this project.
 
@@ -727,11 +734,11 @@ There is also limited support for \texttt{String} values as well; however, opera
 
 \subsection{Lazy Evaluation and Immutability}
 
-Since Haskell is a purely functional language, all values are immutable; what is more, all evaluation in Haskell is lazy.  In contrast, while Scala is a functional language, it is not purely function.  As such, variables must be explicitly declared as immutable; they can also be declared as lazy.  This is done by defining the variable with the keywords ``\texttt{val}" and ``\texttt{lazy}" respectively.  \textit{HamSkill}'s conversion of Haskell values to lazy, immutable Scala values is shown figure~\ref{fig:functionScalaMainConsoleInput} in section~\ref{sec:mainFunction}.
+Since Haskell is a purely functional language, all values are immutable; what is more, all evaluation in Haskell is lazy.  In contrast, while Scala is a functional language, it is not purely function.  As such, variables must be explicitly declared as immutable; they can also be declared as lazy.  This is done by defining the variable with the keywords ``\texttt{val}'' and ``\texttt{lazy}'' respectively.  \textit{HamSkill}'s conversion of Haskell values to lazy, immutable Scala values is shown Figure~\ref{fig:functionScalaMainConsoleInput} in Section~\ref{sec:mainFunction}.
 
 \subsection{Defining Scope via Haskell's {\tt module} Keyword}
 
-A program in Haskell is composed of a set of ``{\tt module}" files.  The ``{\tt module}" keyword is used to specify the scope of functions (i.e. publicly visible or private). Any Haskell function that is not included in a ``\texttt{module}" statement will be defined as \texttt{private} in the transpiled Scala code (with the exception of ``\texttt{main}").  Figure~\ref{fig:haskellModule} shows a \textit{HamSkill} parsable ``\texttt{module}" block.\footnote{This ``\texttt{module}" block is in the \textit{HamSkill} test bench file ``\texttt{simple\_function\_call.hs}".}
+A program in Haskell is composed of a set of ``{\tt module}'' files.  The ``{\tt module}'' keyword is used to specify the scope of functions (i.e. publicly visible or private). Any Haskell function that is not included in a ``\texttt{module}'' statement will be defined as \texttt{private} in the transpiled Scala code (with the exception of ``\texttt{main}'').  Figure~\ref{fig:haskellModule} shows a \textit{HamSkill} parsable ``\texttt{module}'' block.\footnote{This ``\texttt{module}'' block is in the \textit{HamSkill} test bench file ``\texttt{simple\_function\_call.hs}''.}
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -742,25 +749,25 @@ module Simple_Function_Call (
 ) where
 \end{lstlisting}
 \end{mdframed}
-\caption{\textit{HamSkill} Parsable ``\texttt{module}" Statement}\label{fig:haskellModule}
+\caption{\textit{HamSkill} Parsable ``\texttt{module}'' Statement}\label{fig:haskellModule}
 \end{figure}
 
 
 \subsection{\texttt{Maybe} Monad Support}
 
-One of the stretch goals for this project was monad support; this goal was met as \textit{HamSkill} supports Haskell's \texttt{Maybe} monad (referred to as ``\texttt{Option}" in Scala).  \textit{HamSkill}'s requirements for the use of \texttt{Maybe} are:
+One of the stretch goals for this project was monad support; this goal was met as \textit{HamSkill} supports Haskell's \texttt{Maybe} monad (referred to as ``\texttt{Option}'' in Scala).  \textit{HamSkill}'s requirements for the use of \texttt{Maybe} are:
 
 \begin{enumerate}
 
-\item Use of the ``\texttt{do}" syntax.  Note bind (``\texttt{>>=}") is not supported.
+\item Use of the ``\texttt{do}'' syntax.  Note bind (``\texttt{>>=}'') is not supported.
 
-\item The last line of the ``\texttt{do}" block must be \texttt{return} with some value.
+\item The last line of the ``\texttt{do}'' block must be \texttt{return} with some value.
 
-\item The \texttt{Maybe} \texttt{do} block cannot be in the ``\texttt{main}" function.
+\item The \texttt{Maybe} \texttt{do} block cannot be in the ``\texttt{main}'' function.
 
 \end{enumerate}
 
-Figures~\ref{fig:haskellMaybeMonad} and~\ref{fig:haskellOptionMonad} show the original Haskell \texttt{Maybe} Monad code and the \textit{HamSkill} transpiled Scala code respectively.  Note that ``\texttt{do}" in Haskell is changed to ``\texttt{for}" in Scala while ``\texttt{return}" becomes ``\texttt{yield}".\footnote{The ``\texttt{Maybe}" monad example is in the test bench file ``\texttt{maybe\_monad.hs}".}
+Figures~\ref{fig:haskellMaybeMonad} and~\ref{fig:haskellOptionMonad} show the original Haskell \texttt{Maybe} Monad code and the \textit{HamSkill} transpiled Scala code respectively.  Note that ``\texttt{do}'' in Haskell is changed to ``\texttt{for}'' in Scala while ``\texttt{return}'' becomes ``\texttt{yield}''.\footnote{The ``\texttt{Maybe}'' monad example is in the test bench file ``\texttt{maybe\_monad.hs}''.}
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -795,7 +802,7 @@ private def doubleIncrementMonad (___0___ : Int)
 
 \subsection{\texttt{if} Conditionals}
 
-Like most languages, Haskell supports a conditional statement via the ``\texttt{if}", ``\texttt{then}", ``\texttt{else}" model.  Figure~\ref{fig:haskellFunctionIfCheck} shows Haskell code that is parsable by \textit{HamSkill}.  One specific formatting requirement of \textit{HamSkill} is that contents of the ``\texttt{if}"/``\texttt{then}"/``\texttt{else}" must each be enclosed within parentheses as shown in the figure.
+Like most languages, Haskell supports a conditional statement via the ``\texttt{if}'', ``\texttt{then}'', ``\texttt{else}'' model.  Figure~\ref{fig:haskellFunctionIfCheck} shows Haskell code that is parsable by \textit{HamSkill}.  One specific formatting requirement of \textit{HamSkill} is that contents of the ``\texttt{if}''/``\texttt{then}''/``\texttt{else}'' must each be enclosed within parentheses as shown in the figure.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -804,10 +811,10 @@ ifCheck :: Bool -> String
 ifCheck x = if (x) then ("True") else ("False")
 \end{lstlisting}
 \end{mdframed}
-\caption{Haskell ``\texttt{if}" Statement Supported by \textit{HamSkill}}\label{fig:haskellFunctionIfCheck}
+\caption{Haskell ``\texttt{if}'' Statement Supported by \textit{HamSkill}}\label{fig:haskellFunctionIfCheck}
 \end{figure}
 
-Figure~\ref{fig:scalaFunctionIfCheck} shows the transpiled output generated by \textit{HamSkill}. \footnote{The ``\texttt{if}" example code shown in these figures is included in the \textit{HamSkill} test case ``\texttt{if\_statement}".}
+Figure~\ref{fig:scalaFunctionIfCheck} shows the transpiled output generated by \textit{HamSkill}. \footnote{The ``\texttt{if}'' example code shown in these figures is included in the \textit{HamSkill} test case ``\texttt{if\_statement}''.}
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -824,7 +831,7 @@ private def ifCheck (___0___ : Boolean)
 }
 \end{lstlisting}
 \end{mdframed}
-\caption{Scala Transpiled ``\texttt{if}" Statement Generated by \textit{HamSkill}}\label{fig:scalaFunctionIfCheck}
+\caption{Scala Transpiled ``\texttt{if}'' Statement Generated by \textit{HamSkill}}\label{fig:scalaFunctionIfCheck}
 \end{figure}
 
 \subsection{\texttt{case} Statements}
@@ -837,11 +844,11 @@ private def ifCheck (___0___ : Boolean)
 
 \item The compare parameter must be enclosed in parentheses.
 
-\item The \texttt{case} statement ends with an ``\texttt{otherwise}" clause.
+\item The \texttt{case} statement ends with an ``\texttt{otherwise}'' clause.
 
 \end{enumerate}
 
-Figure~\ref{fig:haskellCaseStatement} shows a \textit{HamSkill} supported \texttt{case} statement.\footnote{This ``\texttt{case}" statement is in the \textit{HamSkill} test case ``\texttt{case\_example.hs}".}  Figure~\ref{fig:scalaCaseStatement} is \textit{HamSkill} transpiled Scala code for the \texttt{case} statement in figure~\ref{fig:haskellCaseStatement}.
+Figure~\ref{fig:haskellCaseStatement} shows a \textit{HamSkill} supported \texttt{case} statement.\footnote{This ``\texttt{case}'' statement is in the \textit{HamSkill} test case ``\texttt{case\_example.hs}''.}  Figure~\ref{fig:scalaCaseStatement} is \textit{HamSkill} transpiled Scala code for the \texttt{case} statement in Figure~\ref{fig:haskellCaseStatement}.
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -870,16 +877,16 @@ private def case_example (___0___ : Int)
     }
 \end{lstlisting}
 \end{mdframed}
-\caption{Scala Transpiled ``\texttt{case}" Statement Generated by \textit{HamSkill}}\label{fig:scalaCaseStatement}
+\caption{Scala Transpiled ``\texttt{case}'' Statement Generated by \textit{HamSkill}}\label{fig:scalaCaseStatement}
 \end{figure}
 
-Note that the Haskell ``\texttt{error}" function in figure~\ref{fig:haskellCaseStatement} was transpiled to ``\texttt{sys.error}" in figure~\ref{fig:scalaCaseStatement}.
+Note that the Haskell ``\texttt{error}'' function in Figure~\ref{fig:haskellCaseStatement} was transpiled to ``\texttt{sys.error}'' in Figure~\ref{fig:scalaCaseStatement}.
 
 \subsection{Preserving Comments}\label{sec:preservingComments}
 
-As mentioned in section~\ref{sec:keyProjectRequirements}, one of the goals of this project was to generate Scala code that was maximally readable by a human.  This goal extends to preserving Haskell comments in the transpiled Scala code.
+As mentioned in Section~\ref{sec:keyProjectRequirements}, one of the goals of this project was to generate Scala code that was maximally readable by a human.  This goal extends to preserving Haskell comments in the transpiled Scala code.
 
-Figure~\ref{fig:haskellHeaderComments} shows a header block of comments at the top of the test case file ``\texttt{simple\_function\_call.hs}", and figure~\ref{fig:scalaHeaderComments} shows the transpiled Scala version.  
+Figure~\ref{fig:haskellHeaderComments} shows a header block of comments at the top of the test case file ``\texttt{simple\_function\_call.hs}'', and figure~\ref{fig:scalaHeaderComments} shows the transpiled Scala version.  
 
 \begin{figure}[H]
 \begin{mdframed}
@@ -935,7 +942,7 @@ Particularly useful features that could be added to \textit{HamSkill} include:
 
 \end{enumerate}
 
-What is more, rather than transpiling to Scala, a transpilation to Java bytecode would be the ideal solution to ensure the minimum restrictions on the input Haskell implementation.
+What is more, rather than transpiling to Scala, a compilation to Java bytecode would be the ideal solution to ensure the minimum restrictions on the input Haskell implementation.
 
 \section{Conclusions}
 

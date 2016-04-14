@@ -256,11 +256,7 @@ By induction, an expression $e_1$ must be a value or $\exists e_1$ such that:
 
     \item If $e_1$ is a value, then either \rel{E-If-True} or \rel{E-If-False} applies since $\typeRule{e_1}{\boolt}$.
       
-    \item Otherwise, $\sstep{e_1}{e'_1}$ which means that $\rel{E-If-Ctxt}$ applies (as shown below) which by induction holds.
-    
-    \begin{center}
-      $\sstep{\succ e_1}{\ife {e'_1} {e_2} {e_3}}$
-    \end{center}
+    \item Otherwise, $\sstep{e_1}{e'_1}$ which means that $\rel{E-If-Ctxt}$ applies which by induction holds.
 	
 	\end{enumerate}
 	
@@ -361,5 +357,56 @@ By induction, $e_1$ must either be a value or $\exists e'_1$ such that:~\\
 	
   \caption{Proof of Progress for the \texttt{iszero} Expression}\label{fig:isZeroProofProgress}
 \end{figure}
+
+\eject
+\section{Preservation}\label{sec:preservation}
+
+Preservation entails that a well-typed expression will not change its type during evaluation.  Figure~\ref{fig:preservationTheorem} is the formal, theoretical definition of preservation.
+
+\begin{figure}[H]
+
+	Given $e : T$ and that $\sstep{e}{e'}$, then $\typeRule{e'}{T}$.
+	
+  \caption{Formal Definition of the Preservation Theorem}\label{fig:preservationTheorem}
+\end{figure}
+
+The following subsections are the formal proofs of preservation for the type rules in figure~\ref{fig:arithTypeRules}. 
+
+\subsection{Proving Preservation for Boolean and Integer Values}
+
+For type rules $\rel{T-True}$, $\rel{T-False}$, and $\rel{T-Int}$, preservation holds vacuously as it is not possible to evaluate these expressions given that they are in normal form.
+
+\subsection{Proving Preservation for the \texttt{if} Expression}
+
+Figure~\ref{fig:ifProofPreservation} is the proof of preservation for the \texttt{if} expression in the Arith Language.
+
+\begin{figure}[ht!]
+Given:
+\begin{center}
+   $e = \ife {e_1} {e_2} {e_3}$
+   $\sstep{e}{e'}$
+   $\typeRule{e_1}{\boolt},~~\typeRule{e_2}{T},~~\typeRule{e_3}{T}$
+\end{center}
+Then:
+\begin{center}
+   $\typeRule{e'}{T}$
+\end{center}
+For the \texttt{if} expression, three evaluation rules may apply.
+\begin{enumerate}
+
+    \item If $\rel{E-IfTrue}$ applies, then $e_1 = \true$.  Hence, $e' = e_2$.  This proof holds since by definition $\typeRule{e_2}{T}$.
+      
+    \item If $\rel{E-IfFalse}$ applies, then $e_1 = \false$.  Hence, $e' = e_3$.  This proof holds since by definition $\typeRule{e_3}{T}$.
+    
+    \item If $\rel{E-If-Ctxt}$ applies, then $\sstep{e_1}{e'_1}$ by induction $\typeRule{e_1}{\boolt}$ (this can be assumed by induction since $e_1$ is a subcase of $e$).  Furthermore, by induction using $\rel{T-If}$, then:
+    
+    \begin{center}
+      $\sstep{e' = \ife {e'_1}{e_2}{e_3}}{T}$
+    \end{center}
+	
+	\end{enumerate}
+	
+  \caption{Proof of Preservation for the \texttt{if} Expression}\label{fig:ifProofPreservation}
+\end{figure} 
 
 \end{document}

@@ -188,17 +188,17 @@ Arith is a basic language; its expressions, values, and types are enumerated in 
 \ruleWithBar{T-Succ}{
   \typeRule{e_1}{\intt}
 }{
-  \typeRule{\succe e_1}{\intt}
+  \typeRule{\succe {e_1}}{\intt}
 }
 \ruleWithBar{T-Pred}{
   \typeRule{e_1}{\intt}
 }{
-  \typeRule{\prede e_1}{\intt}
+  \typeRule{\prede {e_1}}{\intt}
 }
 \ruleWithBar{T-IsZero}{
   \typeRule{e_1}{\intt}
 }{
-  \typeRule{\iszeroe e_1}{\boolt}
+  \typeRule{\iszeroe {e_1}}{\boolt}
 }
 \ruleWithBar{T-If}{
   \typeRule{e_1}{\boolt},~~\typeRule{e_2}{T},~~\typeRule{e_3}{T}
@@ -211,7 +211,7 @@ Arith is a basic language; its expressions, values, and types are enumerated in 
 \end{figure}
 
 
-
+\eject
 \section{Progress}\label{sec:progress}
 
 In semantics context, ``progress" entails that a well-type expression will not ``get stuck."  Figure~\ref{fig:progressTheorem} is the formal, theoretical definition of progress.
@@ -237,9 +237,9 @@ The following subsections are the formal proofs of progress for the type rules i
 
 Figure~\ref{fig:progressTheorem} establish that progress is achieved if an expression $e$ is a value.  Hence, by this criterion, type rules \rel{T-True}, \rel{T-False}, and \rel{T-Int} all hold.
 
-\subsection{Proving Progress for the If Expression}
+\subsection{Proving Progress for the \texttt{if} Expression}
 
-Figure~\ref{fig:ifProofProgress} is the proof of progress for the If expression in the Arith Language.
+Figure~\ref{fig:ifProofProgress} is the proof of progress for the \texttt{if} expression in the Arith Language.
 
 \begin{figure}[ht!]
 Given:
@@ -254,11 +254,7 @@ Then:
 By induction, an expression $e_1$ must be a value or $\exists e_1$ such that:
 \begin{enumerate}
 
-    \item If $e_1 = i$ where ``$i$", then $\sstep{e}{i'}$ where:
-    
-    \begin{center}
-       $i' = i + 1$
-    \end{center}
+    \item If $e_1$ is a value, then either \rel{E-If-True} or \rel{E-If-False} applies since $\typeRule{e_1}{\boolt}$.
       
     \item Otherwise, $\sstep{e_1}{e'_1}$ which means that $\rel{E-If-Ctxt}$ applies (as shown below) which by induction holds.
     
@@ -268,12 +264,13 @@ By induction, an expression $e_1$ must be a value or $\exists e_1$ such that:
 	
 	\end{enumerate}
 	
-  \caption{Proof of Progress for the If Expression}\label{fig:ifProofProgress}
+  \caption{Proof of Progress for the \texttt{if} Expression}\label{fig:ifProofProgress}
 \end{figure}
 
-\subsection{Proving Progress for the Successor Expression}
+\eject
+\subsection{Proving Progress for the \texttt{succ} Expression}
 
-Figure~\ref{fig:arithTypeRules} shows the type rule for the successor expression.  The proof of progress for this expression is shown in figure~\ref{fig:succProofProgress}.
+Figure~\ref{fig:arithTypeRules} shows the type rule for the \texttt{succ} expression.  The proof of progress for this expression is shown in figure~\ref{fig:succProofProgress}.
 
 \begin{figure}[ht!]
 Given:
@@ -289,17 +286,80 @@ Then:~\\
 By induction, $e_1$ must either be a value or $\exists e'_1$ such that:~\\
 
 	\begin{enumerate}
-    \item If $e_1$ is a value, then either \rel{E-If-True} or \rel{E-If-False} applies since $\typeRule{e_1}{\boolt}$.
+    \item If $e_1$ is a value (i.e. $i$), then: $\sstep{e}{i'}$ where $i' = i + 1$ by $\rel{E-Succ}$ as $\typeRule{e_1}{\intt}$.
       
-    \item Otherwise $\rel{E-If-Ctxt}$ applies (as shown below) which by induction holds.
+    \item Otherwise, then: $\sstep{e}{e'}$.  Hence, $\rel{E-Succ-Ctxt}$ applies (as shown below) which holds by induction.
     
     \begin{center}
-      $\sstep{e}{\ife {e'_1} {e_2} {e_3}}$
+      $\sstep{e}{\succe {e'}}$
     \end{center}
 	
 	\end{enumerate}
 	
-  \caption{Proof of Progress for the Successor Expression}\label{fig:succProofProgress}
+  \caption{Proof of Progress for the \texttt{succ} Expression}\label{fig:succProofProgress}
+\end{figure}
+
+
+\subsection{Proving Progress for the \texttt{pred} Expression}
+
+Figure~\ref{fig:arithTypeRules} shows the type rule for the \texttt{pred} expression.  The proof of progress for this expression is shown in figure~\ref{fig:predProofProgress}.
+
+\begin{figure}[ht!]
+Given:
+\begin{center}
+  $e = \prede {e_1}$ \\
+  $\typeRule{e_1}{\intt}$
+\end{center}
+Then:~\\
+\begin{center}
+   $T = \intt$
+\end{center}
+
+By induction, $e_1$ must either be a value or $\exists e'_1$ such that:~\\
+
+	\begin{enumerate}
+    \item If $e_1$ is a value (i.e. $i$), then: $\sstep{e}{i'}$ where $i' = i - 1$ by $\rel{E-Pred}$ as $\typeRule{e_1}{\intt}$.
+      
+    \item Otherwise, then: $\sstep{e}{e'}$.  Hence, $\rel{E-Pred-Ctxt}$ applies (as shown below) which holds by induction.
+    
+    \begin{center}
+      $\sstep{e}{\prede {e'}}$
+    \end{center}
+	
+	\end{enumerate}
+	
+  \caption{Proof of Progress for the \texttt{pred} Expression}\label{fig:predProofProgress}
+\end{figure}
+
+\subsection{Proving Progress for the \texttt{iszero} Expression}
+
+Figure~\ref{fig:arithTypeRules} shows the type rule for the \texttt{iszero} expression.  The proof of progress for this expression is shown in figure~\ref{fig:predProofProgress}.
+
+\begin{figure}[ht!]
+Given:
+\begin{center}
+  $e = \iszeroe {e_1}$ \\
+  $\typeRule{e_1}{\intt}$
+\end{center}
+Then:~\\
+\begin{center}
+   $T = \boolt$
+\end{center}
+
+By induction, $e_1$ must either be a value or $\exists e'_1$ such that:~\\
+
+	\begin{enumerate}
+    \item If $e_1$ is a value (i.e. $i$), then either rule $\rel{E-IsZero-Z}$ or $\rel{E-IsZero-NZ}$ applies as $\typeRule{e_1}{\intt}$.
+      
+    \item Otherwise, then: $\sstep{e}{e'}$.  Hence, $\rel{E-IsZero-Ctxt}$ applies (as shown below) which holds by induction.
+    
+    \begin{center}
+      $\sstep{e}{\iszeroe {e'}}$
+    \end{center}
+	
+	\end{enumerate}
+	
+  \caption{Proof of Progress for the \texttt{iszero} Expression}\label{fig:isZeroProofProgress}
 \end{figure}
 
 \end{document}

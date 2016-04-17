@@ -212,7 +212,7 @@ Arith is a basic language; its expressions, values, and types are enumerated in 
 
 
 \eject
-\section{Progress}\label{sec:progress}
+\section{Progress in the Arith Language}\label{sec:progress}
 
 In a type system, ``progress" entails that a well-type expression will not ``get stuck."  Figure~\ref{fig:progressTheorem} is the formal, theoretical definition of progress.
 
@@ -231,11 +231,11 @@ In a type system, ``progress" entails that a well-type expression will not ``get
   \caption{Formal Definition of the Progress Theorem}\label{fig:progressTheorem}
 \end{figure}
 
-The following subsections are the formal proofs of progress for the type rules in figure~\ref{fig:arithTypeRules}.
+The following subsections are the formal progress proofs for the type rules in figure~\ref{fig:arithTypeRules}.
 
 \subsection{Proving Progress for Boolean and Integer Values}
 
-Figure~\ref{fig:progressTheorem} establish that progress is achieved if an expression $e$ is a value.  Hence, by this criterion, type rules \rel{T-True}, \rel{T-False}, and \rel{T-Int} all hold for the progress theorem.
+Figure~\ref{fig:progressTheorem} establish that progress is achieved if an expression ``$e$" is a value.  Hence, by this criterion, type rules \rel{T-True}, \rel{T-False}, and \rel{T-Int} are all valid for the progress theorem.
 
 \subsection{Proving Progress for the \texttt{if} Expression}
 
@@ -256,7 +256,7 @@ By induction, an expression $e_1$ must be a value or $\exists e_1$ such that:
 
     \item If $e_1$ is a value, then either \rel{E-If-True} or \rel{E-If-False} applies since $\typeRule{e_1}{\boolt}$.  Hence, an expression $e'$ exists for both cases.
       
-    \item Otherwise, $\sstep{e_1}{e'_1}$ which means that $\rel{E-If-Ctxt}$ applies which by induction holds.
+    \item Otherwise, $\sstep{e_1}{e'_1}$ which means that $\rel{E-If-Ctxt}$ applies.  This satisfies by induction the progress theorem.
 	
 	\end{enumerate}
 	
@@ -282,9 +282,9 @@ Then:~\\
 By induction, $e_1$ must either be a value or $\exists e'_1$ such that:~\\
 
 	\begin{enumerate}
-    \item If $e_1$ is a value (i.e. $i$), then: $\sstep{e}{i'}$ where $i' = i + 1$ by $\rel{E-Succ}$ as $\typeRule{e_1}{\intt}$.
+    \item If $e_1$ is a value (i.e. ``$i$"), then: $\sstep{e}{i'}$ where $i' = i + 1$ using the small-step rule $\rel{E-Succ}$ since it was given that $\typeRule{e_1}{\intt}$.
       
-    \item Otherwise, then: $\sstep{e}{e'}$.  Hence, $\rel{E-Succ-Ctxt}$ applies (as shown below) which holds by induction.
+    \item Otherwise, $\sstep{e_1}{e'_1}$ in which case $\rel{E-Succ-Ctxt}$ applies (as shown below). Hence, progress holds by induction.
     
     \begin{center}
       $\sstep{e}{\succe {e'_1}}$
@@ -314,9 +314,9 @@ Then:~\\
 By induction, $e_1$ must either be a value or $\exists e'_1$ such that:~\\
 
 	\begin{enumerate}
-    \item If $e_1$ is a value (i.e. $i$), then: $\sstep{e}{i'}$ where $i' = i - 1$ by $\rel{E-Pred}$ as $\typeRule{e_1}{\intt}$.
-      
-    \item Otherwise, then: $\sstep{e}{e'}$.  Hence, $\rel{E-Pred-Ctxt}$ applies (as shown below) which holds by induction.
+    \item If $e_1$ is a value (i.e. ``$i$"), then: $\sstep{e}{i'}$ where $i' = i - 1$ using the small-step rule $\rel{E-Pred}$ since it was given that $\typeRule{e_1}{\intt}$.
+    
+    \item Otherwise, $\sstep{e_1}{e'_1}$ in which case $\rel{E-Pred-Ctxt}$ applies (as shown below). Hence, progress holds by induction.
     
     \begin{center}
       $\sstep{e}{\prede {e'_1}}$
@@ -345,9 +345,9 @@ Then:~\\
 By induction, $e_1$ must either be a value or $\exists e'_1$ such that:~\\
 
 	\begin{enumerate}
-    \item If $e_1$ is a value (i.e. $i$), then either rule $\rel{E-IsZero-Z}$ or $\rel{E-IsZero-NZ}$ applies as $\typeRule{e_1}{\intt}$.
-      
-    \item Otherwise, then: $\sstep{e}{e'}$.  Hence, $\rel{E-IsZero-Ctxt}$ applies (as shown below) which holds by induction.
+    \item If $e_1$ is a value (i.e. ``$i$") in which case either rule $\rel{E-IsZero-Z}$ or $\rel{E-IsZero-NZ}$ applies since $\typeRule{e_1}{\intt}$.
+
+    \item Otherwise, $\sstep{e_1}{e'_1}$ in which case $\rel{E-IsZero-Ctxt}$ applies (as shown below). Hence, progress holds by induction.
     
     \begin{center}
       $\sstep{e}{\iszeroe {e'_1}}$
@@ -359,7 +359,7 @@ By induction, $e_1$ must either be a value or $\exists e'_1$ such that:~\\
 \end{figure}
 
 \eject
-\section{Preservation}\label{sec:preservation}
+\section{Preservation in the Arith Language}\label{sec:preservation}
 
 Preservation entails that a well-typed expression will not change its type during evaluation.  Figure~\ref{fig:preservationTheorem} is the formal, theoretical definition of preservation.
 
@@ -394,7 +394,7 @@ For the \texttt{if} expression, \textbf{three} evaluation rules may apply.
       
     \item If $\rel{E-IfFalse}$ applies, then $e_1 = \false$.  Hence, $e' = e_3$.  This proof holds since by definition $\typeRule{e_3}{T}$.
     
-    \item If $\rel{E-If-Ctxt}$ applies, then $\sstep{e_1}{e'_1}$ since by induction $\typeRule{e'_1}{\boolt}$ (this can be assumed by induction since $e_1$ is a subcase of $e$).  Then using $\rel{T-If}$:
+    \item If $\rel{E-If-Ctxt}$ applies, then $\sstep{e_1}{e'_1}$.  What is more, by induction $\typeRule{e'_1}{\boolt}$ (this can be assumed by induction since $e_1$ is a subcase of $e$).  Then using $\rel{T-If}$:
     
     \begin{center}
       $\sstep{e' = \ife {e'_1}{e_2}{e_3}}{T}$
@@ -423,7 +423,7 @@ Then:
 For the \texttt{succ} expression, \textbf{two} evaluation rules may apply.
 \begin{enumerate}
 
-    \item If $\rel{E-Succ-Ctxt}$ applies, then $\sstep{e_1}{e'_1}$ since by induction $\typeRule{e'_1}{\intt}$.  Using type rule $\rel{T-Succ}$,
+    \item If $\rel{E-Succ-Ctxt}$ applies, then $\sstep{e_1}{e'_1}$.  What is more, by induction $\typeRule{e'_1}{\intt}$.  Using type rule $\rel{T-Succ}$,
     
     \begin{center}
       $\sstep{e' = \succe {e'_1}}{\intt}$
@@ -504,9 +504,9 @@ Then:
 For the \texttt{iszero} expression, \textbf{three} evaluation rules may apply.
 \begin{enumerate}
 
-    \item If $\rel{E-IsZero-Z}$ applies, then $e_1 = 0$.  Hence, $e' = \true$ which holds using rule $\rel{T-True}$.
+    \item If $\rel{E-IsZero-Z}$ applies, then $e_1 = 0$.  Hence, $e' = \true$ which holds using type rule $\rel{T-True}$.
       
-    \item If $\rel{E-IsZero-NZ}$ applies, then $e_1$ is an integer value such that $e_1 \ne 0$.  Hence, $e' = \false$ which holds using rule $\rel{T-False}$.
+    \item If $\rel{E-IsZero-NZ}$ applies, then $e_1$ is an integer value such that $e_1 \ne 0$.  Hence, $e' = \false$ which holds using type rule $\rel{T-False}$.
     
     \item If $\rel{E-IsZero-Ctxt}$ applies, then $\sstep{e_1}{e'_1}$ since by induction $\typeRule{e'_1}{\boolt}$ (this can be assumed by induction since $e_1$ is a subcase of $e$).  Then using $\rel{T-IsZero}$:
     

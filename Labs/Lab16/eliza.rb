@@ -15,22 +15,30 @@ class Shrink
     blather = blather.downcase
 
     # Handle master override cases
-    if blather.downcase.include?("never") or blather.downcase.include?("always")
-      return "CAN YOU BE MORE SPECIFIC?"
+    if blather.include?('never') or blather.include?('always')
+      return 'CAN YOU BE MORE SPECIFIC?'
     end
-    start_str = "Are you"
-    if blather.downcase.start_with?(start_str.downcase)
-      return "IS IT IMPORTANT IF I AM?"
+    start_str = 'Are you'
+    if blather.start_with?(start_str.downcase)
+      return 'IS IT IMPORTANT IF I AM?'
+    end
+
+    filter_words = ["well", "maybe", "perhaps"]
+    filter_words.each do |word|
+      reg_exp = /#{word}\W+/
+      if blather.start_with?(word)
+        blather.sub!(reg_exp, '')
+      end
     end
 
     #change 'you', 'your', etc. to uppercase 'I', 'MY'
-    blather.gsub!(/\byour\b/,"MY")
-    blather.gsub!(/\byou\b/,'I')
+    blather.gsub!(/\byour\b/, 'MY')
+    blather.gsub!(/\byou\b/, 'I')
 
     #Replace 'my' with 'your', 'me' with 'you', 'I' with 'you', etc.
-    blather.gsub!(/\bmy\b/,"your")
-    blather.gsub!(/\bme\b/,"you")
-    blather.gsub!(/\bi\b/,'you')
+    blather.gsub!(/\bmy\b/, 'your')
+    blather.gsub!(/\bme\b/, 'you')
+    blather.gsub!(/\bi\b/, 'you')
 
     # Replace AM -> "are"
     blather.gsub!(/\bam\b/,'are')

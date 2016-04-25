@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="9601f381-b2c6-4e1f-b821-b9efdc9b12bc" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Lab11/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../Lab11/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Lab15/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../Lab15/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/expected_filter_example.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/expected_filter_example.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/expected_map_example.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/expected_map_example.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/expected_maybe_monad.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/expected_maybe_monad.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_add_list.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_add_list.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_case_example.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_case_example.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_compare_ops.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_compare_ops.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_factorial.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_factorial.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_filter_example.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_filter_example.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_get_text.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_get_text.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_haskell_code.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_haskell_code.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_if_statement.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_if_statement.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_main_print_string.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_main_print_string.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_map_example.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_map_example.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_maybe_monad.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_maybe_monad.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_partially_applied_example.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_partially_applied_example.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_simple_function_call.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_simple_function_call.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_simple_math.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskill+_simple_math.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_add_list.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_add_list.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_case_example.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_case_example.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_compare_ops.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_compare_ops.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_factorial.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_factorial.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_filter_example.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_filter_example.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_haskell_code.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_haskell_code.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_if_statement.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_if_statement.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_main_print_string.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_main_print_string.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_map_example.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_map_example.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_maybe_monad.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_maybe_monad.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_partially_applied_example.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_partially_applied_example.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_simple_function_call.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_simple_function_call.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_simple_math.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/hamskillStd_simple_math.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_add_list.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_add_list.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_case_example.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_case_example.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_compare_ops.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_compare_ops.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_factorial.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_factorial.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_filter_example.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_filter_example.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_get_text.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_get_text.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_haskell_code.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_haskell_code.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_if_statement.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_if_statement.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_main_print_string.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_main_print_string.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_map_example.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_map_example.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_maybe_monad.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_maybe_monad.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_partially_applied_example.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_partially_applied_example.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_simple_function_call.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_simple_function_call.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_simple_math.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/haskellOut_simple_math.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/test_bench.sh" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/test_bench.sh" />
+    </list>
+    <ignored path="Lab16.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <ignored path=".idea/dataSources.local.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/Lab16@eval.coverage" NAME="eval Coverage Results" MODIFIED="1461616115249" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="Lab16" />
+  </component>
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="Lab16" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="eliza.rb" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/eliza.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="22" column="39" selection-start-line="22" selection-start-column="39" selection-end-line="22" selection-end-column="39" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/eliza.rb" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" />
+  <component name="JsBuildToolPackageJson" detection-done="true" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="1912" />
+    <option name="y" value="74" />
+    <option name="width" value="1936" />
+    <option name="height" value="1216" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Lab16" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Lab16" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Lab16" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.ruby.settings.RubyActiveModuleSdkConfigurable" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="js-jscs-nodeInterpreter" value="C:\Program Files (x86)\nodejs\node.exe" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/eliza.rb" />
+  </component>
+  <component name="RunManager" selected="Ruby.eval">
+    <configuration default="false" name="eliza" type="RubyRunConfigurationType" factoryName="Ruby" temporary="true">
+      <module name="Lab16" />
+      <RUBY_RUN_CONFIG NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
+      <RUBY_RUN_CONFIG NAME="WORK DIR" VALUE="$MODULE_DIR$" />
+      <RUBY_RUN_CONFIG NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RUBY_RUN_CONFIG NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RUBY_RUN_CONFIG NAME="myPassParentEnvs" VALUE="true" />
+      <envs />
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" NailgunExecEnabled="false" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/eliza.rb" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="" />
+      <method />
+    </configuration>
+    <configuration default="false" name="eval" type="RubyRunConfigurationType" factoryName="Ruby" temporary="true">
+      <module name="Lab16" />
+      <RUBY_RUN_CONFIG NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
+      <RUBY_RUN_CONFIG NAME="WORK DIR" VALUE="$MODULE_DIR$" />
+      <RUBY_RUN_CONFIG NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RUBY_RUN_CONFIG NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RUBY_RUN_CONFIG NAME="myPassParentEnvs" VALUE="true" />
+      <envs />
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" NailgunExecEnabled="false" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/eliza.rb" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="-test" />
+      <method />
+    </configuration>
+    <configuration default="true" type="CucumberRunConfigurationType" factoryName="Cucumber">
+      <predefined_log_file id="RUBY_CUCUMBER" enabled="true" />
+      <module name="" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
+      <envs />
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" NailgunExecEnabled="false" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="TEST_FILE_MASK" VALUE="**/*.feature" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="TEST_TEST_TYPE" VALUE="TEST_SCRIPT" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="TESTS_FOLDER_PATH" VALUE="" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="TEST_SCRIPT_PATH" VALUE="" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="TEST_TAGS_FILTER" VALUE="" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="TEST_NAME_FILTER" VALUE="" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="CUCUMBER_ARGS" VALUE="--color -r features" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="RUNNER_VERSION" VALUE="" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="FULL_BACKTRACE" VALUE="false" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="VERBOSE_OPTION" VALUE="false" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="DRB" VALUE="false" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="ZEUS" VALUE="false" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="SPRING" VALUE="false" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="CUCUMBER_RUNNER_PATH" VALUE="" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="USE_CUSTOM_RUNNER" VALUE="false" />
+      <CUCUMBER_RUN_CONFIG_SETTINGS_ID NAME="SETTINGS_VERSION" VALUE="2" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="RSpecRunConfigurationType" factoryName="RSpec">
+      <predefined_log_file id="RUBY_RSPEC" enabled="true" />
+      <module name="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
+      <envs />
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" NailgunExecEnabled="false" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TESTS_FOLDER_PATH" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_SCRIPT_PATH" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_RUNNER_PATH" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_FILE_MASK" VALUE="**/*_spec.rb" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_EXAMPLE_NAME" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_TEST_TYPE" VALUE="TEST_SCRIPT" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_ARGS" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="RUNNER_VERSION" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="USE_CUSTOM_SPEC_RUNNER" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="DRB" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="ZEUS" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPRING" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="FULL_BACKTRACE" VALUE="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="RubyRunConfigurationType" factoryName="Ruby">
+      <module name="" />
+      <RUBY_RUN_CONFIG NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
+      <RUBY_RUN_CONFIG NAME="WORK DIR" VALUE="" />
+      <RUBY_RUN_CONFIG NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RUBY_RUN_CONFIG NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RUBY_RUN_CONFIG NAME="myPassParentEnvs" VALUE="true" />
+      <envs />
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" NailgunExecEnabled="false" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="TestUnitRunConfigurationType" factoryName="Test::Unit/Shoulda/Minitest">
+      <predefined_log_file id="RUBY_TESTUNIT" enabled="true" />
+      <module name="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
+      <envs />
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" NailgunExecEnabled="false" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TESTS_FOLDER_PATH" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_SCRIPT_PATH" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_FILE_MASK" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_METHOD_NAME" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_TEST_TYPE" VALUE="TEST_SCRIPT" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="DRB" VALUE="false" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="ZEUS" VALUE="false" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="SPRING" VALUE="false" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="RUNNER_OPTIONS" VALUE="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
+      <command value="run-script" />
+      <scripts />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <list size="2">
+      <item index="0" class="java.lang.String" itemvalue="Ruby.eliza" />
+      <item index="1" class="java.lang.String" itemvalue="Ruby.eval" />
+    </list>
+    <recent_temporary>
+      <list size="2">
+        <item index="0" class="java.lang.String" itemvalue="Ruby.eval" />
+        <item index="1" class="java.lang.String" itemvalue="Ruby.eliza" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9601f381-b2c6-4e1f-b821-b9efdc9b12bc" name="Default" comment="" />
+      <created>1461605413744</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1461605413744</updated>
+      <workItem from="1461605415652" duration="1662000" />
+      <workItem from="1461615417932" duration="720000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="2382000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="1912" y="74" width="1936" height="1216" extended-state="6" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18020834" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32921448" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/eliza.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/eliza.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="39" selection-start-line="22" selection-start-column="39" selection-end-line="22" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

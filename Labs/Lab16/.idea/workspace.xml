@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9601f381-b2c6-4e1f-b821-b9efdc9b12bc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Lab11/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../Lab11/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Lab15/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../Lab15/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/eliza.rb" afterPath="$PROJECT_DIR$/eliza.rb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/expected_filter_example.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/expected_filter_example.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/expected_map_example.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/expected_map_example.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Project/Test_Bench/output/expected_maybe_monad.txt" afterPath="$PROJECT_DIR$/../../Project/Test_Bench/output/expected_maybe_monad.txt" />
@@ -62,7 +62,7 @@
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/Lab16@eval.coverage" NAME="eval Coverage Results" MODIFIED="1461616115249" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="Lab16" />
+    <SUITE FILE_PATH="coverage/Lab16@eval.coverage" NAME="eval Coverage Results" MODIFIED="1461631400036" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="Lab16" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -76,8 +76,8 @@
       <file leaf-file-name="eliza.rb" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/eliza.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="22" column="39" selection-start-line="22" selection-start-column="39" selection-end-line="22" selection-end-column="39" />
+            <state relative-caret-position="322">
+              <caret line="50" column="78" selection-start-line="50" selection-start-column="78" selection-end-line="50" selection-end-column="78" />
               <folding />
             </state>
           </provider>
@@ -332,12 +332,12 @@
       <option name="presentableId" value="Default" />
       <updated>1461605413744</updated>
       <workItem from="1461605415652" duration="1662000" />
-      <workItem from="1461615417932" duration="720000" />
+      <workItem from="1461615417932" duration="7991000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2382000" />
+    <option name="totallyTimeSpent" value="9653000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="74" width="1936" height="1216" extended-state="6" />
@@ -348,7 +348,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32921448" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2603707" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -374,7 +374,9 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="2" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
@@ -388,8 +390,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/eliza.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="39" selection-start-line="22" selection-start-column="39" selection-end-line="22" selection-end-column="39" />
+        <state relative-caret-position="322">
+          <caret line="50" column="78" selection-start-line="50" selection-start-column="78" selection-end-line="50" selection-end-column="78" />
           <folding />
         </state>
       </provider>

@@ -19,13 +19,13 @@ class Shrink
     if blather.include?('never') or blather.include?('always')
       return 'CAN YOU BE MORE SPECIFIC?'
     end
-    start_str = 'Are you '
-    if blather.start_with?(start_str.downcase)
+    start_str = 'are you '
+    if blather.start_with?(start_str)
       return 'IS IT IMPORTANT IF I AM?'
     end
 
     # Remove the start words
-    filter_words = ['well', 'maybe', 'perhaps', 'also']
+    filter_words = %w(well maybe perhaps also)
     filter_words.each do |word|
       reg_exp = /#{word}\W+/
       if blather.start_with?(word)
@@ -83,23 +83,23 @@ end
 eliza = Shrink.new()
 if ARGV[0] == "-test"
     ['My girlfriend never listens to me',
-     "I think she might be deaf",
-     "yes",
-     "I am afraid of clowns",
-     "Who are you?",
-     "Well, they just seem creepy",
-     "Also, when I was a kid, a clown killed my dad",
-     "I hate my father bro",
-     "Can you be sure he is done?",
-     "They are cool.",
-     "Are my bros here?",
-     "Yes, they are here.",
-     "My name is Steve",
-     "You ate him",
-     "Your father is dumb.",
-     "Are you a clown in disguise?",
-     "I ALWAYS hated you",
-     "I never loved you"
+     'I think she might be deaf',
+     'yes',
+     'I am afraid of clowns',
+     'Who are you?',
+     'Well, they just seem creepy',
+     'Also, when I was a kid, a clown killed my dad',
+     'I hate my father bro',
+     'Can you be sure he is done?',
+     'They are cool.',
+     'Are my bros here?',
+     'Yes, they are here.',
+     'My name is Steve',
+     'You ate him',
+     'Your father is dumb.',
+     'Are you a clown in disguise?',
+     'I ALWAYS hated you',
+     'I never loved you'
     ].each do |stmt|
         puts stmt
         puts eliza.generateResponse(stmt)

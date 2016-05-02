@@ -89,7 +89,7 @@ if ARGV[0] == "-test"
      'Who are you?',
      'Well, they just seem creepy',
      'Also, when I was a kid, a clown killed my dad',
-     'I hate my father bro',
+     'I like my father bro',
      'Can you be sure he is done?',
      'They are cool.',
      'Are my bros here?',

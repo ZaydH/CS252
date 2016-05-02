@@ -5,6 +5,29 @@ class Tree
     @left = left
     @right = right
   end
+
+  # Create an each node method for the block.
+  def each_node(&block)
+    block.call(@value)
+    @left.each_node(&block) if @left
+    @right.each_node(&block) if @right
+  end
+
+  def method_missing(m)
+    instruction = m.to_s.split('_', 2)
+    if instruction[0] == 'left'
+      elem = @left
+    else
+      elem = @right
+    end
+
+    # If left or right is selected, return that.
+    next_command = instruction[1]
+    return (elem.left.value) if next_command == 'left'
+    return (elem.right.value) if next_command == 'right'
+    elem.send(next_command)
+
+  end
 end
 
 my_tree = Tree.new(42,

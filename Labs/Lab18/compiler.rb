@@ -1,6 +1,9 @@
 NUM_PAT = /[1-9]\d*|0/
 
 # Available opcodes for our VM
+PLUS = '+'
+SUBTRACT = '-'
+MULTIPLY = '*'
 PRINT_OP = "PRINT"
 PUSH_OP = "PUSH"
 ADD_OP = "ADD"
@@ -31,14 +34,14 @@ class AST
       v = @args[0]
       v = v.evaluate if v.is_a?(AST)
       puts v
-    when '+'
+    when PLUS
       sum = 0
       @args.each do |x|
         x = x.evaluate if x.is_a?(AST)
         sum += x
       end
       return sum
-    when '-'
+    when SUBTRACT
       diff = @args[0]
       diff = diff.evaluate if diff.is_a?(AST)
       args_tail = @args.slice(1, args.length-1)
@@ -47,7 +50,7 @@ class AST
         diff -= x
       end
       return diff
-    when '*'
+    when MULTIPLY
       prod = 1
       @args.each do |x|
         x = x.evaluate if x.is_a?(AST)
@@ -62,13 +65,15 @@ class AST
   def to_bytecode
     bytecode = []
     case @op
-    when 'println'
-      comp_arg(@args[0], bytecode)
-      bytecode.push(PRINT_OP)
-    #
-    # YOUR CODE HERE -- Add 'when' cases to support the other expressions.
-    else
-      raise "Unrecognized op '#{@op}'"
+      when 'println'
+        comp_arg(@args[0], bytecode)
+        bytecode.push(PRINT_OP)
+      when MULTIPLY, PLUS, SUBTRACT
+        splits_command_and_add_op_to_ast(bytecode, @op)
+      #
+      # YOUR CODE HERE -- Add 'when' cases to support the other expressions.
+      else
+        raise "Unrecognized op '#{@op}'"
     end
     bytecode # Returning bytecode
   end
@@ -79,6 +84,28 @@ class AST
     else
       bytecode.concat(v.to_bytecode)
     end
+  end
+
+  def splits_command_and_add_op_to_ast(bytecode, op)
+
+    # Parse the op
+
+    case op.chomp
+      when MULTIPLY
+        op_cmd = MUL_OP
+      when PLUS
+        op_cmd = ADD_OP
+      when SUBTRACT
+        op_cmd = SUB_OP
+    end
+
+    # Add the op to the AST
+    (0..(args.length - 1)).each { |i|
+      comp_arg(@args[i], bytecode)
+      if i > 0
+        bytecode.push(op_cmd)
+      end
+    }
   end
 end
 

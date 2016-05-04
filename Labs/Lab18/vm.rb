@@ -17,7 +17,7 @@ class VirtualMachine
           when ADD_OP, SUB_OP, MUL_OP
             a = @stack.pop
             b = @stack.pop
-            ln = ln.strip
+            ln = ln.chomp()
             if ln == 'ADD'
               @stack.push(a + b)
             elsif ln == 'SUB'

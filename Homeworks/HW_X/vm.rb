@@ -37,90 +37,103 @@ class VirtualMachine
     @searching_for_label = ''
   end
   def exec(bytecode_file)
+
+
     File.open(bytecode_file, 'r') do |file|
-      file.each_line do |ln|
+      no_reloop = false
+      until no_reloop do
+        no_reloop = true
+        file.each_line do |ln|
 
-        # Skip blank lines
-        if ln.chomp().strip().length == 0
-          next
-        end
-
-        # If searching for a label, then skip
-        if @searching_for_label != ''
-          tmp_ln = ln.chomp().strip()
-          # Check if matches the label being searched for
-          if tmp_ln == @searching_for_label + ':'
-            # No longer searching for the label.
-            @searching_for_label = ''
+          # Skip blank lines
+          if ln.chomp().strip().length == 0
+            next
           end
-          # Go to next in the loop
-          next
-        end
 
-        # Match a command
-        case ln
-          #
-          # YOUR CODE HERE -- Add extra 'when' cases to handle
-          # additional operations.
-          #
-          when LABEL
-            # NOOP
-
-          # Check for always jump
-          when JMP_OP
-            @searching_for_label = ln.sub(JMP_OP, '\1').chomp().strip()
-
-          when JZ_OP, JNZ_OP
-            stack_val = @stack.pop
-            if (ln =~ JZ_OP and stack_val == 0)
-              @searching_for_label = ln.sub(JZ_OP, '\1').chomp()
-            elsif ln =~ JNZ_OP and stack_val != 0
-              @searching_for_label = ln.sub(JNZ_OP, '\1').chomp()
+          # If searching for a label, then skip
+          if @searching_for_label != ''
+            tmp_ln = ln.chomp().strip()
+            # Check if matches the label being searched for
+            if tmp_ln == @searching_for_label + ':'
+              # No longer searching for the label.
+              @searching_for_label = ''
             end
+            # Go to next in the loop
+            next
+          end
 
-          when ADD_OP, SUB_OP, MUL_OP
-            a = @stack.pop
-            b = @stack.pop
-            ln = ln.chomp()
-            if ln == 'ADD'
-              @stack.push(a + b)
-            elsif ln == 'SUB'
-              @stack.push(b - a)
-            elsif ln == 'MUL'
-              @stack.push(a * b)
-            end
-          when PUSH_OP
-            v = ln.sub(PUSH_OP, '\1').chomp().strip()
-            if v.is_i?
-              @stack.push(v.to_i)
-            else
-              @stack.push(v)
-            end
-          when PRINT_OP
-            v = @stack.pop
-            case v
-              when TRUE_SYMBOL
-                print_val = TRUE_CONSOLE_OUTPUT
-              when FALSE_SYMBOL
-                print_val = FALSE_CONSOLE_OUTPUT
+          # Match a command
+          case ln
+            #
+            # YOUR CODE HERE -- Add extra 'when' cases to handle
+            # additional operations.
+            #
+            when LABEL
+              # NOOP
+
+              # Check for always jump
+            when JMP_OP
+              @searching_for_label = ln.sub(JMP_OP, '\1').chomp().strip()
+              no_reloop = false
+              break
+
+            when JZ_OP, JNZ_OP
+              stack_val = @stack.pop
+              if (ln =~ JZ_OP and stack_val == 0)
+                @searching_for_label = ln.sub(JZ_OP, '\1').chomp()
+                no_reloop = false
+                break
+              elsif ln =~ JNZ_OP and stack_val != 0
+                @searching_for_label = ln.sub(JNZ_OP, '\1').chomp()
+                no_reloop = false
+                break
+              end
+
+
+            when ADD_OP, SUB_OP, MUL_OP
+              a = @stack.pop
+              b = @stack.pop
+              ln = ln.chomp()
+              if ln == 'ADD'
+                @stack.push(a + b)
+              elsif ln == 'SUB'
+                @stack.push(b - a)
+              elsif ln == 'MUL'
+                @stack.push(a * b)
+              end
+            when PUSH_OP
+              v = ln.sub(PUSH_OP, '\1').chomp().strip()
+              if v.is_i?
+                @stack.push(v.to_i)
               else
-                print_val = v
-            end
-            puts print_val
-          # Handle the push variable
-          when STORE_OP
-            key = ln.sub(STORE_OP, '\1').chomp().strip()
-            val = @stack.pop
-            @var_heap[key] = val
-          # Handle the push variable
-          when LOAD_OP
-            key = ln.sub(LOAD_OP, '\1').chomp().strip()
-            @stack.push(@var_heap[key])
-        else
-          raise "Unrecognized command: '#{ln}'"
-        end
-      end
-    end
+                @stack.push(v)
+              end
+            when PRINT_OP
+              v = @stack.pop
+              case v
+                when TRUE_SYMBOL
+                  print_val = TRUE_CONSOLE_OUTPUT
+                when FALSE_SYMBOL
+                  print_val = FALSE_CONSOLE_OUTPUT
+                else
+                  print_val = v
+              end
+              puts print_val
+            # Handle the push variable
+            when STORE_OP
+              key = ln.sub(STORE_OP, '\1').chomp().strip()
+              val = @stack.pop
+              @var_heap[key] = val
+            # Handle the push variable
+            when LOAD_OP
+              key = ln.sub(LOAD_OP, '\1').chomp().strip()
+              @stack.push(@var_heap[key])
+            else
+              raise "Unrecognized command: '#{ln}'"
+          end # Case
+        end # line do
+      end # do while
+    end # File list
   end
 end
 

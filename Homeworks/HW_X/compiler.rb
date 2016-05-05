@@ -4,11 +4,13 @@ NUM_PAT = /[1-9]\d*|0/
 PLUS = '+'
 SUBTRACT = '-'
 MULTIPLY = '*'
-PRINT_OP = "PRINT"
-PUSH_OP = "PUSH"
-ADD_OP = "ADD"
-SUB_OP = "SUB"
-MUL_OP = "MUL"
+PRINT_OP = 'PRINT'
+PUSH_OP = 'PUSH'
+ADD_OP = 'ADD'
+SUB_OP = 'SUB'
+MUL_OP = 'MUL'
+STORE_OP = 'STOR'
+LOAD_OP = 'LOAD'
 
 class AST
   attr_accessor :op, :parent, :args
@@ -16,16 +18,19 @@ class AST
     @op = op
     @parent = parent
     @args = []
+    @if_counter = 0
+    @var_counter = 0
+    @var_heap = {}
   end
   def add_arg(x)
     @args.push(x)
   end
   def to_s
-    s = "(" + @op
+    s = '(' + @op
     @args.each do |arg|
-      s += " " + arg.to_s
+      s += ' ' + arg.to_s
     end
-    s + ")"
+    s + ')'
   end
   # recursively evaluates the AST, used for the interpreter
   def evaluate
@@ -113,7 +118,7 @@ end
 class Parser
   def parse(file)
     asts = []
-    File.open(file, "r") do |file|
+    File.open(file, 'r') do |file|
       file.each_line do |ln|
         asts.push(parse_line(ln))
       end
@@ -147,7 +152,7 @@ class Parser
         if ast then
           ast.add_arg(tokens[i].to_i)
         else
-          raise "Top-level numbers are not permitted"
+          raise 'Top-level numbers are not permitted'
         end
       when /.+/ # If anything else matches (and is at least one char), raise an error
         raise "Unrecognized token: '#{tokens[i]}'"
@@ -193,7 +198,7 @@ end
 
 
 if ARGV.length < 2
-  puts "Usage: ruby compiler.rb <scheme file> <bytecode file>"
+  puts 'Usage: ruby compiler.rb <scheme file> <bytecode file>'
   exit 1
 end
 

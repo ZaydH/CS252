@@ -9,6 +9,12 @@ MUL_OP = /MUL/ # pops the top two elements off the stack, multiplies them, and .
 STORE_OP = /STOR (\d+)/ # Get a variable value
 LOAD_OP = /LOAD (\d+)/ # Get a variable value
 
+JMP_OP = /JMP (\S+)/ # Standard jump (no pop)
+JZ_OP = /JZ (\S+)/ # Standard jump (no pop)
+JNZ_OP = /JNZ (\S+)/ # Standard jump (no pop)
+
+LABEL = /(\S+):/ # Label for a jump
+
 TRUE_SYMBOL = '#t'
 TRUE_CONSOLE_OUTPUT = 'true'
 FALSE_SYMBOL = '#f'
@@ -28,15 +34,45 @@ class VirtualMachine
     # Holds all variable values
     @stack = []
     @var_heap = {}
+    @searching_for_label = ''
   end
   def exec(bytecode_file)
     File.open(bytecode_file, 'r') do |file|
       file.each_line do |ln|
+
+        # If searching for a label, then skip
+        if @searching_for_label != ''
+          tmp_ln = ln.chomp()
+          # Check if matches the label being searched for
+          if tmp_ln == @searching_for_label + ':'
+            # No longer searching for the label.
+            @searching_for_label = ''
+          end
+          # Go to next in the loop
+          next
+        end
+
+        # Match a command
         case ln
           #
           # YOUR CODE HERE -- Add extra 'when' cases to handle
           # additional operations.
           #
+          when LABEL
+            # NOOP
+
+          # Check for always jump
+          when JMP_OP
+            @searching_for_label = ln.sub(JMP_OP, '\1').chomp()
+
+          when JZ_OP, JNZ_OP
+            stack_val = @stack.pop
+            if (ln =~ JZ_OP and stack_val == 0)
+              @searching_for_label = ln.sub(JZ_OP, '\1').chomp()
+            elsif ln =~ JNZ_OP and stack_val != 0
+              @searching_for_label = ln.sub(JNZ_OP, '\1').chomp()
+            end
+
           when ADD_OP, SUB_OP, MUL_OP
             a = @stack.pop
             b = @stack.pop

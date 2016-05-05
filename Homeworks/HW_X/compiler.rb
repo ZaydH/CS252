@@ -9,6 +9,10 @@ PUSH_OP = 'PUSH'
 ADD_OP = 'ADD'
 SUB_OP = 'SUB'
 MUL_OP = 'MUL'
+
+TRUE_CONST = '+t'
+FALSE_CONST = '+f'
+
 STORE_OP = 'STOR'
 LOAD_OP = 'LOAD'
 
@@ -35,31 +39,35 @@ class AST
   # recursively evaluates the AST, used for the interpreter
   def evaluate
     case @op
-    when 'println'
-      v = @args[0]
-      v = v.evaluate if v.is_a?(AST)
-      puts v
-    when PLUS
-      sum = 0
-      @args.each do |x|
-        x = x.evaluate if x.is_a?(AST)
-        sum += x
-      end
-      return sum
-    when SUBTRACT
-      diff = @args[0]
-      diff = diff.evaluate if diff.is_a?(AST)
-      args_tail = @args.slice(1, args.length-1)
-      args_tail.each do |x|
-        x = x.evaluate if x.is_a?(AST)
-        diff -= x
-      end
-      return diff
-    when MULTIPLY
-      prod = 1
-      @args.each do |x|
-        x = x.evaluate if x.is_a?(AST)
-        prod *= x
+      when 'println'
+        v = @args[0]
+        v = v.evaluate if v.is_a?(AST)
+        puts v
+      when TRUE_CONST
+        comp_arg(1, bytecode)
+      when FALSE_CONST
+        comp_arg(0, bytecode)
+      when PLUS
+        sum = 0
+        @args.each do |x|
+          x = x.evaluate if x.is_a?(AST)
+          sum += x
+        end
+        return sum
+      when SUBTRACT
+        diff = @args[0]
+        diff = diff.evaluate if diff.is_a?(AST)
+        args_tail = @args.slice(1, args.length-1)
+        args_tail.each do |x|
+          x = x.evaluate if x.is_a?(AST)
+          diff -= x
+        end
+        return diff
+      when MULTIPLY
+        prod = 1
+        @args.each do |x|
+          x = x.evaluate if x.is_a?(AST)
+          prod *= x
       end
       return prod
     else

@@ -28,7 +28,7 @@
       <EXTENSION ID="JRubyRunConfigurationExtension" NailgunExecEnabled="false" />
       <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov" />
       <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/vm.rb" />
-      <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="twoif.byco" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="jmp.byco" />
       <method />
     </configuration>
   </component>

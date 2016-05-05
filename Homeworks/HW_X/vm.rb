@@ -16,9 +16,9 @@ JNZ_OP = /JNZ (\S+)/ # Standard jump (no pop)
 LABEL = /(\S+):/ # Label for a jump
 
 TRUE_SYMBOL = '#t'
-TRUE_CONSOLE_OUTPUT = 'true'
+TRUE_CONSOLE_OUTPUT = '1'
 FALSE_SYMBOL = '#f'
-FALSE_CONSOLE_OUTPUT = 'true'
+FALSE_CONSOLE_OUTPUT = '0'
 
 
 
@@ -40,9 +40,14 @@ class VirtualMachine
     File.open(bytecode_file, 'r') do |file|
       file.each_line do |ln|
 
+        # Skip blank lines
+        if ln.chomp().strip().length == 0
+          next
+        end
+
         # If searching for a label, then skip
         if @searching_for_label != ''
-          tmp_ln = ln.chomp()
+          tmp_ln = ln.chomp().strip()
           # Check if matches the label being searched for
           if tmp_ln == @searching_for_label + ':'
             # No longer searching for the label.
@@ -63,7 +68,7 @@ class VirtualMachine
 
           # Check for always jump
           when JMP_OP
-            @searching_for_label = ln.sub(JMP_OP, '\1').chomp()
+            @searching_for_label = ln.sub(JMP_OP, '\1').chomp().strip()
 
           when JZ_OP, JNZ_OP
             stack_val = @stack.pop
@@ -85,7 +90,7 @@ class VirtualMachine
               @stack.push(a * b)
             end
           when PUSH_OP
-            v = ln.sub(PUSH_OP, '\1').chomp()
+            v = ln.sub(PUSH_OP, '\1').chomp().strip()
             if v.is_i?
               @stack.push(v.to_i)
             else
@@ -104,12 +109,12 @@ class VirtualMachine
             puts print_val
           # Handle the push variable
           when STORE_OP
-            key = ln.sub(STORE_OP, '\1').chomp()
+            key = ln.sub(STORE_OP, '\1').chomp().strip()
             val = @stack.pop
             @var_heap[key] = val
           # Handle the push variable
           when LOAD_OP
-            key = ln.sub(LOAD_OP, '\1').chomp()
+            key = ln.sub(LOAD_OP, '\1').chomp().strip()
             @stack.push(@var_heap[key])
         else
           raise "Unrecognized command: '#{ln}'"

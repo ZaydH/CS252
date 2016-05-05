@@ -13,7 +13,7 @@
       <EXTENSION ID="JRubyRunConfigurationExtension" NailgunExecEnabled="false" />
       <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov" />
       <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/compiler.rb" />
-      <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="twoif.scm  twoif_zayd.byco" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="let.scm  let_zayd.byco" />
       <method />
     </configuration>
     <configuration default="false" name="vm" type="RubyRunConfigurationType" factoryName="Ruby" temporary="true">
@@ -28,7 +28,7 @@
       <EXTENSION ID="JRubyRunConfigurationExtension" NailgunExecEnabled="false" />
       <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov" />
       <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/vm.rb" />
-      <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="jmp.byco" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="let.byco" />
       <method />
     </configuration>
   </component>

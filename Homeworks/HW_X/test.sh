@@ -84,3 +84,12 @@ expected_output_file="${EXPECTED_DIR}/print_expected.txt"
 # Run the Test Bench
 run_test_bench
 
+
+# Test the "let" testcase with a comment.
+scheme_source_code="let.scm"
+expected_byco="let.byco"
+byco_output_file="${OUT_DIR}/let_zayd.byco"
+vm_output_file="${OUT_DIR}/let_out.txt"
+expected_output_file="${EXPECTED_DIR}/let_expected.txt"
+# Run the Test Bench
+run_test_bench

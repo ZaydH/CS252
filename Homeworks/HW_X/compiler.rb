@@ -1,11 +1,16 @@
 NUM_PAT = /[1-9]\d*|0/
 BOOL_PAT = /#\w+/
 STR_PAT = /\w+/
+BRACKET_PAT = /[*]*/
 
 # Available opcodes for our VM
 PLUS = '+'
 SUBTRACT = '-'
 MULTIPLY = '*'
+
+LET_PAT = /let/
+LET = 'let'
+LEFT_BRACKET = '['
 
 JUMP_OP = 'JMP'
 JUMP_ZERO_OP = 'JZ'
@@ -32,17 +37,18 @@ LOAD_OP = 'LOAD'
 
 COMMENT_CHARACTER = ';'
 
+
+
 class AST
   # Object accessors
   attr_accessor :op, :parent, :args
 
   # Update the class
   class << self
-    attr_accessor :if_counter, :attr_accessor, :var_heap
+    attr_accessor :if_counter, :var_heap
     def init
       @if_counter = 0
-      @attr_accessor = 0
-      @var_heap = {}
+      @var_heap = Hash.new
     end
   end
 
@@ -100,6 +106,16 @@ class AST
   def to_bytecode
     bytecode = []
     case @op
+      when LEFT_BRACKET
+        # Check if not already in the heap
+        self.class.var_heap[@args[0]] = self.class.var_heap.length unless self.class.var_heap.has_key?(@args[0])
+        comp_arg(@args[1].to_i(), bytecode)
+        bytecode.push("#{STORE_OP} #{self.class.var_heap[args[0]]}")
+      when LET
+        # Parse each argument
+        @args.each() do |v|
+          bytecode.concat(v.to_bytecode)
+        end
 
       when IF
         # If Predicate
@@ -137,6 +153,8 @@ class AST
       comp_arg(TRUE_VALUE, bytecode)
     elsif v.to_s() == FALSE_CONST
       comp_arg(FALSE_VALUE, bytecode)
+    elsif self.class.var_heap.has_key?(v.to_s())
+      bytecode.push("#{LOAD_OP} #{self.class.var_heap[v.to_s()]}")
     else
       bytecode.concat(v.to_bytecode)
     end
@@ -182,6 +200,8 @@ class Parser
     # Adding spaces around parens to make tokenization trivial.
     line = line.gsub(/\(/, ' ( ')
     line = line.gsub(/\)/, ' ) ')
+    line = line.gsub('[', ' [ ')
+    line = line.gsub(']', ' ] ')
     line.split
   end
   # [token] -> [AST]
@@ -194,12 +214,28 @@ class Parser
       case tokens[i]
         when '('
           ast = AST.new(tokens[i+1], ast) # Assuming that we will only receive valid programs
-          i += 1 # Skipping an extra token
+          if tokens[i+1] != LET
+            i += 1 # Skipping an extra token
+          end
         when ')'
           if ast.parent then
             ast.parent.add_arg(ast)
             ast = ast.parent
           end
+        when LET_PAT
+          # Do nothing
+          i += 1 # Skipping an extra token
+        when '['
+          ast = AST.new(tokens[i], ast)
+          i += 1
+          # Add the variables to store
+          while tokens[i] != ']'
+            ast.add_arg(tokens[i])
+            i += 1
+          end
+          ast.add_arg(']')
+          ast.parent.add_arg(ast)
+          ast = ast.parent
         when NUM_PAT
           if ast then
             ast.add_arg(tokens[i].to_i)

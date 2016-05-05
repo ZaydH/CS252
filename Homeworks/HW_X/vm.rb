@@ -42,6 +42,7 @@ class VirtualMachine
     File.open(bytecode_file, 'r') do |file|
       no_reloop = false
       until no_reloop do
+        # Clumsy way to allow backward jumps
         no_reloop = true
         file.each_line do |ln|
 

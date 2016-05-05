@@ -54,3 +54,33 @@ expected_output_file="${EXPECTED_DIR}/jmp_expected.txt"
 # Run the Test Bench
 run_test_bench
 
+
+# Test the "test" testcase with a comment.
+scheme_source_code="test.scm"
+expected_byco="test.byco"
+byco_output_file="${OUT_DIR}/test.byco"
+vm_output_file="${OUT_DIR}/test_out.txt"
+expected_output_file="${EXPECTED_DIR}/test_expected.txt"
+# Run the Test Bench
+run_test_bench
+
+
+# Test the "stor_load" testcase with a comment.
+scheme_source_code=""
+expected_byco=""
+byco_output_file="stor_load.byco"
+vm_output_file="${OUT_DIR}/stor_load_out.txt"
+expected_output_file="${EXPECTED_DIR}/stor_load_expected.txt"
+# Run the Test Bench
+run_test_bench
+
+
+# Test the "print" testcase with a comment.
+scheme_source_code="print.scm"
+expected_byco=""
+byco_output_file="${OUT_DIR}/print_zayd.byco"
+vm_output_file="${OUT_DIR}/print_out.txt"
+expected_output_file="${EXPECTED_DIR}/print_expected.txt"
+# Run the Test Bench
+run_test_bench
+

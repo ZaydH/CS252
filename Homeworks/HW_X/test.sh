@@ -18,7 +18,10 @@ dos2unix -r * &> /dev/null
 
 # Expected output directory
 EXPECTED_DIR='./expected'
-dos2unix "${EXPECTED_DIR}/*" &> /dev/null
+pushd . &> /dev/null
+cd $EXPECTED_DIR &> /dev/null
+dos2unix * &> /dev/null
+popd &> /dev/null
 
 # Clean the output directory
 OUT_DIR='./output'

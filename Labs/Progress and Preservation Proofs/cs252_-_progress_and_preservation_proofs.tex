@@ -85,7 +85,7 @@ Arith is a basic language; its expressions, values, and types are enumerated in 
   \mydefhead{e ::=\qquad\qquad\qquad\qquad}{Expressions}
   \mydefcase{\true}{Boolean True}
   \mydefcase{\false}{Boolean False}
-  \mydefcase{\zero}{Integer Value ``0"}
+  \mydefcase{i}{Integer Value}
   \mydefcase{\succe e}{Successor Expressions}
   \mydefcase{\prede e}{Predecessor Expressions}
   \mydefcase{\iszeroe e}{Zero Value Check Expressions}
@@ -235,7 +235,7 @@ The following subsections are the formal progress proofs for the type rules in f
 
 \subsection{Proving Progress for Boolean and Integer Values}
 
-Figure~\ref{fig:progressTheorem} establish that progress is achieved if an expression ``$e$" is a value.  Hence, by this criterion, type rules \rel{T-True}, \rel{T-False}, and \rel{T-Int} are all valid for the progress theorem.
+Figure~\ref{fig:progressTheorem} establishes that progress is achieved if an expression ``$e$" is a value.  Hence, by this criterion, type rules \rel{T-True}, \rel{T-False}, and \rel{T-Int} are all valid for the progress theorem.
 
 \subsection{Proving Progress for the \texttt{if} Expression}
 
@@ -397,7 +397,7 @@ For the \texttt{if} expression, \textbf{three} evaluation rules may apply.
     \item If $\rel{E-If-Ctxt}$ applies, then $\sstep{e_1}{e'_1}$.  What is more, by induction $\typeRule{e'_1}{\boolt}$ (this can be assumed by induction since $e_1$ is a subcase of $e$).  Then using $\rel{T-If}$:
     
     \begin{center}
-      $\sstep{e' = \ife {e'_1}{e_2}{e_3}}{T}$
+      $\typeRule{e' = \ife {e'_1}{e_2}{e_3}}{T}$
     \end{center}
 	
 	\end{enumerate}

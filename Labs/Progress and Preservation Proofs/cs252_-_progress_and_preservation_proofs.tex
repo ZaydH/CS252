@@ -243,14 +243,14 @@ Figure~\ref{fig:ifProofProgress} is the proof of progress for the \texttt{if} ex
 
 \begin{figure}[ht!]
 Given:
+
 \begin{center}
    $e = \ife {e_1} {e_2} {e_3}$\\
    $\typeRule{e_1}{\boolt},~~\typeRule{e_2}{T},~~\typeRule{e_3}{T}$
 \end{center}
-Then:
-\begin{center}
-   $\typeRule{e}{T}$
-\end{center}
+
+Then:~\\
+
 By induction, an expression $e_1$ must be a value or $\exists e_1$ such that:
 \begin{enumerate}
 
@@ -275,11 +275,8 @@ Given:
    $\typeRule{e_1}{\intt}$
 \end{center}
 Then:~\\
-\begin{center}
-   $T = \intt$
-\end{center}
 
-By induction, $e_1$ must either be a value or $\exists e'_1$ such that:~\\
+By induction, $e$ must either be a value or $\exists e'$ such that:~\\
 
 	\begin{enumerate}
     \item If $e_1$ is a value (i.e. ``$i$"), then: $\sstep{e}{i'}$ where $i' = i + 1$ using the small-step rule $\rel{E-Succ}$ since it was given that $\typeRule{e_1}{\intt}$.
@@ -307,11 +304,8 @@ Given:
   $\typeRule{e_1}{\intt}$
 \end{center}
 Then:~\\
-\begin{center}
-   $T = \intt$
-\end{center}
 
-By induction, $e_1$ must either be a value or $\exists e'_1$ such that:~\\
+By induction, $e$ must either be a value or $\exists e'$ such that:~\\
 
 	\begin{enumerate}
     \item If $e_1$ is a value (i.e. ``$i$"), then: $\sstep{e}{i'}$ where $i' = i - 1$ using the small-step rule $\rel{E-Pred}$ since it was given that $\typeRule{e_1}{\intt}$.
@@ -338,11 +332,8 @@ Given:
   $\typeRule{e_1}{\intt}$
 \end{center}
 Then:~\\
-\begin{center}
-   $T = \boolt$
-\end{center}
 
-By induction, $e_1$ must either be a value or $\exists e'_1$ such that:~\\
+By induction, $e$ must either be a value or $\exists e'$ such that:~\\
 
 	\begin{enumerate}
     \item If $e_1$ is a value (i.e. ``$i$") in which case either rule $\rel{E-IsZero-Z}$ or $\rel{E-IsZero-NZ}$ applies since $\typeRule{e_1}{\intt}$.
@@ -477,7 +468,7 @@ For the \texttt{pred} expression, \textbf{two} evaluation rules may apply.
     \item If $\rel{E-Pred-Ctxt}$ applies, then $\sstep{e_1}{e'_1}$ since by induction $\typeRule{e'_1}{\intt}$.  Using type rule $\rel{T-Pred}$,
     
     \begin{center}
-      $\sstep{e' = \prede {e'_1}}{\intt}$
+      $\typeRule{e' = \prede {e'_1}}{\intt}$
     \end{center}
       
     \item If $\rel{E-Pred}$ applies, then $e_1 = i$.  Hence, $\sstep{e = \prede{i}}{i'}$ where $i' = i - 1$.  Therefore, $\typeRule{e'}{\intt}$ using Lemma-Int defined in Figure~\ref{fig:lemmaInt}.
@@ -511,7 +502,7 @@ For the \texttt{iszero} expression, \textbf{three} evaluation rules may apply.
     \item If $\rel{E-IsZero-Ctxt}$ applies, then $\sstep{e_1}{e'_1}$ since by induction $\typeRule{e'_1}{\boolt}$ (this can be assumed by induction since $e_1$ is a subcase of $e$).  Then using $\rel{T-IsZero}$:
     
     \begin{center}
-      $\sstep{e' = \iszeroe {e'_1}}{\boolt}$
+      $\typeRule{e' = \iszeroe {e'_1}}{\boolt}$
     \end{center}
     
 \end{enumerate}

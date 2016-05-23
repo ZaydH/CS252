@@ -1,0 +1,15 @@
+For this lab, you will be working with the Parsec library.  Install parsec via the command `cabal install parsec`.
+
+Download jsonParser.hs and all .json files from the course website. Currently this program will successfully parse strList.json.
+
+Part 1
+Add support for integers.  You may find 'many1' and 'digit' to be useful:
+  http://hackage.haskell.org/packages/archive/parsec/latest/doc/html/Text-Parsec-Combinator.html#v:many1
+  http://hackage.haskell.org/packages/archive/parsec/latest/doc/html/Text-Parsec-Char.html#v:digit
+
+Part 2
+Add support for JSON objects.
+
+Part 3
+The main function currently just prints out the json value in Haskell's default format.
+Modify this function to pretty-print the JSON object instead, in the usual expected format.

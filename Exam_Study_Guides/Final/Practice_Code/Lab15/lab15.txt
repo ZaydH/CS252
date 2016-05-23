@@ -1,0 +1,7 @@
+Download forwardingProxy.js from the course website.
+
+Modify the forwarding API to log all actions taken on an object.
+
+With this proxy, you can debug an application by wrapping an object in a proxy and tracing its behavior.
+
+If you have extra time, explore the ECMAScript standard version of the API: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy.  (Currently, only Firefox supports this version).

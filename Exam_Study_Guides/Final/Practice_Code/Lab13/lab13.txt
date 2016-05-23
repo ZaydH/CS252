@@ -1,0 +1,3 @@
+For this lab, create a "rotate" macro in Sweet.js that works like the "swap" macro from class, except that it works on an arbitrary number of arguments.  The "square" macro may be helpful.
+
+There is no starter code for this lab.

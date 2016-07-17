@@ -1,7 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8b996bfb-da30-48a3-9993-58ec6a877a53" name="Default" comment="" />
+    <list default="true" id="8b996bfb-da30-48a3-9993-58ec6a877a53" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../Lab08/Practice04/complex.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../Lab08/Practice04/jsonParser.hs" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../Lab08/Practice05/csvParser.hs" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../Lab08/Practice05/test.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../Lab08/Practice06/complex.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../Lab08/Practice06/csvParser.hs" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../Lab08/Practice06/jsonParser.hs" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../Lab08/Practice06/test.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../Lab13/Practice03/rotate.sjs" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../Lab13/Practice03/swap.sjs" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../Lab18/Practice01/.idea/vcs.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../Lab18/Practice02/.idea/vcs.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../Lab18/Practice02/compiler.rb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../Lab18/Practice02/test.scm" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../Lab18/Practice02/vm.rb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../Lab18/Practice02/zayd.byco" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/../../Lab18/Practice #01/.idea/vcs.xml" afterPath="$PROJECT_DIR$/../../Lab17/Practice03/.idea/vcs.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/../../Lab18/Practice #01/compiler.rb" afterPath="$PROJECT_DIR$/../../Lab18/Practice01/compiler.rb" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/../../Lab18/Practice #01/print.scm" afterPath="$PROJECT_DIR$/../../Lab18/Practice01/print.scm" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/../../Lab18/Practice #01/test.byco" afterPath="$PROJECT_DIR$/../../Lab18/Practice01/test.byco" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/../../Lab18/Practice #01/test.scm" afterPath="$PROJECT_DIR$/../../Lab18/Practice01/test.scm" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/../../Lab18/Practice #01/vm.rb" afterPath="$PROJECT_DIR$/../../Lab18/Practice01/vm.rb" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/../../Lab18/Practice #01/zayd.byco" afterPath="$PROJECT_DIR$/../../Lab18/Practice01/zayd.byco" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/../../Lab18/Practice #01/zayd.scm" afterPath="$PROJECT_DIR$/../../Lab18/Practice01/zayd.scm" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../../CS252_-_Final_Exam_Study_Guide.docx" afterPath="$PROJECT_DIR$/../../../CS252_-_Final_Exam_Study_Guide.docx" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Lab16/Practice01/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../../Lab16/Practice01/.idea/workspace.xml" />
+    </list>
     <ignored path="Practice02.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -20,11 +48,11 @@
     <favorites_list name="Practice02" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="chatServer.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/chatServer.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
+            <state relative-caret-position="578">
               <caret line="44" column="68" selection-start-line="44" selection-start-column="68" selection-end-line="44" selection-end-column="68" />
               <folding />
             </state>
@@ -32,6 +60,9 @@
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../../.." />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -52,7 +83,7 @@
     <option name="width" value="1936" />
     <option name="height" value="1056" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
     <OptionsSetting value="true" id="Checkout" />
@@ -77,6 +108,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -97,12 +130,10 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Lab09/Practice03" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="nodejs_interpreter_path" value="C:\Program Files\nodejs\node" />
     <property name="js-jscs-nodeInterpreter" value="C:\Program Files\nodejs\node.exe" />
@@ -136,6 +167,12 @@
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.npm" factoryName="npm">
@@ -181,32 +218,33 @@
       <option name="presentableId" value="Default" />
       <updated>1464001318447</updated>
       <workItem from="1464001319581" duration="883000" />
+      <workItem from="1464058458014" duration="832000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="883000" />
+    <option name="totallyTimeSpent" value="1715000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39957717" sideWeight="0.50208336" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980973" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39957717" sideWeight="0.50208336" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39957717" sideWeight="0.49791667" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980973" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39957717" sideWeight="0.49791667" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -229,7 +267,15 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/chatServer.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chatServer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="578">
           <caret line="44" column="68" selection-start-line="44" selection-start-column="68" selection-end-line="44" selection-end-column="68" />
           <folding />
         </state>
